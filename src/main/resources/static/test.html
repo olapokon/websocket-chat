@@ -6,6 +6,9 @@
     <script type="text/javascript">
 		let socket;
 
+		/**
+		 * @param {boolean} connected
+		 */
 		function setConnected(connected) {
 			document.getElementById('connect').disabled = connected;
 			document.getElementById('disconnect').disabled = !connected;
@@ -14,10 +17,23 @@
 			document.getElementById('response').innerHTML = '';
 		}
 
-		function connect() {
+		/**
+		 * @param socket {WebSocket}
+		 *  a websocket
+		 * @returns {boolean}
+		 *  whether the socket is connected
+		 */
+		function socketIsConnected(socket) {
 			// https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/readyState
+			const CLOSING_STATE = 2;
 			const CLOSED_STATE = 3;
-			// if (socket && socket.readyState !== CLOSED_STATE) {
+			return socket &&
+				socket.readyState !== CLOSED_STATE &&
+				socket.readyState !== CLOSING_STATE;
+		}
+
+		function connect() {
+			// if (socketIsConnected(socket)) {
 			// 	return;
 			// }
 
@@ -28,11 +44,16 @@
 			socket.onmessage = (event) => showMessageOutput(event);
 			socket.onclose = (_) => console.log("websocket closed");
 
+			// TODO: temporary
+			socket.addEventListener("entered chatroom", function (event) {
+				console.log('"entered chatroom" event: ', event.data);
+			});
+
 			// setConnected(true);
 		}
 
 		function disconnect() {
-			if (!socket) {
+			if (!socketIsConnected(socket)) {
 				return;
 			}
 			socket.close();
@@ -46,6 +67,9 @@
 			socket.send(JSON.stringify({text}));
 		}
 
+		/**
+		 * @param {string} messageOutput
+		 */
 		function showMessageOutput(messageOutput) {
 			const response = document.getElementById('response');
 			const p = document.createElement('p');
