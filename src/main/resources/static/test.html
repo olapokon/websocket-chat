@@ -63,12 +63,12 @@
 		function sendMessage() {
 			const from = document.getElementById('from').value;
 			const text = document.getElementById('text').value;
-			// socket.send(text);
-			socket.send(JSON.stringify({text}));
+			socket.send(text);
+			// socket.send(JSON.stringify({text}));
 		}
 
 		/**
-		 * @param {string} messageOutput
+		 * @param {MessageEvent} messageOutput
 		 */
 		function showMessageOutput(messageOutput) {
 			const response = document.getElementById('response');

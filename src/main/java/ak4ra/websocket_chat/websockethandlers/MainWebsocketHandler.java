@@ -13,12 +13,22 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+/**
+ * https://docs.spring.io/spring-framework/docs/4.3.x/spring-framework-reference/html/websocket.html
+ * <p>
+ * https://stackoverflow.com/questions/54763261/how-to-send-custom-message-to-custom-user-with-spring-websocket
+ */
 @Component
 public class MainWebsocketHandler implements WebSocketHandler {
 
 	private final Logger log = LoggerFactory.getLogger(MainWebsocketHandler.class);
 
-	private static Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
+	/**
+	 * All {@link WebSocketSession}s currently active.
+	 * <p>
+	 * Maps {@link WebSocketSession} ids to {@link WebSocketSession}s
+	 */
+	private static final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) {
@@ -46,6 +56,7 @@ public class MainWebsocketHandler implements WebSocketHandler {
 		);
 		try {
 			session.sendMessage(new TextMessage("message received"));
+			//			var m = new WebSocketMessage<String>("");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
