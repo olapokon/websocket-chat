@@ -22,7 +22,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 //}
 
 // TODO: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket
-// TODO: https://docs.spring.io/spring-framework/docs/4.3.x/spring-framework-reference/html/websocket.html#websocket-stomp-enable
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
@@ -34,15 +33,32 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 				.setAllowedOrigins("*"); // TODO: only for development
 	}
 
+	// TODO: ApplicationContext event listeners
+	// https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-appplication-context-events
+
+	// TODO: Intercept messages if needed
+	// https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-interceptors
+
 	@Override
-	public void configureMessageBroker(MessageBrokerRegistry config) {
+	public void configureMessageBroker(MessageBrokerRegistry registry) {
 		// STOMP messages whose destination header begins with these prefixes
 		// are routed to @MessageMapping methods in @Controller classes,
 		// before they're sent to the message broker?
-		config.setApplicationDestinationPrefixes("/app");
+		registry.setApplicationDestinationPrefixes("/app");
 
+		// TODO: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-handle-broker-relay-configure
 		// STOMP messages whose destination header begins with these prefixes
 		// are routed directly to the message broker.
-		config.enableSimpleBroker("/topic", "/queue");
+		registry.enableSimpleBroker("/topic", "/queue");
+
+
+		// Messages from the broker are published to the clientOutboundChannel,
+		// from where they are written to WebSocket sessions.
+		// As the channel is backed by a ThreadPoolExecutor, messages are processed
+		// in different threads, and the resulting sequence received by the client
+		// may not match the exact order of publication.
+		//
+		//If this is an issue, enable the setPreservePublishOrder flag
+		registry.setPreservePublishOrder(true);
 	}
 }

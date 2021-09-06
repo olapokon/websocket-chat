@@ -1,7 +1,9 @@
 // TODO: https://stomp-js.github.io/guide/stompjs/using-stompjs-v5.html
 
+const WEBSOCKET_URL = 'ws://localhost:8080/ws';
+
 const client = new StompJs.Client({
-	brokerURL: 'ws://localhost:8080/ws',
+	brokerURL: WEBSOCKET_URL,
 	connectHeaders: {
 		// login: 'user',
 		// passcode: 'password',
@@ -18,10 +20,11 @@ client.onConnect = async function (frame) {
 	console.log("connected:\n", frame);
 	// Do something, all subscribes must be done is this callback
 	// This is needed because this will be executed after a (re)connect
+
 	function cb(message) {
 		// called when the client receives a STOMP message from the server
 		if (message.body) {
-			console.log('got message with body ' + message.body);
+			console.log('got message with body:\n', message.body);
 		} else {
 			console.log('got empty message');
 		}
