@@ -1,4 +1,4 @@
-package ak4ra.websocket_chat;
+package ak4ra.websocketchat;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

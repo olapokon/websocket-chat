@@ -1,0 +1,10 @@
+version: '3.5'
+services:
+  rabbitmq:
+    container_name: rabbitmq-broker
+    build: . # Dockerfile location
+    ports:
+      - '15671:15671'
+      - '15672:15672'
+      - '15674:15674'
+      - '61613:61613'

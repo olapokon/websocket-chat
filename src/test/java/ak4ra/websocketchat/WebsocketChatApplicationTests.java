@@ -1,4 +1,4 @@
-package ak4ra.websocket_chat;
+package ak4ra.websocketchat;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
