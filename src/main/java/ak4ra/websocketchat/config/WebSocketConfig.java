@@ -1,33 +1,16 @@
 package ak4ra.websocketchat.config;
 
-import java.net.SocketAddress;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.messaging.simp.stomp.StompReactorNettyCodec;
 import org.springframework.messaging.support.ChannelInterceptor;
-import org.springframework.messaging.tcp.reactor.ReactorNettyTcpClient;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-
-//@Configuration
-//@EnableWebSocket
-//public class WebSocketConfig implements WebSocketConfigurer {
-//
-//	@Override
-//	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-//		registry.addHandler(new MainWebsocketHandler(), "/")
-//				.setAllowedOrigins("*"); // TODO: only for development
-//	}
-//}
 
 // TODO: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket
 @Configuration
@@ -60,7 +43,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         @Override
         public Message<?> preSend(Message<?> message, MessageChannel channel) {
             StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-
             return message;
         }
     }
@@ -83,6 +65,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // are routed directly to the message broker.
         //
         // relay the messages to an external message broker
+        // TODO: https://stackoverflow.com/questions/29799975/custom-destination-with-rabbitmq
+        // TODO: https://stackoverflow.com/questions/28015942/how-do-i-use-convertandsendtouser-with-an-external-broker-such-as-rabbitmq-in
         registry.enableStompBrokerRelay("/topic", "/queue")
                 // .setTcpClient(createTcpClient()) // alternative to setRelayHost & setRelayPort?
                 .setRelayHost(host)
