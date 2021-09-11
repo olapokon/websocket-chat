@@ -1,6 +1,9 @@
 // TODO: https://stomp-js.github.io/guide/stompjs/using-stompjs-v5.html
 
-const WEBSOCKET_URL = 'ws://localhost:8080/ws';
+const WEBSOCKET_SERVER_PORT = 8080;
+const WEBSOCKET_URL = `ws://localhost:${WEBSOCKET_SERVER_PORT}/ws`;
+
+let messageCount = 0;
 
 const client = new StompJs.Client({
     brokerURL: WEBSOCKET_URL,
@@ -50,7 +53,7 @@ function sendMessage() {
     setInterval(() => {
         client.publish({
             destination: '/app/ws-test',
-            body: 'A A A A A',
+            body: `test message #${++messageCount}`,
             skipContentLengthHeader: true,
         });
     }, 1000);
