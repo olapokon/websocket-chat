@@ -1,7 +1,14 @@
 // TODO: https://stomp-js.github.io/guide/stompjs/using-stompjs-v5.html
 
-const WEBSOCKET_SERVER_PORT = 8080;
-const WEBSOCKET_URL = `ws://localhost:${WEBSOCKET_SERVER_PORT}/ws`;
+const SERVER_PORT = 8080;
+const WEBSOCKET_ENDPOINT = "ws"
+const WEBSOCKET_URL = `ws://localhost:${SERVER_PORT}/${WEBSOCKET_ENDPOINT}`;
+
+const SUBSCRIBE_DESTINATION = "/topic/all";
+
+const APPLICATION_DESTINATION_PREFIX = "/app";
+const APPLICATION_DESTINATION = "/ws-test";
+const PUBLISH_DESTINATION = `${APPLICATION_DESTINATION_PREFIX}${APPLICATION_DESTINATION}`;
 
 let messageCount = 0;
 
@@ -33,7 +40,7 @@ client.onConnect = async function (frame) {
     }
 
     const headers = {ack: 'client'};
-    await client.subscribe('/topic/all', cb, headers);
+    await client.subscribe(SUBSCRIBE_DESTINATION, cb, headers);
 
     sendMessage();
 };
@@ -52,7 +59,7 @@ client.activate();
 function sendMessage() {
     setInterval(() => {
         client.publish({
-            destination: '/app/ws-test',
+            destination: PUBLISH_DESTINATION,
             body: `test message #${++messageCount}`,
             skipContentLengthHeader: true,
         });
