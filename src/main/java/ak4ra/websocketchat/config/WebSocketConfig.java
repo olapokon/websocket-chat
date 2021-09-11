@@ -65,6 +65,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // are routed directly to the message broker.
         //
         // relay the messages to an external message broker
+        // TODO: https://stackoverflow.com/questions/53467546/spring-boot-connection-failure-with-rabbitmq-web-stomp-plugin
         // TODO: https://stackoverflow.com/questions/29799975/custom-destination-with-rabbitmq
         // TODO: https://stackoverflow.com/questions/28015942/how-do-i-use-convertandsendtouser-with-an-external-broker-such-as-rabbitmq-in
         registry.enableStompBrokerRelay("/topic", "/queue")
