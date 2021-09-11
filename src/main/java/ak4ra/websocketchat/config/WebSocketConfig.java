@@ -38,7 +38,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     // TODO: Intercept messages if needed
     // https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-interceptors
-    static class DebugInterceptor implements ChannelInterceptor {
+    // incoming from client
+    static class InboundDebugInterceptor implements ChannelInterceptor {
+
+        @Override
+        public Message<?> preSend(Message<?> message, MessageChannel channel) {
+            StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+            return message;
+        }
+    }
+
+    // outgoing to client
+    static class OutboundDebugInterceptor implements ChannelInterceptor {
 
         @Override
         public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -49,7 +60,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new DebugInterceptor());
+        registration.interceptors(new InboundDebugInterceptor());
+    }
+
+    @Override
+    public void configureClientOutboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new OutboundDebugInterceptor());
     }
     // END intercept
 
@@ -63,13 +79,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // TODO: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-handle-broker-relay-configure
         // STOMP messages whose destination header begins with these prefixes
         // are routed directly to the message broker.
-        //
-        // relay the messages to an external message broker
-        // TODO: https://stackoverflow.com/questions/53467546/spring-boot-connection-failure-with-rabbitmq-web-stomp-plugin
-        // TODO: https://stackoverflow.com/questions/29799975/custom-destination-with-rabbitmq
-        // TODO: https://stackoverflow.com/questions/28015942/how-do-i-use-convertandsendtouser-with-an-external-broker-such-as-rabbitmq-in
         registry.enableStompBrokerRelay("/topic", "/queue")
-                // .setTcpClient(createTcpClient()) // alternative to setRelayHost & setRelayPort?
                 .setRelayHost(host)
                 .setRelayPort(port)
                 .setSystemLogin(userName)
@@ -88,13 +98,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         //If this is an issue, enable the setPreservePublishOrder flag
         registry.setPreservePublishOrder(true);
     }
-
-    //    private ReactorNettyTcpClient<byte[]> createTcpClient() {
-    //        return new ReactorNettyTcpClient<>(client ->
-    //                                                   client.remoteAddress(() -> null),
-    //                                           new StompReactorNettyCodec());
-    //    }
-
 
     // TODO: configure time limit and buffer size, if needed
     //	@Override

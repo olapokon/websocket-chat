@@ -30,7 +30,7 @@ client.onConnect = async function (frame) {
     }
 
     const headers = {ack: 'client'};
-    await client.subscribe('/queue', cb, headers);
+    await client.subscribe('/topic/all', cb, headers);
 
     sendMessage();
 };

@@ -25,7 +25,7 @@ public class TestController {
     public void handle(String t) {
         log.info("message received: " + t);
         String r = "\"" + t + "\" received";
-        this.template.convertAndSend("/queue", r);
+        this.template.convertAndSend("/topic/all", r);
         //  return r;
     }
 }
