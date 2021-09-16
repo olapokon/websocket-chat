@@ -1,0 +1,17 @@
+<!--TODO: only for testing-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>A</title>
+    <!-- https://stomp-js.github.io/guide/stompjs/using-stompjs-v5.html -->
+    <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@5.0.0/bundles/stomp.umd.min.js">
+    </script>
+    <script type="text/javascript" th:src="@{/js/stomp-test.js}"></script>
+</head>
+<body>
+<div>
+    <h1 th:text="${A}"></h1>
+</div>
+</body>
+</html>
