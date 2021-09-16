@@ -11,6 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/chat")
 public class ChatroomController {
 
+    private static final String WEBSOCKET_URL         = "ws://localhost:8080/ws";
+    private static final String SUBSCRIBE_DESTINATION = "/topic/all";
+
+    /**
+     * Destination for the STOMP messages. Additional segments can be appended.
+     */
+    private static final String PUBLISH_DESTINATION = "/app/ws-test";
+
     // TODO: move elsewhere
     private static final Chatroom[] DEFAULT_CHATROOMS = {
             new Chatroom("default chatroom 1", "/default-1"),
@@ -28,6 +36,10 @@ public class ChatroomController {
     @GetMapping("/{chatroomId}")
     public String chatroom(@PathVariable String chatroomId, Model model) {
         model.addAttribute("chatroomId", chatroomId);
+
+        model.addAttribute("WEBSOCKET_URL", WEBSOCKET_URL);
+        model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION);
+        model.addAttribute("PUBLISH_DESTINATION", PUBLISH_DESTINATION + "/" + chatroomId);
         return "chatroom";
     }
 }

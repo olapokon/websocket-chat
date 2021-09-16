@@ -1,17 +1,10 @@
 // TODO: https://stomp-js.github.io/guide/stompjs/using-stompjs-v5.html
 
-const SERVER_PORT = 8080;
-const WEBSOCKET_ENDPOINT = "ws"
-const WEBSOCKET_URL = `ws://localhost:${SERVER_PORT}/${WEBSOCKET_ENDPOINT}`;
-
-const SUBSCRIBE_DESTINATION = "/topic/all";
-
-const APPLICATION_DESTINATION_PREFIX = "/app";
-const APPLICATION_DESTINATION = "/ws-test";
-const CUSTOM_DESTINATION = "/custom-endpoint"
-const PUBLISH_DESTINATION = `${APPLICATION_DESTINATION_PREFIX}${APPLICATION_DESTINATION}${CUSTOM_DESTINATION}`;
-
-// TODO: jsdoc
+/**
+ * Creates a stomp-js Client, using options passed from java, through thymeleaf inline javascript
+ *
+ * @returns {StompJs.Client} a stomp-js client
+ */
 export function createClient() {
     let client;
 
@@ -21,7 +14,7 @@ export function createClient() {
         brokerURL: WEBSOCKET_URL,
         connectHeaders: {},
         debug: (str) => console.debug(str), // DEBUG console output
-        reconnectDelay: 5000,
+        reconnectDelay: 1000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
     });
@@ -72,4 +65,6 @@ export function createClient() {
             });
         }, 4000);
     }
+
+    return client;
 }
