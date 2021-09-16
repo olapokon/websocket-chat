@@ -13,7 +13,8 @@ const PUBLISH_DESTINATION = `${APPLICATION_DESTINATION_PREFIX}${APPLICATION_DEST
 
 let messageCount = 0;
 
-const client = new StompJs.Client({
+let client;
+client = new StompJs.Client({
     brokerURL: WEBSOCKET_URL,
     connectHeaders: {
         // login: 'user',
@@ -34,10 +35,10 @@ client.onConnect = async function (frame) {
 
     function cb(message) {
         // called when the client receives a STOMP message from the server
-        if (message.body)
-            console.log('got message with body:\n', message.body);
-        else
-            console.log('got empty message');
+        // if (message.body)
+        //     console.log('got message with body:\n', message.body);
+        // else
+        //     console.log('got empty message');
     }
 
     const headers = {ack: 'client'};
@@ -57,11 +58,18 @@ client.onStompError = function (frame) {
 
 client.activate();
 
+let intervalID;
+
 function sendMessage() {
-    setInterval(() => {
+    if (intervalID)
+        clearInterval(intervalID);
+
+    intervalID = setInterval(() => {
+        const messageBody = `test message #${++messageCount}`;
+        // console.log("sent message with body:\n", messageBody)
         client.publish({
             destination: PUBLISH_DESTINATION,
-            body: `test message #${++messageCount}`,
+            body: messageBody,
             skipContentLengthHeader: true,
         });
     }, 1000);

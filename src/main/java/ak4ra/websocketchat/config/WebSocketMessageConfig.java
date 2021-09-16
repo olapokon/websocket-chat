@@ -13,9 +13,11 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 // TODO: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket
+//
+// TODO: WS sessions: https://docs.spring.io/spring-session/docs/current/reference/html5/guides/boot-websocket.html
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer {
     @Value("${spring.rabbitmq.host}")
     private String host;
     @Value("${spring.rabbitmq.port}")
