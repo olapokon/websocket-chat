@@ -31,8 +31,7 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // the HTTP URL for the endpoint to which a WebSocket client will need to connect to
         // for the WebSocket handshake
-        registry.addEndpoint("/ws")
-                .setAllowedOrigins("*"); // TODO: only for development
+        registry.addEndpoint("/ws");
     }
 
     // TODO: ApplicationContext event listeners
