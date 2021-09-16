@@ -1,0 +1,33 @@
+package ak4ra.websocketchat.controllers;
+
+import ak4ra.websocketchat.domain.Chatroom;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/chat")
+public class ChatroomController {
+
+    // TODO: move elsewhere
+    private static final Chatroom[] DEFAULT_CHATROOMS = {
+            new Chatroom("default chatroom 1", "/default-1"),
+            new Chatroom("default chatroom 2", "/default-2"),
+            new Chatroom("default chatroom 3", "/default-3"),
+            new Chatroom("default chatroom 4", "/default-4"),
+            };
+
+    @GetMapping("/list")
+    public String chatroomList(Model model) {
+        model.addAttribute("chatrooms", DEFAULT_CHATROOMS);
+        return "chatroom-list";
+    }
+
+    @GetMapping("/{chatroomId}")
+    public String chatroom(@PathVariable String chatroomId, Model model) {
+        model.addAttribute("chatroomId", chatroomId);
+        return "chatroom";
+    }
+}
