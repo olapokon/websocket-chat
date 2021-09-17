@@ -1,12 +1,18 @@
 package ak4ra.websocketchat.domain;
 
+import java.util.Set;
+
 /**
  * Represents a chatroom.
  *
  * @param name
- *         The name of the chatroom.
+ *         the name of the chatroom
  * @param endpoint
- *         To be appended to the message broker destination.
+ *         to be appended to the message broker destination
+ * @param users
+ *         the github ids of the users who are authorized to access the chatroom
  */
-public record Chatroom(String name,
-                       String endpoint) {}
+public record Chatroom(Long id,
+                       String name,
+                       String endpoint,
+                       Set<Long> users) {}
