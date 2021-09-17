@@ -6,6 +6,12 @@
  * @returns {StompJs.Client} a stomp-js client
  */
 export function createClient() {
+    // expect the connection options to be available
+    if (!WEBSOCKET_URL
+        || !SUBSCRIBE_DESTINATION
+        || !PUBLISH_DESTINATION)
+        throw new Error("Missing arguments needed to establish websocket connection.");
+
     let client;
 
     let messageCount = 0;
