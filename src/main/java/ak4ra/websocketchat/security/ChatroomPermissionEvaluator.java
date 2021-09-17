@@ -15,7 +15,7 @@ public class ChatroomPermissionEvaluator implements PermissionEvaluator {
      * @param targetObject
      *         the id of the chatroom the user is trying to access
      * @param permission
-     *         it is always null.
+     *         it is always null
      *
      * @return true if the user has permission to access the chatroom
      */

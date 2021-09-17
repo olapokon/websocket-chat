@@ -12,10 +12,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/chat/list")
+            .antMatchers("/chat/room/**")
             .authenticated()
+            .anyRequest()
+            .permitAll()
             .and()
             .oauth2Login()
+            .loginPage("/login")
         ;
     }
 }
