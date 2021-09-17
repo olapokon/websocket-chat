@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class LoginController {
-
-    private static final String GITHUB_LOGIN_URL = "/github";
+    private static final String GITHUB_LOGIN_URL = "/oauth2/authorization/github";
 
     @GetMapping("/login")
     public String loginPage(Model model) {
