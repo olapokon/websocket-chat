@@ -1,6 +1,7 @@
 package ak4ra.websocketchat.controllers;
 
 import ak4ra.websocketchat.domain.Chatroom;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,9 @@ public class ChatroomController {
      */
     private static final String PUBLISH_DESTINATION = "/app/ws-test";
 
+    /**
+     * Chatrooms available by default.
+     */
     // TODO: move elsewhere
     private static final Chatroom[] DEFAULT_CHATROOMS = {
             new Chatroom("default chatroom 1", "/default-1"),
@@ -27,13 +31,16 @@ public class ChatroomController {
             new Chatroom("default chatroom 4", "/default-4"),
             };
 
+    // TODO: javadoc
     @GetMapping("/list")
     public String chatroomList(Model model) {
         model.addAttribute("chatrooms", DEFAULT_CHATROOMS);
         return "chatroom-list";
     }
 
-    @GetMapping("/{chatroomId}")
+    // TODO: javadoc
+    @GetMapping("/room/{chatroomId}")
+    @PostAuthorize("hasPermission(#chatroomId, null)")
     public String chatroom(@PathVariable String chatroomId, Model model) {
         model.addAttribute("chatroomId", chatroomId);
 
