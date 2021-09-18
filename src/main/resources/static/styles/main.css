@@ -1,3 +1,9 @@
+:root {
+    --yellow-color: rgb(255, 216, 20);
+    --orange-color: rgb(255, 164, 28);
+    --black-color: rgb(15, 17, 17);
+}
+
 * {
     margin: 0;
     padding: 0;

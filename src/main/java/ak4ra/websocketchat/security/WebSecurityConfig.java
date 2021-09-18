@@ -12,7 +12,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/chat/room/**")
+            // the websocket endpoint and chatroom pages require authentication
+            // TODO: change websocket authenticated routes?
+            .antMatchers("/ws", "/chat/room/**")
             .authenticated()
             .anyRequest()
             .permitAll()

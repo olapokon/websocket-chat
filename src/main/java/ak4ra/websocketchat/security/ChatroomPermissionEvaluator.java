@@ -2,7 +2,6 @@ package ak4ra.websocketchat.security;
 
 import java.io.Serializable;
 
-import ak4ra.websocketchat.services.ChatroomService;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 
