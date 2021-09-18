@@ -1,4 +1,4 @@
-package ak4ra.websocketchat.domain;
+package ak4ra.websocketchat.chatroom;
 
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-package ak4ra.websocketchat.controllers;
+package ak4ra.websocketchat.test;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

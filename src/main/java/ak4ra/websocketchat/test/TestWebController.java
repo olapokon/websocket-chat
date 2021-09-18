@@ -1,4 +1,4 @@
-package ak4ra.websocketchat.controllers;
+package ak4ra.websocketchat.test;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

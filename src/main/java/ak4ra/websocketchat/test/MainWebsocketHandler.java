@@ -1,4 +1,4 @@
-package ak4ra.websocketchat.websockethandlers;
+package ak4ra.websocketchat.test;
 
 import java.io.IOException;
 import java.util.Map;

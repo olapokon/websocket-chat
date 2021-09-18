@@ -1,8 +1,7 @@
-package ak4ra.websocketchat.services;
+package ak4ra.websocketchat.chatroom;
 
 import java.util.Set;
 
-import ak4ra.websocketchat.domain.Chatroom;
 import org.springframework.stereotype.Service;
 
 @Service

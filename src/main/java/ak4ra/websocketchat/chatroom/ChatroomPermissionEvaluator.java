@@ -1,4 +1,4 @@
-package ak4ra.websocketchat.security;
+package ak4ra.websocketchat.chatroom;
 
 import java.io.Serializable;
 

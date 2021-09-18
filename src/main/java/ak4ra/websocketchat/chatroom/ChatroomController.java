@@ -1,7 +1,6 @@
-package ak4ra.websocketchat.controllers;
+package ak4ra.websocketchat.chatroom;
 
-import ak4ra.websocketchat.services.ChatroomService;
-import ak4ra.websocketchat.websockethandlers.MainWebsocketHandler;
+import ak4ra.websocketchat.test.MainWebsocketHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
