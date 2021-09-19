@@ -20,11 +20,13 @@
     <script type="module" th:src="@{/js/chatroom.js}"></script>
 </head>
 <body>
-<h1 th:text="${chatroomId}"></h1>
-<button id="test-send">SEND</button>
-<section id="messages-container">
-    <ul id="messages">
-    </ul>
-</section>
+<div id="chat-container">
+    <h1 th:text="${chatroomId}"></h1>
+    <section id="messages-container">
+        <ul id="messages">
+        </ul>
+    </section>
+    <input id="chat-input" autofocus maxlength="500" type="text" placeholder="Type a message">
+</div>
 </body>
 </html>

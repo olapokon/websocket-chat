@@ -1,9 +1,26 @@
+#chat-container {
+    /*background-color: #FFEAB4D6;*/
+}
+
 #test-send {
     font-size: 100%;
     font-family: inherit;
 }
 
 #messages-container {
-    max-height: 80vh;
+    height: 80vh;
     overflow-y: scroll;
+    word-wrap: break-word;
+}
+
+#chat-input {
+    font-size: 100%;
+    font-family: inherit;
+    /*background-color: #FDBC5AFF;*/
+    height: 4rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    text-align: left;
+    width: 100%;
+    border: solid var(--black-color) 3px;
 }

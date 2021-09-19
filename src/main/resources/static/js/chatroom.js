@@ -22,6 +22,16 @@ function onMessage(message) {
     document.getElementById("messages").appendChild(li);
 }
 
-const testMessageBody = `test message from chatroom ${chatroomId}`;
-document.getElementById("test-send")
-    .addEventListener("click", () => sendMessage(client, testMessageBody));
+// when Enter is pressed in the chat input, send a websocket message with the text content
+// and clear the input field
+const chatInput = document.getElementById("chat-input");
+chatInput.addEventListener("keyup", (e) => {
+    console.log(e);
+    if (e.key !== "Enter")
+        return;
+    const text = chatInput.value;
+    if (!text)
+        return;
+    chatInput.value = "";
+    sendMessage(client, text);
+});

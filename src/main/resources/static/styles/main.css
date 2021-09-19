@@ -1,6 +1,6 @@
 :root {
-    --yellow-color: rgb(255, 216, 20);
-    --orange-color: rgb(255, 164, 28);
+    --yellow-color: rgba(255, 234, 180, 0.84);
+    --orange-color: rgb(253, 188, 90);
     --black-color: rgb(15, 17, 17);
 }
 
