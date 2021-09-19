@@ -13,11 +13,7 @@ export function createClient(onMessage) {
         || !PUBLISH_DESTINATION)
         throw new Error("Missing arguments needed to establish websocket connection.");
 
-    let client;
-
-    let messageCount = 0;
-
-    client = new StompJs.Client({
+    const client = new StompJs.Client({
         brokerURL: WEBSOCKET_URL,
         connectHeaders: {},
         debug: (str) => console.debug(str), // DEBUG console output
@@ -30,14 +26,6 @@ export function createClient(onMessage) {
         console.log("connected:\n", frame);
         // Do something, all subscribes must be done is this callback
         // This is needed because this will be executed after a (re)connect
-
-        function cb(message) {
-            // called when the client receives a STOMP message from the server
-            // if (message.body)
-            //     console.log('got message with body:\n', message.body);
-            // else
-            //     console.log('got empty message');
-        }
 
         const headers = {ack: 'client'};
         client.subscribe(SUBSCRIBE_DESTINATION, onMessage, headers);
@@ -54,27 +42,11 @@ export function createClient(onMessage) {
 
     client.activate();
 
-    // let intervalID;
-    //
-    // function sendMessage() {
-    //     if (intervalID)
-    //         clearInterval(intervalID);
-    //
-    //     intervalID = setInterval(() => {
-    //         const messageBody = `test message #${++messageCount}`;
-    //         // console.log("sent message with body:\n", messageBody)
-    //         client.publish({
-    //             destination: PUBLISH_DESTINATION,
-    //             body: messageBody,
-    //             skipContentLengthHeader: true,
-    //         });
-    //     }, 4000);
-    // }
-
     return client;
 }
 
 
+// TODO: to be removed eventually
 let messageCount = 0;
 
 /**
