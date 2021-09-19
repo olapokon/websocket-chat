@@ -73,3 +73,24 @@ export function createClient(onMessage) {
 
     return client;
 }
+
+
+let messageCount = 0;
+
+/**
+ * Sends a websocket message.
+ *
+ * @param client {StompJs.Client} the websocket client to use
+ * @param messageBody the body of the message
+ */
+export function sendMessage(client, messageBody) {
+    // expect the connection options to be available
+    if (!PUBLISH_DESTINATION)
+        throw new Error("Missing arguments needed to send websocket message.");
+
+    client.publish({
+        destination: PUBLISH_DESTINATION,
+        body: messageBody + ` #${++messageCount}`,
+        skipContentLengthHeader: true,
+    });
+}
