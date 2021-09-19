@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${chatroomId}"></title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/chatroom.css}" rel="stylesheet"/>
     <script type="text/javascript"
             src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@5.0.0/bundles/stomp.umd.min.js">
     </script>
+    <!-- https://stomp-js.github.io/guide/stompjs/using-stompjs-v5.html -->
     <script th:inline="javascript">
         /*<![CDATA[*/
+        const chatroomId = /*[[${chatroomId}]]*/ '';
         const WEBSOCKET_URL = /*[[${WEBSOCKET_URL}]]*/ '';
         const SUBSCRIBE_DESTINATION = /*[[${SUBSCRIBE_DESTINATION}]]*/ '';
         const PUBLISH_DESTINATION = /*[[${PUBLISH_DESTINATION}]]*/ '';
@@ -17,5 +21,10 @@
 </head>
 <body>
 <h1 th:text="${chatroomId}"></h1>
+<button id="test-send">SEND</button>
+<section id="messages-container">
+    <ul id="messages">
+    </ul>
+</section>
 </body>
 </html>

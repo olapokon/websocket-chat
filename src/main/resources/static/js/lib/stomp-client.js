@@ -3,9 +3,10 @@
 /**
  * Creates a stomp-js Client, using options passed from java, through thymeleaf inline javascript
  *
+ * @param onMessage {() => void} websocket message event callback
  * @returns {StompJs.Client} a stomp-js client
  */
-export function createClient() {
+export function createClient(onMessage) {
     // expect the connection options to be available
     if (!WEBSOCKET_URL
         || !SUBSCRIBE_DESTINATION
@@ -39,9 +40,7 @@ export function createClient() {
         }
 
         const headers = {ack: 'client'};
-        await client.subscribe(SUBSCRIBE_DESTINATION, cb, headers);
-
-        sendMessage();
+        client.subscribe(SUBSCRIBE_DESTINATION, onMessage, headers);
     };
 
     client.onStompError = function (frame) {
@@ -55,22 +54,22 @@ export function createClient() {
 
     client.activate();
 
-    let intervalID;
-
-    function sendMessage() {
-        if (intervalID)
-            clearInterval(intervalID);
-
-        intervalID = setInterval(() => {
-            const messageBody = `test message #${++messageCount}`;
-            // console.log("sent message with body:\n", messageBody)
-            client.publish({
-                destination: PUBLISH_DESTINATION,
-                body: messageBody,
-                skipContentLengthHeader: true,
-            });
-        }, 4000);
-    }
+    // let intervalID;
+    //
+    // function sendMessage() {
+    //     if (intervalID)
+    //         clearInterval(intervalID);
+    //
+    //     intervalID = setInterval(() => {
+    //         const messageBody = `test message #${++messageCount}`;
+    //         // console.log("sent message with body:\n", messageBody)
+    //         client.publish({
+    //             destination: PUBLISH_DESTINATION,
+    //             body: messageBody,
+    //             skipContentLengthHeader: true,
+    //         });
+    //     }, 4000);
+    // }
 
     return client;
 }
