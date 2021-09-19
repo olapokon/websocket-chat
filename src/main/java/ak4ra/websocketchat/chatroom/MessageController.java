@@ -1,4 +1,4 @@
-package ak4ra.websocketchat.test;
+package ak4ra.websocketchat.chatroom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,16 +10,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class TestController {
+public class MessageController {
 
     private final SimpMessagingTemplate template;
 
     @Autowired
-    public TestController(SimpMessagingTemplate template) {
+    public MessageController(SimpMessagingTemplate template) {
         this.template = template;
     }
 
-    private final Logger log = LoggerFactory.getLogger(TestController.class);
+    private final Logger log = LoggerFactory.getLogger(MessageController.class);
 
     // TODO: get socket session id
     // https://stackoverflow.com/questions/42243543/how-to-get-session-id-in-spring-websocketstompclient

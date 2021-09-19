@@ -26,7 +26,6 @@ function onMessage(message) {
 // and clear the input field
 const chatInput = document.getElementById("chat-input");
 chatInput.addEventListener("keyup", (e) => {
-    console.log(e);
     if (e.key !== "Enter")
         return;
     const text = chatInput.value;
