@@ -3,7 +3,6 @@
  * @param addedNodes {NodeList} the nodes that have been added to the element
  */
 function autoScroll(e, addedNodes) {
-    console.log(addedNodes);
     const addedElementHeight = Array.from(addedNodes)
         .reduce((height, node) => height + node.parentElement.lastElementChild.clientHeight, 0);
     const overflowHeight = e.scrollHeight - e.clientHeight;
