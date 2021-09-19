@@ -23,14 +23,15 @@ public class TestController {
 
     // TODO: get socket session id
     // https://stackoverflow.com/questions/42243543/how-to-get-session-id-in-spring-websocketstompclient
-    @MessageMapping("/ws-test/{variableDestination}")
+    @MessageMapping("/ws-chat/{variableDestination}")
     public void handle(@DestinationVariable("variableDestination") String variableDestination,
                        String message) {
         var context = SecurityContextHolder.getContext();
         log.info("security context: " + context);
         log.info("message: " + message
-                 + ", destination: /ws-test/" + variableDestination);
+                 + ", destination: /ws-chat/" + variableDestination);
         String r = "\"" + message + "\" received";
-        this.template.convertAndSend("/topic/all", r);
+        String destination = "/topic/" + variableDestination;
+        this.template.convertAndSend(destination, r);
     }
 }

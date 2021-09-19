@@ -19,20 +19,26 @@ public class ChatroomController {
 
     private final Logger log = LoggerFactory.getLogger(MainWebsocketHandler.class);
 
-    private static final String WEBSOCKET_URL         = "ws://localhost:8080/ws";
-    private static final String SUBSCRIBE_DESTINATION = "/topic/all";
+    private static final String WEBSOCKET_URL = "ws://localhost:8080/ws";
 
-    private ChatroomService chatroomService;
+    /**
+     * Subscribe destination for the STOMP messages. Additional segments can be appended.
+     * <p>
+     * (can subscript to all with "topic/all:
+     */
+    private static final String SUBSCRIBE_DESTINATION = "/topic";
+
+    /**
+     * Destination for the STOMP messages. Additional segments can be appended.
+     */
+    private static final String PUBLISH_DESTINATION = "/app/ws-chat";
+
+    private final ChatroomService chatroomService;
 
     @Autowired
     public ChatroomController(ChatroomService chatroomService) {
         this.chatroomService = chatroomService;
     }
-
-    /**
-     * Destination for the STOMP messages. Additional segments can be appended.
-     */
-    private static final String PUBLISH_DESTINATION = "/app/ws-test";
 
     // TODO: javadoc
     @GetMapping("/list")
@@ -50,9 +56,9 @@ public class ChatroomController {
         log.info("user: {}", ud);
 
         model.addAttribute("chatroomId", chatroomId);
-
         model.addAttribute("WEBSOCKET_URL", WEBSOCKET_URL);
-        model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION);
+        //        model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION);
+        model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION + "/" + chatroomId);
         model.addAttribute("PUBLISH_DESTINATION", PUBLISH_DESTINATION + "/" + chatroomId);
         return "chatroom";
     }

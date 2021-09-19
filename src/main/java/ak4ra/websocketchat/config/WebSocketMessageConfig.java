@@ -80,7 +80,7 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
         // TODO: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-handle-broker-relay-configure
         // STOMP messages whose destination header begins with these prefixes
         // are routed directly to the message broker.
-        registry.enableStompBrokerRelay("/topic", "/queue")
+        registry.enableStompBrokerRelay("/topic")
                 .setRelayHost(host)
                 .setRelayPort(port)
                 .setSystemLogin(userName)
