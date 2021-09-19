@@ -3,16 +3,14 @@
  * @param m {MutationRecord} the mutation record
  */
 function autoScroll(e, m) {
-    if (m.addedNodes.length < 1) {
+    if (m.addedNodes.length < 1)
         return;
-    }
     const addedElementHeight = m.addedNodes[0].parentElement.lastElementChild.clientHeight;
     const overflowHeight = e.scrollHeight - e.clientHeight;
     const isAtBottom = e.scrollHeight <= e.clientHeight
         || e.scrollTop >= e.scrollHeight - addedElementHeight - e.clientHeight;
-    if (!isAtBottom) {
+    if (!isAtBottom)
         return;
-    }
     e.scrollTop = overflowHeight;
 }
 
