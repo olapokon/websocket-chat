@@ -1,9 +1,15 @@
 package ak4ra.websocketchat.messages;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -18,6 +24,11 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer {
+
+    private static final Logger         log = LoggerFactory.getLogger(WebSocketMessageConfig.class);
+    private final        MessageService messageService;
+
+
     @Value("${spring.rabbitmq.host}")
     private String host;
     @Value("${spring.rabbitmq.port}")
@@ -26,6 +37,11 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
     private String userName;
     @Value("${spring.rabbitmq.password}")
     private String password;
+
+    @Autowired
+    public WebSocketMessageConfig(@Lazy MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -37,38 +53,15 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
     // TODO: ApplicationContext event listeners
     // https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-appplication-context-events
 
-    // TODO: Intercept messages if needed
-    // https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-interceptors
-    // incoming from client
-    static class InboundDebugInterceptor implements ChannelInterceptor {
-
-        @Override
-        public Message<?> preSend(Message<?> message, MessageChannel channel) {
-            StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-            return message;
-        }
-    }
-
-    // outgoing to client
-    static class OutboundDebugInterceptor implements ChannelInterceptor {
-
-        @Override
-        public Message<?> preSend(Message<?> message, MessageChannel channel) {
-            StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-            return message;
-        }
-    }
-
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new InboundDebugInterceptor());
+        registration.interceptors(new InboundChannelInterceptor(messageService));
     }
 
     @Override
     public void configureClientOutboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new OutboundDebugInterceptor());
+        registration.interceptors(new OutboundChannelInterceptor(messageService));
     }
-    // END intercept
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {

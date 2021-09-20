@@ -54,7 +54,7 @@ public class MessageService {
         log.info("username: {}, user id: {}", username, userId);
         log.info("message: {}", message);
         //        log.info("headers: {}", headers);
-        log.info("destination: /ws-chat/{}", destination);
+        log.info("destination: /ws-chat{}", destination);
         ChatMessage body = new ChatMessage(ChatMessageType.USER_MESSAGE,
                                            username,
                                            message,

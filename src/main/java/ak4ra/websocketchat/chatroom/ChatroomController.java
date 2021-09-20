@@ -84,41 +84,41 @@ public class ChatroomController {
         return "chatroom";
     }
 
-    /**
-     * This is called when a chatroom user navigates to a chatroom page and establishes a websocket connection for the
-     * first time.
-     *
-     * @param chatroomId
-     *         the id of the chatroom that user left
-     */
-    @GetMapping("/room/{chatroomId}/join")
-    @ResponseBody
-    public void joinChatroom(@PathVariable String chatroomId) throws JsonProcessingException {
-        // TODO: put in method
-        DefaultOAuth2User ud
-                = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ud.getAttributes().getOrDefault("login", "").toString();
-        log.info("user {} joined chatroom {}", username, chatroomId);
-
-        messageService.sendChatroomMessage(ChatroomEvent.USER_JOINED, chatroomId, username);
-    }
-
-
-    /**
-     * This is called when a chatroom user navigates away from the chatroom page.
-     *
-     * @param chatroomId
-     *         the id of the chatroom that user left
-     */
-    @GetMapping("/room/{chatroomId}/exit")
-    @ResponseBody
-    public void exitChatroom(@PathVariable String chatroomId) throws JsonProcessingException {
-        // TODO: put in method
-        DefaultOAuth2User ud
-                = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ud.getAttributes().getOrDefault("login", "").toString();
-        log.info("user {} exited chatroom {}", username, chatroomId);
-
-        messageService.sendChatroomMessage(ChatroomEvent.USER_LEFT, chatroomId, username);
-    }
+//    /**
+//     * This is called when a chatroom user navigates to a chatroom page and establishes a websocket connection for the
+//     * first time.
+//     *
+//     * @param chatroomId
+//     *         the id of the chatroom that user left
+//     */
+//    @GetMapping("/room/{chatroomId}/join")
+//    @ResponseBody
+//    public void joinChatroom(@PathVariable String chatroomId) throws JsonProcessingException {
+//        // TODO: put in method
+//        DefaultOAuth2User ud
+//                = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String username = ud.getAttributes().getOrDefault("login", "").toString();
+//        log.info("user {} joined chatroom {}", username, chatroomId);
+//
+//        messageService.sendChatroomMessage(ChatroomEvent.USER_JOINED, chatroomId, username);
+//    }
+//
+//
+//    /**
+//     * This is called when a chatroom user navigates away from the chatroom page.
+//     *
+//     * @param chatroomId
+//     *         the id of the chatroom that user left
+//     */
+//    @GetMapping("/room/{chatroomId}/exit")
+//    @ResponseBody
+//    public void exitChatroom(@PathVariable String chatroomId) throws JsonProcessingException {
+//        // TODO: put in method
+//        DefaultOAuth2User ud
+//                = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String username = ud.getAttributes().getOrDefault("login", "").toString();
+//        log.info("user {} exited chatroom {}", username, chatroomId);
+//
+//        messageService.sendChatroomMessage(ChatroomEvent.USER_LEFT, chatroomId, username);
+//    }
 }

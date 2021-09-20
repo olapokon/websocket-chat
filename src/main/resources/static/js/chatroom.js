@@ -11,6 +11,30 @@ const client = createClient(onMessage);
 // autoscroll message display
 autoscroll(document.getElementById("messages-container"));
 
+// /**
+//  * The endpoint to call when joining a chatroom.
+//  */
+// const JOIN_CHATROOM_URL = `/chat/room/${chatroomId}/join`;
+//
+// /**
+//  * Notifies the server that a user has connected to the chat room socket.
+//  */
+// function onConnect() {
+//     fetch(JOIN_CHATROOM_URL).then(null);
+// }
+//
+// /**
+//  * The endpoint to call when exiting a chatroom.
+//  */
+// const EXIT_CHATROOM_URL = `/chat/room/${chatroomId}/exit`;
+//
+// /**
+//  * Notifies the server that a user has disconnected from the chat room socket.
+//  */
+// function onDisconnect() {
+//     fetch(EXIT_CHATROOM_URL).then(null);
+// }
+
 /**
  * The body of a STOMP message.
  *
@@ -51,25 +75,3 @@ chatInput.addEventListener("keyup", (e) => {
     chatInput.value = "";
     sendMessage(client, text);
 });
-
-/**
- * The endpoint to call when joining a chatroom.
- *
- * @type {string}
- */
-const JOIN_CHATROOM_URL = `/chat/room/${chatroomId}/join`;
-// notify the chat server when a user navigates to the chatroom page TODO: after first connection only
-fetch(JOIN_CHATROOM_URL).then(null);
-
-/**
- * The endpoint to call when exiting a chatroom.
- *
- * @type {string}
- */
-const EXIT_CHATROOM_URL = `/chat/room/${chatroomId}/exit`;
-
-// notify the chat server when a user navigates away from the chatroom page
-window.onbeforeunload = () => {
-    fetch(EXIT_CHATROOM_URL).then(null);
-    return null;
-}

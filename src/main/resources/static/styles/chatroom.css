@@ -2,6 +2,10 @@
     /*background-color: #FFEAB4D6;*/
 }
 
+#chat-title {
+    margin-bottom: 1rem;
+}
+
 #chat-main-section {
     display: flex;
     flex-direction: row;
