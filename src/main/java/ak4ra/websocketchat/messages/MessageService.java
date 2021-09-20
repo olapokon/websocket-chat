@@ -67,10 +67,10 @@ public class MessageService {
     }
 
     public void sendChatroomMessage(ChatroomEvent event,
-                                    String chatroomId) throws JsonProcessingException {
-
+                                    String chatroomId,
+                                    String username) throws JsonProcessingException {
         ChatMessage body = new ChatMessage(ChatMessageType.CHATROOM_MESSAGE,
-                                           chatroomId,
+                                           username,
                                            event.toString(),
                                            LocalDateTime.now().toString());
         String messageJson = objectMapper.writeValueAsString(body);

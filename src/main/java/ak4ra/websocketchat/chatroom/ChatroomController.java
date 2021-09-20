@@ -72,15 +72,35 @@ public class ChatroomController {
     @PostAuthorize("hasPermission(#chatroomId, null)")
     public String chatroom(@PathVariable String chatroomId, Model model) {
         // TODO: put in method
-        DefaultOAuth2User ud
-                = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("user: {}", ud);
+        //        DefaultOAuth2User ud
+        //                = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //        String username = ud.getAttributes().getOrDefault("login", "").toString();
+        //        log.info("user attribute: {}", username);
 
         model.addAttribute("chatroomId", chatroomId);
         model.addAttribute("WEBSOCKET_URL", WEBSOCKET_URL);
         model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION + "/" + chatroomId);
         model.addAttribute("PUBLISH_DESTINATION", PUBLISH_DESTINATION + "/" + chatroomId);
         return "chatroom";
+    }
+
+    /**
+     * This is called when a chatroom user navigates to a chatroom page and establishes a websocket connection for the
+     * first time.
+     *
+     * @param chatroomId
+     *         the id of the chatroom that user left
+     */
+    @GetMapping("/room/{chatroomId}/join")
+    @ResponseBody
+    public void joinChatroom(@PathVariable String chatroomId) throws JsonProcessingException {
+        // TODO: put in method
+        DefaultOAuth2User ud
+                = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ud.getAttributes().getOrDefault("login", "").toString();
+        log.info("user {} joined chatroom {}", username, chatroomId);
+
+        messageService.sendChatroomMessage(ChatroomEvent.USER_JOINED, chatroomId, username);
     }
 
 
@@ -96,8 +116,9 @@ public class ChatroomController {
         // TODO: put in method
         DefaultOAuth2User ud
                 = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("user {} exited chatroom {}", ud.getName(), chatroomId);
+        String username = ud.getAttributes().getOrDefault("login", "").toString();
+        log.info("user {} exited chatroom {}", username, chatroomId);
 
-        messageService.sendChatroomMessage(ChatroomEvent.USER_LEFT, chatroomId);
+        messageService.sendChatroomMessage(ChatroomEvent.USER_LEFT, chatroomId, username);
     }
 }

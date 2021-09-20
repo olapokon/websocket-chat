@@ -53,6 +53,15 @@ chatInput.addEventListener("keyup", (e) => {
 });
 
 /**
+ * The endpoint to call when joining a chatroom.
+ *
+ * @type {string}
+ */
+const JOIN_CHATROOM_URL = `/chat/room/${chatroomId}/join`;
+// notify the chat server when a user navigates to the chatroom page TODO: after first connection only
+fetch(JOIN_CHATROOM_URL).then(null);
+
+/**
  * The endpoint to call when exiting a chatroom.
  *
  * @type {string}
