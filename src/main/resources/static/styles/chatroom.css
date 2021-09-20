@@ -2,6 +2,11 @@
     /*background-color: #FFEAB4D6;*/
 }
 
+#chat-main-section {
+    display: flex;
+    flex-direction: row;
+}
+
 #test-send {
     font-size: 100%;
     font-family: inherit;
@@ -9,8 +14,14 @@
 
 #messages-container {
     height: 80vh;
+    width: 84vw;
     overflow-y: scroll;
     word-wrap: break-word;
+}
+
+#user-list {
+    max-width: 16vw;
+    min-width: 12vw;
 }
 
 #chat-input {

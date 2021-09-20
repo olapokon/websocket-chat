@@ -22,10 +22,15 @@
 <body>
 <div id="chat-container">
     <h1 th:text="${chatroomId}"></h1>
-    <section id="messages-container">
-        <ul id="messages">
-        </ul>
-    </section>
+    <div id="chat-main-section">
+        <section id="messages-container">
+            <ul id="messages">
+            </ul>
+        </section>
+        <section id="user-list">
+            <h4>users</h4>
+        </section>
+    </div>
     <input id="chat-input" autofocus maxlength="500" type="text" placeholder="Type a message">
 </div>
 </body>
