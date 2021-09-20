@@ -51,3 +51,16 @@ chatInput.addEventListener("keyup", (e) => {
     chatInput.value = "";
     sendMessage(client, text);
 });
+
+/**
+ * The endpoint to call when exiting a chatroom.
+ *
+ * @type {string}
+ */
+const EXIT_CHATROOM_URL = `/chat/room/${chatroomId}/exit`;
+
+// notify the chat server when a user navigates away from the chatroom page
+window.onbeforeunload = () => {
+    fetch(EXIT_CHATROOM_URL).then(null);
+    return null;
+}

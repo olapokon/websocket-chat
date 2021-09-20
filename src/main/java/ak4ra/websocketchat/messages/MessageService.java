@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageService {
 
+    private static final String CHATROOM_DESTINATION_PREFIX = "/topic";
+
     private final Logger log = LoggerFactory.getLogger(MessageService.class);
 
     private final SimpMessagingTemplate template;
@@ -53,7 +55,7 @@ public class MessageService {
         log.info("message: {}", message);
         //        log.info("headers: {}", headers);
         log.info("destination: /ws-chat/{}", destination);
-        MessageBody body = new MessageBody(ChatMessage.USER_MESSAGE,
+        ChatMessage body = new ChatMessage(ChatMessageType.USER_MESSAGE,
                                            username,
                                            message,
                                            LocalDateTime.now().toString());
@@ -61,6 +63,18 @@ public class MessageService {
         log.info("messageJson: {}", messageJson);
         log.info("-----------------------------------------------------------------");
 
+        this.template.convertAndSend(destination, messageJson);
+    }
+
+    public void sendChatroomMessage(ChatroomEvent event,
+                                    String chatroomId) throws JsonProcessingException {
+
+        ChatMessage body = new ChatMessage(ChatMessageType.CHATROOM_MESSAGE,
+                                           chatroomId,
+                                           event.toString(),
+                                           LocalDateTime.now().toString());
+        String messageJson = objectMapper.writeValueAsString(body);
+        String destination = CHATROOM_DESTINATION_PREFIX + "/" + chatroomId;
         this.template.convertAndSend(destination, messageJson);
     }
 }

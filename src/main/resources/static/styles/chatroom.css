@@ -14,14 +14,16 @@
 
 #messages-container {
     height: 80vh;
-    width: 84vw;
+    min-width: 84vw;
     overflow-y: scroll;
     word-wrap: break-word;
+    flex-grow: 1;
 }
 
 #user-list {
     max-width: 16vw;
     min-width: 12vw;
+    border: solid var(--yellow-color) 2px;
 }
 
 #chat-input {
