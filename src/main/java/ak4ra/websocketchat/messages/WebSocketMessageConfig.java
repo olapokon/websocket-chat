@@ -1,4 +1,4 @@
-package ak4ra.websocketchat.config;
+package ak4ra.websocketchat.messages;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

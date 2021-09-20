@@ -1,11 +1,15 @@
-package ak4ra.websocketchat.chatroom;
+package ak4ra.websocketchat.security;
 
 import java.io.Serializable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 
 public class ChatroomPermissionEvaluator implements PermissionEvaluator {
+
+    private final Logger log = LoggerFactory.getLogger(ChatroomPermissionEvaluator.class);
 
     /**
      * Determines if the user has permission to access a given chatroom.
@@ -23,11 +27,12 @@ public class ChatroomPermissionEvaluator implements PermissionEvaluator {
     public boolean hasPermission(Authentication authentication,
                                  Object targetObject,
                                  Object permission) {
-        System.out.println("hasPermission:\n"
+        log.info("hasPermission:\n"
                            + "\tAuthentication: " + authentication.toString() + "\n"
                            + "\tChatroom id: " + targetObject);
         String userId = authentication.getName();
-        System.out.println("userId: " + userId);
+        log.info("authentication: {}", authentication);
+        log.info("userId: {}", userId);
         // TODO: chatroom exists and has the user id in its "users" set
         return true;
     }

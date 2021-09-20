@@ -12,11 +12,28 @@ const client = createClient(onMessage);
 autoscroll(document.getElementById("messages-container"));
 
 /**
+ * The body of a STOMP message.
+ *
+ * @typedef MessageBody
+ * @property {string} username the username of the sender
+ * @property {string} message the message text
+ * @property {string} timeStamp the date and time when the message was sent
+ * */
+
+/**
  * Handles a websocket message event.
  *
  * @param message {StompJs.Message} the websocket message received
  */
 function onMessage(message) {
+    /**
+     * @type {MessageBody}
+     */
+    const messageBody = JSON.parse(message.body);
+
+    // console.log("message:\n", messageBody);
+    // const timeStamp = new Date(Date.parse(messageBody.timeStamp)).toISOString();
+    // console.log("messageBody.timeStamp:\n", timeStamp);
     const li = document.createElement("li");
     li.appendChild(document.createTextNode(message.body));
     document.getElementById("messages").appendChild(li);

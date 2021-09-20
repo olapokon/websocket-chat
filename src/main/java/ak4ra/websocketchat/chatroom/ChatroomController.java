@@ -1,6 +1,5 @@
 package ak4ra.websocketchat.chatroom;
 
-import ak4ra.websocketchat.test.MainWebsocketHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +16,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/chat")
 public class ChatroomController {
 
-    private final Logger log = LoggerFactory.getLogger(MainWebsocketHandler.class);
+    private final Logger log = LoggerFactory.getLogger(ChatroomController.class);
 
     private static final String WEBSOCKET_URL = "ws://localhost:8080/ws";
 
     /**
-     * Subscribe destination for the STOMP messages. Additional segments can be appended.
+     * Subscribe destination for STOMP messages. Additional segments can be appended.
      * <p>
      * (can subscript to all with "topic/all:
      */
     private static final String SUBSCRIBE_DESTINATION = "/topic";
 
     /**
-     * Destination for the STOMP messages. Additional segments can be appended.
+     * Destination for STOMP messages. Additional segments can be appended.
      */
     private static final String PUBLISH_DESTINATION = "/app/ws-chat";
 
@@ -57,7 +56,6 @@ public class ChatroomController {
 
         model.addAttribute("chatroomId", chatroomId);
         model.addAttribute("WEBSOCKET_URL", WEBSOCKET_URL);
-        //        model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION);
         model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION + "/" + chatroomId);
         model.addAttribute("PUBLISH_DESTINATION", PUBLISH_DESTINATION + "/" + chatroomId);
         return "chatroom";

@@ -1,6 +1,5 @@
 package ak4ra.websocketchat.security;
 
-import ak4ra.websocketchat.chatroom.ChatroomPermissionEvaluator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
