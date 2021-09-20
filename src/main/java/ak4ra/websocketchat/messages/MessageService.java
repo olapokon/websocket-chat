@@ -2,6 +2,7 @@ package ak4ra.websocketchat.messages;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
-
-    private static final String CHATROOM_DESTINATION_PREFIX = "/topic";
 
     private final Logger log = LoggerFactory.getLogger(MessageService.class);
 
@@ -66,15 +65,25 @@ public class MessageService {
         this.template.convertAndSend(destination, messageJson);
     }
 
-    public void sendChatroomMessage(ChatroomEvent event,
-                                    String chatroomId,
-                                    String username) throws JsonProcessingException {
+    public void sendUserLeftMessage(Map<String, Object> userAttributes) throws JsonProcessingException {
+        Set<String> destinations = Set.of(); // TODO get user's chatrooms
+
+        for (String d : destinations) {
+            sendChatroomMessage(d, userAttributes, ChatroomEvent.USER_LEFT);
+        }
+    }
+
+    public void sendChatroomMessage(String destination,
+                                    Map<String, Object> userAttributes,
+                                    ChatroomEvent event) throws JsonProcessingException {
+        String username = userAttributes.get("login").toString(); // github username
+        //        String userId = userAttributes.get("id").toString(); // github id
         ChatMessage body = new ChatMessage(ChatMessageType.CHATROOM_MESSAGE,
                                            username,
                                            event.toString(),
                                            LocalDateTime.now().toString());
         String messageJson = objectMapper.writeValueAsString(body);
-        String destination = CHATROOM_DESTINATION_PREFIX + "/" + chatroomId;
+
         this.template.convertAndSend(destination, messageJson);
     }
 }
