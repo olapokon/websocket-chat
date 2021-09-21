@@ -19,8 +19,6 @@ public class User {
     @Id
     private String id;
 
-    // TODO: fix unique indexes in mongo template, fix partialFilter expression
-    // the same for Chatroom
     @Indexed(unique = true, partialFilter = "{ githubId: { $exists: true } }")
     private String githubId;
 
