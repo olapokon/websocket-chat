@@ -2,6 +2,7 @@ package ak4ra.websocketchat.chatroom;
 
 import java.util.List;
 
+import ak4ra.websocketchat.entities.Chatroom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
