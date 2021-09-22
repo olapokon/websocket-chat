@@ -27,13 +27,13 @@ public class Chatroom {
     private String endpoint;
 
     /**
-     * The {@link User} ids of the users who are authorized to access the chatroom.
+     * The {@link User}s who are authorized to access the chatroom.
      */
     @DBRef(db = "User", lazy = true)
     private Set<User> authorizedUsers = new HashSet<>();
 
     /**
-     * The {@link User} ids of the users who are currently the chatroom.
+     * The {@link User}s who are currently the chatroom.
      */
     @DBRef(db = "User", lazy = true)
     private Set<User> activeUsers = new HashSet<>();

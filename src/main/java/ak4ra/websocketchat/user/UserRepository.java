@@ -1,7 +1,5 @@
 package ak4ra.websocketchat.user;
 
-import javax.swing.text.html.Option;
-
 import java.util.Optional;
 
 import ak4ra.websocketchat.entities.User;
