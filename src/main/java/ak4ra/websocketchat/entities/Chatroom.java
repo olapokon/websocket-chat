@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,7 +19,10 @@ public class Chatroom {
 
     /**
      * The name of the chatroom.
+     * <p>
+     * Chatroom names are unique.
      */
+    @Indexed(unique = true)
     private String name;
 
     /**
@@ -37,6 +41,13 @@ public class Chatroom {
      */
     @DBRef(db = "User", lazy = true)
     private Set<User> activeUsers = new HashSet<>();
+
+    public Chatroom() {}
+
+    public Chatroom(String name, String endpoint) {
+        this.name = name;
+        this.endpoint = endpoint;
+    }
 
     public String getId() {
         return id;

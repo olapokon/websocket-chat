@@ -22,8 +22,26 @@ public class ChatroomService {
         this.userRepository = userRepository;
     }
 
-    public List<Chatroom> getChatrooms() {
+    public List<Chatroom> findAllChatrooms() {
         return chatroomRepository.findAll();
+    }
+
+    /**
+     * Inserts a chatroom into the database if it does not exist, otherwise finds and returns it.
+     *
+     * @param c
+     *         the chatroom to get or save to the database
+     *
+     * @return the chatroom
+     */
+    public Chatroom getOrCreateChatroom(Chatroom c) {
+        if (c.getName() == null || c.getName().isBlank()) {
+            throw new ValidationException("Chatroom name cannot be empty");
+        }
+        if (c.getEndpoint() == null || c.getEndpoint().isBlank()) {
+            throw new ValidationException("Chatroom endpoint cannot be empty");
+        }
+        return chatroomRepository.findChatroomByName(c.getName()).orElseGet(() -> chatroomRepository.save(c));
     }
 
     // TODO: transactions

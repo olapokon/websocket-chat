@@ -1,20 +1,15 @@
 package ak4ra.websocketchat.chatroom;
 
-import ak4ra.websocketchat.messages.ChatroomEvent;
 import ak4ra.websocketchat.messages.MessageService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/chat")
@@ -55,7 +50,7 @@ public class ChatroomController {
      */
     @GetMapping("/list")
     public String chatroomList(Model model) {
-        model.addAttribute("chatrooms", chatroomService.getChatrooms());
+        model.addAttribute("chatrooms", chatroomService.findAllChatrooms());
         return "chatroom-list";
     }
 
