@@ -25,8 +25,9 @@ public class StartupRunner implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(StartupRunner.class);
 
-    private final ChatroomService chatroomService;
-    private final UserService     userService;
+    private final ChatroomRepository chatroomRepository;
+    private final ChatroomService    chatroomService;
+    private final UserService        userService;
 
     private static final List<User>     DEFAULT_USERS     = new ArrayList<>();
     private static final List<Chatroom> DEFAULT_CHATROOMS = new ArrayList<>();
@@ -42,31 +43,39 @@ public class StartupRunner implements CommandLineRunner {
         DEFAULT_CHATROOMS.addAll(List.of(c1, c2, c3, c4));
     }
 
-    @Autowired
-    public StartupRunner(ChatroomService chatroomService, UserService userService) {
+    public StartupRunner(ChatroomRepository chatroomRepository,
+                         ChatroomService chatroomService, UserService userService) {
+        this.chatroomRepository = chatroomRepository;
         this.chatroomService = chatroomService;
         this.userService = userService;
     }
 
     @Override
     public void run(String... args) {
-        DEFAULT_USERS.forEach(u -> log.info("{}", userService.getOrCreateGithubUser(u)));
+        //        DEFAULT_USERS.forEach(u -> log.info("{}", userService.getOrCreateGithubUser(u)));
 
         DEFAULT_CHATROOMS.forEach(c -> log.info("{}", chatroomService.getOrCreateChatroom(c)));
 
-        log.info("findAllUsers(): {}", userService
-                .findAllUsers()
-                .stream()
-                .map(u -> "\n" + u.toString())
-                .collect(Collectors.joining()));
-        log.info("findAllChatrooms(): {}", chatroomService
-                .findAllChatrooms()
-                .stream()
-                .map(c -> "\n" + c.toString())
-                .collect(Collectors.joining()));
+        //        var users = userService.findAllUsers();
+        //        log.info("users: {}", users);
+        //        log.info("findAllUsers(): {}", users
+        //                .stream()
+        //                .map(u -> "\n" + u.toString())
+        //                .collect(Collectors.joining()));
+        //        log.info("findAllChatrooms(): {}", chatroomService
+        //                .findAllChatrooms()
+        //                .stream()
+        //                .map(c -> "\n" + c.toString())
+        //                .collect(Collectors.joining()));
 
         User u2 = new User("githubId2", "githubLogin2");
-        log.info("getOrCreateGithubUser: {}", userService.getOrCreateGithubUser(u2));
+        chatroomService.addAuthorizedUserToChatroom(u2, 1L);
+        User u3 = new User("githubId2", "githubLogin2");
+        chatroomService.addActiveUserToChatroom(u3, 1L);
+        //        var chatroom = chatroomRepository.getById(1L);
+        //        chatroom.getAuthorizedUsers().add(u2);
+        //        chatroomRepository.save(chatroom);
+        //        log.info("getOrCreateGithubUser: {}", userService.getOrCreateGithubUser(u2));
 
         //        chatroomService.transactionTest(DEFAULT_CHATROOMS.get(0));
         //        log.info("after transactionTest");

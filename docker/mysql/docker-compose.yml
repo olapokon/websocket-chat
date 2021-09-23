@@ -1,0 +1,13 @@
+version: '3.5'
+services:
+  mysql:
+    image: 'mysql'
+    restart: always
+    container_name: mysql
+    environment:
+      - MYSQL_DATABASE=chat
+      - MYSQL_USER=guest
+      - MYSQL_PASSWORD=guest
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - '9001:3306'

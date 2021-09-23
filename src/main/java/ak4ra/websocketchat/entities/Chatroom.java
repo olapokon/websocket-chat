@@ -1,28 +1,34 @@
 package ak4ra.websocketchat.entities;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Represents a chatroom.
  */
-@Document
+@Entity
+@Table(name = "chatroom")
 public class Chatroom {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     /**
      * The name of the chatroom.
      * <p>
      * Chatroom names are unique.
      */
-    @Indexed(unique = true)
     private String name;
 
     /**
@@ -33,13 +39,17 @@ public class Chatroom {
     /**
      * The {@link User}s who are authorized to access the chatroom.
      */
-    @DBRef(db = "User", lazy = true)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<User> authorizedUsers = new HashSet<>();
 
     /**
      * The {@link User}s who are currently the chatroom.
      */
-    @DBRef(db = "User", lazy = true)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    //    @ManyToMany
+    @JoinTable(name = "chatroom_active_user",
+               joinColumns = @JoinColumn(name = "chatroom"),
+               inverseJoinColumns = @JoinColumn(name = "active_user"))
     private Set<User> activeUsers = new HashSet<>();
 
     public Chatroom() {}
@@ -49,11 +59,11 @@ public class Chatroom {
         this.endpoint = endpoint;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -87,16 +97,5 @@ public class Chatroom {
 
     public void setActiveUsers(Set<User> activeUsers) {
         this.activeUsers = activeUsers;
-    }
-
-    @Override
-    public String toString() {
-        return "Chatroom{" +
-               "id='" + id + '\'' +
-               ", name='" + name + '\'' +
-               ", endpoint='" + endpoint + '\'' +
-               ", authorizedUsers=" + authorizedUsers +
-               ", activeUsers=" + activeUsers +
-               '}';
     }
 }

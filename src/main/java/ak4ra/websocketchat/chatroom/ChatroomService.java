@@ -56,28 +56,18 @@ public class ChatroomService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void addAuthorizedUserToChatroom(User user, String chatroomId) {
+    public void addAuthorizedUserToChatroom(User user, Long chatroomId) {
         Chatroom c = chatroomRepository.findById(chatroomId)
                                        .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
-        if (user.getId() == null) {
-            throw new ValidationException("User id cannot be null.");
-        }
-
-        User u = userRepository.findById(user.getId()).orElseGet(() -> userRepository.save(user));
-        c.getAuthorizedUsers().add(u);
+        c.getAuthorizedUsers().add(user);
         chatroomRepository.save(c);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void addActiveUserToChatroom(User user, String chatroomId) {
+    public void addActiveUserToChatroom(User user, Long chatroomId) {
         Chatroom c = chatroomRepository.findById(chatroomId)
                                        .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
-        if (user.getId() == null) {
-            throw new ValidationException("User id cannot be null.");
-        }
-
-        User u = userRepository.findById(user.getId()).orElseGet(() -> userRepository.save(user));
-        c.getActiveUsers().add(u);
+        c.getActiveUsers().add(user);
         chatroomRepository.save(c);
     }
 }

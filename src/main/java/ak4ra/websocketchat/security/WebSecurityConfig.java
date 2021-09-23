@@ -8,11 +8,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // TODO: openid?, login page
+    // TODO: openid?
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            // the websocket endpoint and chatroom pages require authentication
             // TODO: change websocket authenticated routes?
             .antMatchers("/ws", "/chat/room/**")
             .authenticated()

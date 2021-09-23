@@ -1,34 +1,40 @@
 package ak4ra.websocketchat.entities;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Represents a user of the chat application.
  * <p>
  * Only github login is currently supported, so every user is expected to have a github id and login/username.
  */
-@Document
+@Entity
+@Table(name = "user")
 public class User {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Indexed(unique = true, partialFilter = "{ githubId: { $exists: true } }")
+    @Column(unique = true, nullable = false)
     private String githubId;
 
+    @Column(nullable = false)
     private String githubLogin;
 
     /**
-     * The {@link Chatroom}s to which the user has access.
+     * The {@link Chatroom}s to which the user is currently in.
      */
-    @DBRef(db = "Chatroom", lazy = true)
-    private Set<Chatroom> chatrooms = new HashSet<>();
+    @ManyToMany(mappedBy = "activeUsers")
+    private Set<Chatroom> activeChatrooms = new HashSet<>();
 
     public User() {}
 
@@ -37,11 +43,19 @@ public class User {
         this.githubLogin = githubLogin;
     }
 
-    public String getId() {
+    public User(Long id, String githubId, String githubLogin,
+                Set<Chatroom> chatrooms) {
+        this.id = id;
+        this.githubId = githubId;
+        this.githubLogin = githubLogin;
+        this.activeChatrooms = chatrooms;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -61,21 +75,11 @@ public class User {
         this.githubLogin = githubLogin;
     }
 
-    public Set<Chatroom> getChatrooms() {
-        return chatrooms;
+    public Set<Chatroom> getActiveChatrooms() {
+        return activeChatrooms;
     }
 
-    public void setChatrooms(Set<Chatroom> chatrooms) {
-        this.chatrooms = chatrooms;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-               "id='" + id + '\'' +
-               ", githubId='" + githubId + '\'' +
-               ", githubLogin='" + githubLogin + '\'' +
-               ", chatrooms=" + chatrooms +
-               '}';
+    public void setActiveChatrooms(Set<Chatroom> activeChatrooms) {
+        this.activeChatrooms = activeChatrooms;
     }
 }
