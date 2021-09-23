@@ -54,7 +54,7 @@ public class StartupRunner implements CommandLineRunner {
     public void run(String... args) {
         //        DEFAULT_USERS.forEach(u -> log.info("{}", userService.getOrCreateGithubUser(u)));
 
-        DEFAULT_CHATROOMS.forEach(c -> log.info("{}", chatroomService.getOrCreateChatroom(c)));
+        //        DEFAULT_CHATROOMS.forEach(c -> log.info("{}", chatroomService.getOrCreateChatroom(c)));
 
         //        var users = userService.findAllUsers();
         //        log.info("users: {}", users);
@@ -68,10 +68,10 @@ public class StartupRunner implements CommandLineRunner {
         //                .map(c -> "\n" + c.toString())
         //                .collect(Collectors.joining()));
 
-        User u2 = new User("githubId2", "githubLogin2");
-        chatroomService.addAuthorizedUserToChatroom(u2, 1L);
-        User u3 = new User("githubId2", "githubLogin2");
-        chatroomService.addActiveUserToChatroom(u3, 1L);
+        //        User u2 = new User("githubId2", "githubLogin2");
+        //        chatroomService.addAuthorizedUserToChatroom(u2, 1L);
+        //        User u3 = new User("githubId2", "githubLogin2");
+        //        chatroomService.addActiveUserToChatroom(u3, 1L);
         //        var chatroom = chatroomRepository.getById(1L);
         //        chatroom.getAuthorizedUsers().add(u2);
         //        chatroomRepository.save(chatroom);

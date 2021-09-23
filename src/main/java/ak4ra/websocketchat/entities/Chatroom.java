@@ -1,6 +1,7 @@
 package ak4ra.websocketchat.entities;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,27 +30,31 @@ public class Chatroom {
      * <p>
      * Chatroom names are unique.
      */
+    @Column(nullable = false)
     private String name;
 
     /**
      * To be appended to the message broker destination.
      */
+    @Column(nullable = false)
     private String endpoint;
 
     /**
      * The {@link User}s who are authorized to access the chatroom.
      */
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "chatroom_authorized_user",
+               joinColumns = @JoinColumn(name = "chatroom_id"),
+               inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> authorizedUsers = new HashSet<>();
 
     /**
      * The {@link User}s who are currently the chatroom.
      */
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    //    @ManyToMany
     @JoinTable(name = "chatroom_active_user",
-               joinColumns = @JoinColumn(name = "chatroom"),
-               inverseJoinColumns = @JoinColumn(name = "active_user"))
+               joinColumns = @JoinColumn(name = "chatroom_id"),
+               inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> activeUsers = new HashSet<>();
 
     public Chatroom() {}

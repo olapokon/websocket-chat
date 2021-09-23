@@ -26,8 +26,9 @@ public class ChatroomService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Chatroom transactionTest(Chatroom c) {
-        c = chatroomRepository.save(c);
-        Chatroom c1 = new Chatroom(c.getName(), c.getEndpoint());
+        chatroomRepository.save(c);
+        System.out.println(1 / 0);
+        Chatroom c1 = new Chatroom("asda", "/asda");
         return chatroomRepository.save(c1);
     }
 
