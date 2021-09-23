@@ -9,6 +9,7 @@ import ak4ra.websocketchat.chatroom.ChatroomRepository;
 import ak4ra.websocketchat.chatroom.ChatroomService;
 import ak4ra.websocketchat.entities.Chatroom;
 import ak4ra.websocketchat.entities.User;
+import ak4ra.websocketchat.entities.UserType;
 import ak4ra.websocketchat.user.UserRepository;
 import ak4ra.websocketchat.user.UserService;
 import org.slf4j.Logger;
@@ -33,8 +34,9 @@ public class StartupRunner implements CommandLineRunner {
     private static final List<Chatroom> DEFAULT_CHATROOMS = new ArrayList<>();
 
     static {
-        User u = new User("githubId1", "githubLogin1");
-        DEFAULT_USERS.add(u);
+        User u = new User(UserType.GITHUB, "githubId1", "githubLogin1");
+        User u1 = new User(UserType.GITHUB, "githubId2", "githubLogin2");
+        DEFAULT_USERS.addAll(List.of(u, u1));
 
         Chatroom c1 = new Chatroom("default chatroom 1", "/default-1");
         Chatroom c2 = new Chatroom("default chatroom 2", "/default-2");
@@ -52,9 +54,16 @@ public class StartupRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        //        DEFAULT_USERS.forEach(u -> log.info("{}", userService.getOrCreateGithubUser(u)));
+        DEFAULT_USERS.forEach(u -> log.info("{}", userService.getOrCreateGithubUser(u)));
 
         //        DEFAULT_CHATROOMS.forEach(c -> log.info("{}", chatroomService.getOrCreateChatroom(c)));
+        //
+        //        var it = DEFAULT_USERS.iterator();
+        //        chatroomService.addAuthorizedUserToChatroom(it.next(), 1L);
+        //        chatroomService.addAuthorizedUserToChatroom(it.next(), 1L);
+        //        var it1 = DEFAULT_USERS.iterator();
+        //        chatroomService.addAuthorizedUserToChatroom(it1.next(), 1L);
+        //        chatroomService.addAuthorizedUserToChatroom(it1.next(), 1L);
 
         //        var users = userService.findAllUsers();
         //        log.info("users: {}", users);

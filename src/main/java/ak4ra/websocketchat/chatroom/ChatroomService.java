@@ -56,19 +56,24 @@ public class ChatroomService {
         return chatroomRepository.findChatroomByName(c.getName()).orElseGet(() -> chatroomRepository.save(c));
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void addAuthorizedUserToChatroom(User user, Long chatroomId) {
-        Chatroom c = chatroomRepository.findById(chatroomId)
-                                       .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
-        c.getAuthorizedUsers().add(user);
-        chatroomRepository.save(c);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void addActiveUserToChatroom(User user, Long chatroomId) {
-        Chatroom c = chatroomRepository.findById(chatroomId)
-                                       .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
-        c.getActiveUsers().add(user);
-        chatroomRepository.save(c);
-    }
+    //    @Transactional(propagation = Propagation.REQUIRED)
+    //    public void addAuthorizedUserToChatroom(User user, Long chatroomId) {
+    //        Chatroom c = chatroomRepository
+    //                .findById(chatroomId)
+    //                .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
+    //        User u = userRepository.findUserByGithubId(user.getGithubId()).orElse(user);
+    //        if (c.getAuthorizedUsers().contains(u)) {
+    //            return;
+    //        }
+    //        c.getAuthorizedUsers().add(u);
+    //        chatroomRepository.save(c);
+    //    }
+    //
+    //    @Transactional(propagation = Propagation.REQUIRED)
+    //    public void addActiveUserToChatroom(User user, Long chatroomId) {
+    //        Chatroom c = chatroomRepository.findById(chatroomId)
+    //                                       .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
+    //        c.getActiveUsers().add(user);
+    //        chatroomRepository.save(c);
+    //    }
 }

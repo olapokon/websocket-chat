@@ -2,10 +2,10 @@ package ak4ra.websocketchat.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
@@ -17,18 +17,29 @@ import java.util.Set;
  * Only github login is currently supported, so every user is expected to have a github id and login/username.
  */
 @Entity
+@IdClass(UserId.class)
 @Table(name = "user")
 public class User {
 
+    /**
+     * The user's identity provider.
+     * <p>
+     * Only GitHub is currently supported.
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private UserType type;
 
-    @Column(unique = true, nullable = false)
-    private String githubId;
+    /**
+     * The user's id returned by the identity provider.
+     */
+    @Id
+    @Column(nullable = false)
+    private String providedId;
 
     @Column(nullable = false)
-    private String githubLogin;
+    private String username;
 
     /**
      * The {@link Chatroom}s to which the user is currently in.
@@ -38,41 +49,34 @@ public class User {
 
     public User() {}
 
-    public User(String githubId, String githubLogin) {
-        this.githubId = githubId;
-        this.githubLogin = githubLogin;
+    public User(UserType type, String providedId, String username) {
+        this.type = type;
+        this.providedId = providedId;
+        this.username = username;
     }
 
-    public User(Long id, String githubId, String githubLogin,
-                Set<Chatroom> chatrooms) {
-        this.id = id;
-        this.githubId = githubId;
-        this.githubLogin = githubLogin;
-        this.activeChatrooms = chatrooms;
+    public UserType getType() {
+        return type;
     }
 
-    public Long getId() {
-        return id;
+    public void setType(UserType type) {
+        this.type = type;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getProvidedId() {
+        return providedId;
     }
 
-    public String getGithubId() {
-        return githubId;
+    public void setProvidedId(String providedId) {
+        this.providedId = providedId;
     }
 
-    public void setGithubId(String githubId) {
-        this.githubId = githubId;
+    public String getUsername() {
+        return username;
     }
 
-    public String getGithubLogin() {
-        return githubLogin;
-    }
-
-    public void setGithubLogin(String githubLogin) {
-        this.githubLogin = githubLogin;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Set<Chatroom> getActiveChatrooms() {

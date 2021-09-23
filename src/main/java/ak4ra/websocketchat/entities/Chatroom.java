@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,20 +40,28 @@ public class Chatroom {
 
     /**
      * The {@link User}s who are authorized to access the chatroom.
+     * <p>
+     * Uni-directional many-to-many relationship.
      */
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "chatroom_authorized_user",
                joinColumns = @JoinColumn(name = "chatroom_id"),
-               inverseJoinColumns = @JoinColumn(name = "user_id"))
+               inverseJoinColumns = {@JoinColumn(name = "user_type"),
+                                     @JoinColumn(name = "user_provided_id")
+               })
     private Set<User> authorizedUsers = new HashSet<>();
 
     /**
      * The {@link User}s who are currently the chatroom.
+     * <p>
+     * Bi-directional many-to-many relationship.
      */
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "chatroom_active_user",
                joinColumns = @JoinColumn(name = "chatroom_id"),
-               inverseJoinColumns = @JoinColumn(name = "user_id"))
+               inverseJoinColumns = {@JoinColumn(name = "user_type"),
+                                     @JoinColumn(name = "user_provided_id")
+               })
     private Set<User> activeUsers = new HashSet<>();
 
     public Chatroom() {}

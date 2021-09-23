@@ -24,19 +24,24 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    /**
-     * Gets or creates a user authenticated through github. Should have a githubId.
-     *
-     * @param user
-     *         the user to get or create
-     *
-     * @return the user
-     */
+    //    /**
+    //     * Gets or creates a user authenticated through github. Should have a githubId.
+    //     *
+    //     * @param user
+    //     *         the user to get or create
+    //     *
+    //     * @return the user
+    //     */
+    //    @Transactional(propagation = Propagation.REQUIRED)
+    //    public User getOrCreateGithubUser(User user) {
+    //        if (user.getGithubId() == null) {
+    //            throw new ValidationException("Github user must have a github id.");
+    //        }
+    //        return userRepository.findUserByGithubId(user.getGithubId()).orElseGet(() -> userRepository.save(user));
+    //    }
+
     @Transactional(propagation = Propagation.REQUIRED)
     public User getOrCreateGithubUser(User user) {
-        if (user.getGithubId() == null) {
-            throw new ValidationException("Github user must have a github id.");
-        }
-        return userRepository.findUserByGithubId(user.getGithubId()).orElseGet(() -> userRepository.save(user));
+        return userRepository.save(user);
     }
 }
