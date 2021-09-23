@@ -50,22 +50,25 @@ public class StartupRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        DEFAULT_USERS.forEach(u -> log.info("{}", userService.getOrCreateGithubUser(u)));
+        //        DEFAULT_USERS.forEach(u -> log.info("{}", userService.getOrCreateGithubUser(u)));
+        //
+        //        DEFAULT_CHATROOMS.forEach(c -> log.info("{}", chatroomService.getOrCreateChatroom(c)));
+        //
+        //        log.info("findAllUsers(): {}", userService
+        //                .findAllUsers()
+        //                .stream()
+        //                .map(u -> "\n" + u.toString())
+        //                .collect(Collectors.joining()));
+        //        log.info("findAllChatrooms(): {}", chatroomService
+        //                .findAllChatrooms()
+        //                .stream()
+        //                .map(c -> "\n" + c.toString())
+        //                .collect(Collectors.joining()));
+        //
+        //        User u2 = new User("githubId2", "githubLogin2");
+        //        log.info("getOrCreateGithubUser: {}", userService.getOrCreateGithubUser(u2));
 
-        DEFAULT_CHATROOMS.forEach(c -> log.info("{}", chatroomService.getOrCreateChatroom(c)));
-
-        log.info("findAllUsers(): {}", userService
-                .findAllUsers()
-                .stream()
-                .map(u -> "\n" + u.toString())
-                .collect(Collectors.joining()));
-        log.info("findAllChatrooms(): {}", chatroomService
-                .findAllChatrooms()
-                .stream()
-                .map(c -> "\n" + c.toString())
-                .collect(Collectors.joining()));
-
-        User u2 = new User("githubId2", "githubLogin2");
-        log.info("getOrCreateGithubUser: {}", userService.getOrCreateGithubUser(u2));
+        chatroomService.transactionTest(DEFAULT_CHATROOMS.get(0));
+        log.info("after transactionTest");
     }
 }

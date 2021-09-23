@@ -6,6 +6,8 @@ import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -17,6 +19,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
@@ -29,6 +32,7 @@ public class UserService {
      *
      * @return the user
      */
+    @Transactional(propagation = Propagation.REQUIRED)
     public User getOrCreateGithubUser(User user) {
         if (user.getGithubId() == null) {
             throw new ValidationException("Github user must have a github id.");
