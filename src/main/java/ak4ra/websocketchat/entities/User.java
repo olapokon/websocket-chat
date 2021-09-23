@@ -104,4 +104,13 @@ public class User {
     public int hashCode() {
         return Objects.hash(type, providedId);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+               "type=" + type +
+               ", providedId='" + providedId + '\'' +
+               ", username='" + username + '\'' +
+               '}';
+    }
 }

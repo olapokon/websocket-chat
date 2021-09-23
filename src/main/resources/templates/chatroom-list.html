@@ -6,8 +6,8 @@
     <link th:href="@{/styles/main.css}" rel="stylesheet"/>
 </head>
 <body>
-    <ul th:each="chatroom: ${chatrooms}">
-        <li th:text="${chatroom.name()}"></li>
+    <ul th:each="c: ${chatrooms}">
+        <li th:text="${c.getName()}"></li>
     </ul>
 </body>
 </html>

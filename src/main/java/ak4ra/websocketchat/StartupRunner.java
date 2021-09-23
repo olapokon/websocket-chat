@@ -52,16 +52,16 @@ public class StartupRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        DEFAULT_USERS.forEach(userService::createUser);
+        //        DEFAULT_USERS.forEach(userService::createUser);
         //        DEFAULT_CHATROOMS.forEach(chatroomService::createChatroom);
 
-        var it = DEFAULT_USERS.iterator();
-        chatroomService.addAuthorizedUserToChatroom(it.next(), 4L);
-        chatroomService.addAuthorizedUserToChatroom(it.next(), 4L);
-
-        var it1 = DEFAULT_USERS.iterator();
-        chatroomService.addActiveUserToChatroom(it1.next(), 5L);
-        chatroomService.addActiveUserToChatroom(it1.next(), 5L);
+        //        var it = DEFAULT_USERS.iterator();
+        //        chatroomService.addAuthorizedUserToChatroom(it.next(), 4L);
+        //        chatroomService.addAuthorizedUserToChatroom(it.next(), 4L);
+        //
+        //        var it1 = DEFAULT_USERS.iterator();
+        //        chatroomService.addActiveUserToChatroom(it1.next(), 5L);
+        //        chatroomService.addActiveUserToChatroom(it1.next(), 5L);
 
         //        var users = userService.findAllUsers();
         //        log.info("users: {}", users);
@@ -84,6 +84,9 @@ public class StartupRunner implements CommandLineRunner {
         //        chatroomRepository.save(chatroom);
         //        log.info("getOrCreateGithubUser: {}", userService.getOrCreateGithubUser(u2));
 
-        //        log.info("after transactionTest");
+        log.info("authorized users: {}", chatroomService
+                .getAuthorizedUsers(4L)
+                .stream().map(u -> "\n\t" + u.toString())
+                .collect(Collectors.joining()));
     }
 }

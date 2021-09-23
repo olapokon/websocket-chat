@@ -1,6 +1,7 @@
 package ak4ra.websocketchat.chatroom;
 
 import java.util.List;
+import java.util.Set;
 
 import ak4ra.websocketchat.entities.Chatroom;
 import ak4ra.websocketchat.entities.User;
@@ -51,9 +52,26 @@ public class ChatroomService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void addActiveUserToChatroom(User user, Long chatroomId) {
-        Chatroom c = chatroomRepository.findById(chatroomId)
-                                       .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
+        Chatroom c = chatroomRepository
+                .findById(chatroomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
         c.getActiveUsers().add(user);
         chatroomRepository.save(c);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public Set<User> getAuthorizedUsers(Long chatroomId) {
+        Chatroom c = chatroomRepository
+                .findChatroomByIdAndFetchAuthorizedUsers(chatroomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
+        return c.getAuthorizedUsers();
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public Set<User> getActiveUsers(Long chatroomId) {
+        Chatroom c = chatroomRepository
+                .findChatroomByIdAndFetchActiveUsers(chatroomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
+        return c.getAuthorizedUsers();
     }
 }

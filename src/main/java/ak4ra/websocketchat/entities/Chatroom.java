@@ -110,4 +110,13 @@ public class Chatroom {
     public void setActiveUsers(Set<User> activeUsers) {
         this.activeUsers = activeUsers;
     }
+
+    @Override
+    public String toString() {
+        return "Chatroom{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", endpoint='" + endpoint + '\'' +
+               '}';
+    }
 }
