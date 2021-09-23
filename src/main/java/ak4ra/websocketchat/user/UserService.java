@@ -24,24 +24,25 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    //    /**
-    //     * Gets or creates a user authenticated through github. Should have a githubId.
-    //     *
-    //     * @param user
-    //     *         the user to get or create
-    //     *
-    //     * @return the user
-    //     */
-    //    @Transactional(propagation = Propagation.REQUIRED)
-    //    public User getOrCreateGithubUser(User user) {
-    //        if (user.getGithubId() == null) {
-    //            throw new ValidationException("Github user must have a github id.");
-    //        }
-    //        return userRepository.findUserByGithubId(user.getGithubId()).orElseGet(() -> userRepository.save(user));
-    //    }
-
+    /**
+     * Creates a user. Should have a type, providedId, and username.
+     *
+     * @param user
+     *         the user to get or create
+     *
+     * @return the created user
+     */
     @Transactional(propagation = Propagation.REQUIRED)
-    public User getOrCreateGithubUser(User user) {
+    public User createUser(User user) {
+        if (user.getType() == null) {
+            throw new ValidationException("Github user must have a type.");
+        }
+        if (user.getProvidedId() == null) {
+            throw new ValidationException("Github user must have a providedId.");
+        }
+        if (user.getUsername() == null) {
+            throw new ValidationException("Github user must have a username.");
+        }
         return userRepository.save(user);
     }
 }

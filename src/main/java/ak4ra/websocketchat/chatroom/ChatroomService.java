@@ -24,56 +24,36 @@ public class ChatroomService {
         this.userRepository = userRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public Chatroom transactionTest(Chatroom c) {
-        chatroomRepository.save(c);
-        System.out.println(1 / 0);
-        Chatroom c1 = new Chatroom("asda", "/asda");
-        return chatroomRepository.save(c1);
-    }
-
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public List<Chatroom> findAllChatrooms() {
         return chatroomRepository.findAll();
     }
 
-    /**
-     * Inserts a chatroom into the database if it does not exist, otherwise finds and returns it.
-     *
-     * @param c
-     *         the chatroom to get or save to the database
-     *
-     * @return the chatroom
-     */
     @Transactional(propagation = Propagation.REQUIRED)
-    public Chatroom getOrCreateChatroom(Chatroom c) {
+    public Chatroom createChatroom(Chatroom c) {
         if (c.getName() == null || c.getName().isBlank()) {
             throw new ValidationException("Chatroom name cannot be empty");
         }
         if (c.getEndpoint() == null || c.getEndpoint().isBlank()) {
             throw new ValidationException("Chatroom endpoint cannot be empty");
         }
-        return chatroomRepository.findChatroomByName(c.getName()).orElseGet(() -> chatroomRepository.save(c));
+        return chatroomRepository.save(c);
     }
 
-    //    @Transactional(propagation = Propagation.REQUIRED)
-    //    public void addAuthorizedUserToChatroom(User user, Long chatroomId) {
-    //        Chatroom c = chatroomRepository
-    //                .findById(chatroomId)
-    //                .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
-    //        User u = userRepository.findUserByGithubId(user.getGithubId()).orElse(user);
-    //        if (c.getAuthorizedUsers().contains(u)) {
-    //            return;
-    //        }
-    //        c.getAuthorizedUsers().add(u);
-    //        chatroomRepository.save(c);
-    //    }
-    //
-    //    @Transactional(propagation = Propagation.REQUIRED)
-    //    public void addActiveUserToChatroom(User user, Long chatroomId) {
-    //        Chatroom c = chatroomRepository.findById(chatroomId)
-    //                                       .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
-    //        c.getActiveUsers().add(user);
-    //        chatroomRepository.save(c);
-    //    }
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void addAuthorizedUserToChatroom(User user, Long chatroomId) {
+        Chatroom c = chatroomRepository
+                .findById(chatroomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
+        c.getAuthorizedUsers().add(user);
+        chatroomRepository.save(c);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void addActiveUserToChatroom(User user, Long chatroomId) {
+        Chatroom c = chatroomRepository.findById(chatroomId)
+                                       .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
+        c.getActiveUsers().add(user);
+        chatroomRepository.save(c);
+    }
 }

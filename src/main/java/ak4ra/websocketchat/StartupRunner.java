@@ -10,11 +10,9 @@ import ak4ra.websocketchat.chatroom.ChatroomService;
 import ak4ra.websocketchat.entities.Chatroom;
 import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.entities.UserType;
-import ak4ra.websocketchat.user.UserRepository;
 import ak4ra.websocketchat.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -54,16 +52,16 @@ public class StartupRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        DEFAULT_USERS.forEach(u -> log.info("{}", userService.getOrCreateGithubUser(u)));
+        DEFAULT_USERS.forEach(userService::createUser);
+        //        DEFAULT_CHATROOMS.forEach(chatroomService::createChatroom);
 
-        //        DEFAULT_CHATROOMS.forEach(c -> log.info("{}", chatroomService.getOrCreateChatroom(c)));
-        //
-        //        var it = DEFAULT_USERS.iterator();
-        //        chatroomService.addAuthorizedUserToChatroom(it.next(), 1L);
-        //        chatroomService.addAuthorizedUserToChatroom(it.next(), 1L);
-        //        var it1 = DEFAULT_USERS.iterator();
-        //        chatroomService.addAuthorizedUserToChatroom(it1.next(), 1L);
-        //        chatroomService.addAuthorizedUserToChatroom(it1.next(), 1L);
+        var it = DEFAULT_USERS.iterator();
+        chatroomService.addAuthorizedUserToChatroom(it.next(), 4L);
+        chatroomService.addAuthorizedUserToChatroom(it.next(), 4L);
+
+        var it1 = DEFAULT_USERS.iterator();
+        chatroomService.addActiveUserToChatroom(it1.next(), 5L);
+        chatroomService.addActiveUserToChatroom(it1.next(), 5L);
 
         //        var users = userService.findAllUsers();
         //        log.info("users: {}", users);
@@ -86,7 +84,6 @@ public class StartupRunner implements CommandLineRunner {
         //        chatroomRepository.save(chatroom);
         //        log.info("getOrCreateGithubUser: {}", userService.getOrCreateGithubUser(u2));
 
-        //        chatroomService.transactionTest(DEFAULT_CHATROOMS.get(0));
         //        log.info("after transactionTest");
     }
 }
