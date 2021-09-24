@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 
+// TODO: probably needs to be removed
 public class InboundChannelInterceptor implements ChannelInterceptor {
 
     private static final Logger         log = LoggerFactory.getLogger(InboundChannelInterceptor.class);

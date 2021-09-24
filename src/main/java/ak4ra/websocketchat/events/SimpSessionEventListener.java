@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.exceptions.InvalidStateException;
@@ -29,7 +31,6 @@ public class SimpSessionEventListener {
 
     @EventListener
     public void sessionSubscribe(SessionSubscribeEvent e) {
-        log.info("sessions currently in the map: {}", simpSessionDestinations);
         Message<?> m = e.getMessage();
         User user = SimpMessageHeadersUtil.extractUser(m);
         SessionDestination sessDest = SimpMessageHeadersUtil.extractSessionDestination(m);
@@ -40,6 +41,8 @@ public class SimpSessionEventListener {
             return sessDests1;
         });
         log.warn("user {} connected to {}", user.getUsername(), sessDest.destination());
+        String map = formatMap(simpSessionDestinations);
+        log.info("sessions currently in the map: {}", map);
     }
 
     @EventListener
@@ -48,19 +51,37 @@ public class SimpSessionEventListener {
         User user = SimpMessageHeadersUtil.extractUser(m);
         SessionDestination sessDest = SimpMessageHeadersUtil.extractSessionDestination(m);
 
-        // the session that was just disconnected will still be in the map, holding its destination
-        Set<SessionDestination> sessDests = simpSessionDestinations.get(user);
-        SessionDestination disconnectedSession = sessDests
-                .stream()
-                .filter(s -> s.simpSessionId().equals(sessDest.simpSessionId()))
-                .findFirst()
-                .orElseThrow(() -> new InvalidStateException("Simp session missing."));
-
-        // remove it from the map
-        simpSessionDestinations.get(user).remove(disconnectedSession);
+        // the session that was just disconnected must be in the map, holding its destination
+        AtomicReference<String> destination = new AtomicReference<>();
+        simpSessionDestinations.compute(user, (user1, sessionDestinations) -> {
+            if (sessionDestinations == null) {
+                throw new InvalidStateException("Simp session missing.");
+            }
+            SessionDestination disconnected = sessionDestinations
+                    .stream()
+                    .filter(s -> s.simpSessionId().equals(sessDest.simpSessionId()))
+                    .findFirst()
+                    .orElseThrow(() -> new InvalidStateException("Simp session missing."));
+            sessionDestinations.remove(disconnected);
+            destination.set(disconnected.destination());
+            return sessionDestinations;
+        });
 
         // TODO: send notification to the destination that the user has disconnected
-        String disconnectedDestination = disconnectedSession.destination();
-        log.warn("user {} disconnected from {}", user.getUsername(), disconnectedDestination);
+        log.warn("user {} disconnected from {}", user.getUsername(), destination);
+        String map = formatMap(simpSessionDestinations);
+        log.info("sessions currently in the map: {}", map);
+    }
+
+    private static String formatMap(ConcurrentHashMap<User, Set<SessionDestination>> m) {
+        return m
+                .entrySet()
+                .stream()
+                .map(entry -> "\n" + entry.getKey().toString()
+                              + entry.getValue()
+                                     .stream()
+                                     .map(sd -> "\n\t" + sd.toString())
+                                     .collect(Collectors.joining()))
+                .collect(Collectors.joining());
     }
 }
