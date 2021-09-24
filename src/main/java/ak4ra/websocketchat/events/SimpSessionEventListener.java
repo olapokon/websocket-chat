@@ -29,6 +29,7 @@ public class SimpSessionEventListener {
 
     @EventListener
     public void sessionSubscribe(SessionSubscribeEvent e) {
+        log.info("sessions currently in the map: {}", simpSessionDestinations);
         Message<?> m = e.getMessage();
         User user = SimpMessageHeadersUtil.extractUser(m);
         SessionDestination sessDest = SimpMessageHeadersUtil.extractSessionDestination(m);
