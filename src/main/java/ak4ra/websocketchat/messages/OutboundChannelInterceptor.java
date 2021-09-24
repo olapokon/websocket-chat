@@ -10,12 +10,7 @@ import org.springframework.messaging.support.ChannelInterceptor;
 
 public class OutboundChannelInterceptor implements ChannelInterceptor {
 
-    private static final Logger         log = LoggerFactory.getLogger(OutboundChannelInterceptor.class);
-    private final        MessageService messageService;
-
-    public OutboundChannelInterceptor(MessageService messageService) {
-        this.messageService = messageService;
-    }
+    private static final Logger log = LoggerFactory.getLogger(OutboundChannelInterceptor.class);
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {

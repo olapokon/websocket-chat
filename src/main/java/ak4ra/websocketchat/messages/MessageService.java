@@ -10,11 +10,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
+
+    // TODO: move into constructor, or elsewhere
+    @Autowired
+    private SimpUserRegistry simpUserRegistry; // TODO: only local count, need a different registry if other nodes
 
     private final Logger log = LoggerFactory.getLogger(MessageService.class);
 
@@ -65,12 +70,20 @@ public class MessageService {
         this.template.convertAndSend(destination, messageJson);
     }
 
-    public void sendUserLeftMessage(Map<String, Object> userAttributes) throws JsonProcessingException {
-        Set<String> destinations = Set.of(); // TODO get user's chatrooms
+    public void sendUserJoinedMessage(String destination, Map<String, Object> userAttributes)
+    throws JsonProcessingException {
+        log.info("users: {}", simpUserRegistry.getUsers());
 
-        for (String d : destinations) {
-            sendChatroomMessage(d, userAttributes, ChatroomEvent.USER_LEFT);
-        }
+        sendChatroomMessage(destination, userAttributes, ChatroomEvent.USER_JOINED);
+    }
+
+    public void sendUserLeftMessage(Map<String, Object> userAttributes) throws JsonProcessingException {
+        // TODO: fox disconnect notification
+        // TODO get the chatroom the user is disconnecting from
+        log.info("users: {}", simpUserRegistry.getUsers());
+
+        String d = null;
+        sendChatroomMessage(d, userAttributes, ChatroomEvent.USER_LEFT);
     }
 
     public void sendChatroomMessage(String destination,

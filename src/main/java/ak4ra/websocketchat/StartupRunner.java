@@ -55,18 +55,20 @@ public class StartupRunner implements CommandLineRunner {
         //        DEFAULT_USERS.forEach(userService::createUser);
         //        DEFAULT_CHATROOMS.forEach(chatroomService::createChatroom);
 
-        Set<Chatroom> chatrooms = userService.getActiveChatrooms("githubId1", UserType.GITHUB);
-        log.info("user active chatrooms: {}", chatrooms);
-        Set<Chatroom> chatrooms1 = userService.getActiveChatrooms("githubId3", UserType.GITHUB);
-        log.info("user active chatrooms: {}", chatrooms1);
+        //        Set<Chatroom> chatrooms = userService.getActiveChatrooms("githubId1", UserType.GITHUB);
+        //        log.info("user active chatrooms: {}", chatrooms);
+        //        Set<Chatroom> chatrooms1 = userService.getActiveChatrooms("githubId3", UserType.GITHUB);
+        //        log.info("user active chatrooms: {}", chatrooms1);
+        //
+        //        Set<User> users = chatroomService.getAuthorizedUsers(8L);
+        //        log.info("chatroom.getAuthorizedUsers: {}", users);
+        //        Set<User> users1 = chatroomService.getActiveUsers(8L);
+        //        log.info("chatroom.getActiveUsers: {}", users1);
+        //        Set<User> users2 = chatroomService.getAuthorizedUsers(4L);
+        //        log.info("chatroom.getAuthorizedUsers: {}", users2);
+        //        Set<User> users3 = chatroomService.getActiveUsers(5L);
+        //        log.info("chatroom.getActiveUsers: {}", users3);
 
-        Set<User> users = chatroomService.getAuthorizedUsers(8L);
-        log.info("chatroom.getAuthorizedUsers: {}", users);
-        Set<User> users1 = chatroomService.getActiveUsers(8L);
-        log.info("chatroom.getActiveUsers: {}", users1);
-        Set<User> users2 = chatroomService.getAuthorizedUsers(4L);
-        log.info("chatroom.getAuthorizedUsers: {}", users2);
-        Set<User> users3 = chatroomService.getActiveUsers(5L);
-        log.info("chatroom.getActiveUsers: {}", users3);
+        chatroomService.addAuthorizedUserToChatroom(new User(UserType.GITHUB, "githubId14", "githubLogin14"), 8L);
     }
 }

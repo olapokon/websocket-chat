@@ -28,26 +28,62 @@ public class InboundChannelInterceptor implements ChannelInterceptor {
         String destination = accessor.getDestination();
         OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) accessor.getUser();
         Map<String, Object> userAttributes = oauth2Token.getPrincipal().getAttributes();
+        String simpSessionId = accessor.getSessionId();
 
+        //        switch (type) {
+        //            case HEARTBEAT -> {}
+        //            case SUBSCRIBE -> {
+        //                // when a user connects, send notification to the chatroom
+        //                try {
+        //                    messageService.sendUserJoinedMessage(destination, userAttributes);
+        //                } catch (JsonProcessingException e) {
+        //                    log.error("Failed to send user SUBSCRIBE notification message");
+        //                    e.printStackTrace();
+        //                }
+        //            }
+        //            case DISCONNECT -> {
+        //                log.info("DISCONNECT accessor: {}", accessor);
+        //                log.info("DISCONNECT simpSessionId: {}", simpSessionId);
+        //                log.info("DISCONNECT destination: {}", destination);
+        //                log.info("DISCONNECT user attributes: {}", userAttributes);
+        //                // when a user disconnects, send notification to the chatroom
+        //                //            try {
+        //                //                messageService.sendUserLeftMessage(destination, userAttributes);
+        //                //            } catch (JsonProcessingException e) {
+        //                //                log.error("Failed to send user DISCONNECT notification message");
+        //                //                e.printStackTrace();
+        //                //            }
+        //            }
+        //            default -> log.info("inbound message type: {}", type);
+        //        }
         if (type != SimpMessageType.HEARTBEAT) {
             log.info("inbound message type: {}", accessor.getMessageType());
         }
         if (type == SimpMessageType.SUBSCRIBE) {
             // when a user connects, send notification to the chatroom
             try {
-                messageService.sendChatroomMessage(destination, userAttributes, ChatroomEvent.USER_JOINED);
+                messageService.sendUserJoinedMessage(destination, userAttributes);
             } catch (JsonProcessingException e) {
                 log.error("Failed to send user SUBSCRIBE notification message");
                 e.printStackTrace();
             }
         }
         if (type == SimpMessageType.DISCONNECT) {
+            log.info("DISCONNECT accessor: {}", accessor);
+            log.info("DISCONNECT simpSessionId: {}", simpSessionId);
+            log.info("DISCONNECT destination: {}", destination);
+            log.info("DISCONNECT user attributes: {}", userAttributes);
             // when a user disconnects, send notification to the chatroom
-            try {
-                messageService.sendUserLeftMessage(userAttributes);
-            } catch (JsonProcessingException e) {
-                log.error("Failed to send user DISCONNECT notification message");
-                e.printStackTrace();
+            // TODO: fox disconnect notification
+            if (destination == null) {
+                log.error("Could not send DISCONNECT notification, destination was null.");
+            } else {
+                try {
+                    messageService.sendUserLeftMessage(userAttributes);
+                } catch (JsonProcessingException e) {
+                    log.error("Failed to send user DISCONNECT notification message");
+                    e.printStackTrace();
+                }
             }
         }
 

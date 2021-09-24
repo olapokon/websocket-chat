@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChatroomService {
 
-    private final String CHATROOM_NOT_FOUND = "Chatroom not found.";
+    private static final String CHATROOM_NOT_FOUND = "Chatroom not found.";
 
     private final ChatroomRepository chatroomRepository;
     private final UserRepository     userRepository;
