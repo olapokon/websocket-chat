@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import ak4ra.websocketchat.entities.User;
+import ak4ra.websocketchat.exceptions.InvalidStateException;
 import ak4ra.websocketchat.util.SimpMessageHeadersUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ public class SimpSessionEventListener {
             new ConcurrentHashMap<>();
 
     @EventListener
-    public void sessionConnect(SessionSubscribeEvent e) {
+    public void sessionSubscribe(SessionSubscribeEvent e) {
         Message<?> m = e.getMessage();
         User user = SimpMessageHeadersUtil.extractUser(m);
         SessionDestination sessDest = SimpMessageHeadersUtil.extractSessionDestination(m);
@@ -37,6 +38,7 @@ public class SimpSessionEventListener {
             sessDests1.addAll(sessDests2);
             return sessDests1;
         });
+        log.warn("user {} connected to {}", user.getUsername(), sessDest.destination());
     }
 
     @EventListener
@@ -45,7 +47,19 @@ public class SimpSessionEventListener {
         User user = SimpMessageHeadersUtil.extractUser(m);
         SessionDestination sessDest = SimpMessageHeadersUtil.extractSessionDestination(m);
 
+        // the session that was just disconnected will still be in the map, holding its destination
         Set<SessionDestination> sessDests = simpSessionDestinations.get(user);
+        SessionDestination disconnectedSession = sessDests
+                .stream()
+                .filter(s -> s.simpSessionId().equals(sessDest.simpSessionId()))
+                .findFirst()
+                .orElseThrow(() -> new InvalidStateException("Simp session missing."));
 
+        // remove it from the map
+        simpSessionDestinations.get(user).remove(disconnectedSession);
+
+        // TODO: send notification to the destination that the user has disconnected
+        String disconnectedDestination = disconnectedSession.destination();
+        log.warn("user {} disconnected from {}", user.getUsername(), disconnectedDestination);
     }
 }

@@ -35,7 +35,7 @@ public final class SimpMessageHeadersUtil {
             OAuth2AuthenticationToken oauth2Token = ((OAuth2AuthenticationToken) accessor.getUser());
             Map<String, Object> attributes = oauth2Token.getPrincipal().getAttributes();
             String authorizedClientRegistrationId = oauth2Token.getAuthorizedClientRegistrationId();
-            String providedId = attributes.get("if").toString(); // github id or equivalent
+            String providedId = attributes.get("id").toString(); // github id or equivalent
             String username = attributes.get("login").toString(); // github username or equivalent
             UserType type = determineUserType(authorizedClientRegistrationId);
             return new User(type, providedId, username);
