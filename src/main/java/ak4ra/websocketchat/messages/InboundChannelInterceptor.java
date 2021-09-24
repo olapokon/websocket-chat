@@ -64,7 +64,7 @@ public class InboundChannelInterceptor implements ChannelInterceptor {
             // when a user connects, send notification to the chatroom
             try {
                 log.info("SUBSCRIBE simpSessionId: {}", simpSessionId);
-                log.info("SUBSCRIBE user attributes: {}", userAttributes);
+                //                log.info("SUBSCRIBE user attributes: {}", userAttributes);
                 messageService.sendUserJoinedMessage(destination, userAttributes);
             } catch (JsonProcessingException e) {
                 log.error("Failed to send user SUBSCRIBE notification message");
@@ -75,7 +75,7 @@ public class InboundChannelInterceptor implements ChannelInterceptor {
             log.info("DISCONNECT accessor: {}", accessor);
             log.info("DISCONNECT simpSessionId: {}", simpSessionId);
             log.info("DISCONNECT destination: {}", destination);
-            log.info("DISCONNECT user attributes: {}", userAttributes);
+            //            log.info("DISCONNECT user attributes: {}", userAttributes);
             // when a user disconnects, send notification to the chatroom
             // TODO: fox disconnect notification
             if (destination == null) {
