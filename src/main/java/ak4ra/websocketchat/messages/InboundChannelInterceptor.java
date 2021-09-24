@@ -21,6 +21,7 @@ public class InboundChannelInterceptor implements ChannelInterceptor {
         this.messageService = messageService;
     }
 
+    // When you throw any exception from ClientInboundChannelInterceptor, it will be sent as ERROR frame
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
@@ -62,6 +63,8 @@ public class InboundChannelInterceptor implements ChannelInterceptor {
         if (type == SimpMessageType.SUBSCRIBE) {
             // when a user connects, send notification to the chatroom
             try {
+                log.info("SUBSCRIBE simpSessionId: {}", simpSessionId);
+                log.info("SUBSCRIBE user attributes: {}", userAttributes);
                 messageService.sendUserJoinedMessage(destination, userAttributes);
             } catch (JsonProcessingException e) {
                 log.error("Failed to send user SUBSCRIBE notification message");

@@ -27,12 +27,12 @@ public class ChatroomPermissionEvaluator implements PermissionEvaluator {
     public boolean hasPermission(Authentication authentication,
                                  Object targetObject,
                                  Object permission) {
-        log.info("hasPermission:\n"
-                           + "\tAuthentication: " + authentication.toString() + "\n"
-                           + "\tChatroom id: " + targetObject);
-        String userId = authentication.getName();
-        log.info("authentication: {}", authentication);
-        log.info("userId: {}", userId);
+        //        log.info("hasPermission:\n"
+        //                           + "\tAuthentication: " + authentication.toString() + "\n"
+        //                           + "\tChatroom id: " + targetObject);
+        //        String userId = authentication.getName();
+        //        log.info("authentication: {}", authentication);
+        //        log.info("userId: {}", userId);
         // TODO: chatroom exists and has the user id in its "users" set
         return true;
     }

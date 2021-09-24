@@ -31,6 +31,21 @@ export function createClient(onMessage) {
         client.subscribe(SUBSCRIBE_DESTINATION, onMessage, headers);
     };
 
+    client.onDisconnect = async function (frame) {
+        console.log("disconnected:\n", frame);
+        client.unsubscribe(SUBSCRIBE_DESTINATION, {});
+    };
+
+    client.onWebSocketClose = async function (frame) {
+        console.log("web socket closed:\n", frame);
+        client.unsubscribe(SUBSCRIBE_DESTINATION, {});
+    };
+
+    client.onStompError = async function (frame) {
+        console.log("web socket closed:\n", frame);
+        client.unsubscribe(SUBSCRIBE_DESTINATION, {});
+    };
+
     client.onStompError = function (frame) {
         // Will be invoked in case of error encountered at Broker
         // Bad login/passcode typically will cause an error

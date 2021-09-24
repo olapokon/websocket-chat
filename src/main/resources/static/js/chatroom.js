@@ -11,30 +11,6 @@ const client = createClient(onMessage);
 // autoscroll message display
 autoscroll(document.getElementById("messages-container"));
 
-// /**
-//  * The endpoint to call when joining a chatroom.
-//  */
-// const JOIN_CHATROOM_URL = `/chat/room/${chatroomId}/join`;
-//
-// /**
-//  * Notifies the server that a user has connected to the chat room socket.
-//  */
-// function onConnect() {
-//     fetch(JOIN_CHATROOM_URL).then(null);
-// }
-//
-// /**
-//  * The endpoint to call when exiting a chatroom.
-//  */
-// const EXIT_CHATROOM_URL = `/chat/room/${chatroomId}/exit`;
-//
-// /**
-//  * Notifies the server that a user has disconnected from the chat room socket.
-//  */
-// function onDisconnect() {
-//     fetch(EXIT_CHATROOM_URL).then(null);
-// }
-
 /**
  * The body of a STOMP message.
  *
@@ -74,4 +50,8 @@ chatInput.addEventListener("keyup", (e) => {
         return;
     chatInput.value = "";
     sendMessage(client, text);
+});
+
+window.addEventListener("unload", function(event) {
+    client.onS(SUBSCRIBE_DESTINATION);
 });
