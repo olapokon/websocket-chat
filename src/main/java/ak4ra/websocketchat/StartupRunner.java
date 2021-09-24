@@ -1,9 +1,8 @@
 package ak4ra.websocketchat;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import ak4ra.websocketchat.chatroom.ChatroomRepository;
 import ak4ra.websocketchat.chatroom.ChatroomService;
@@ -34,7 +33,8 @@ public class StartupRunner implements CommandLineRunner {
     static {
         User u = new User(UserType.GITHUB, "githubId1", "githubLogin1");
         User u1 = new User(UserType.GITHUB, "githubId2", "githubLogin2");
-        DEFAULT_USERS.addAll(List.of(u, u1));
+        User u2 = new User(UserType.GITHUB, "githubId3", "githubLogin3");
+        DEFAULT_USERS.addAll(List.of(u, u1, u2));
 
         Chatroom c1 = new Chatroom("default chatroom 1", "/default-1");
         Chatroom c2 = new Chatroom("default chatroom 2", "/default-2");
@@ -55,38 +55,18 @@ public class StartupRunner implements CommandLineRunner {
         //        DEFAULT_USERS.forEach(userService::createUser);
         //        DEFAULT_CHATROOMS.forEach(chatroomService::createChatroom);
 
-        //        var it = DEFAULT_USERS.iterator();
-        //        chatroomService.addAuthorizedUserToChatroom(it.next(), 4L);
-        //        chatroomService.addAuthorizedUserToChatroom(it.next(), 4L);
-        //
-        //        var it1 = DEFAULT_USERS.iterator();
-        //        chatroomService.addActiveUserToChatroom(it1.next(), 5L);
-        //        chatroomService.addActiveUserToChatroom(it1.next(), 5L);
+        Set<Chatroom> chatrooms = userService.getActiveChatrooms("githubId1", UserType.GITHUB);
+        log.info("user active chatrooms: {}", chatrooms);
+        Set<Chatroom> chatrooms1 = userService.getActiveChatrooms("githubId3", UserType.GITHUB);
+        log.info("user active chatrooms: {}", chatrooms1);
 
-        //        var users = userService.findAllUsers();
-        //        log.info("users: {}", users);
-        //        log.info("findAllUsers(): {}", users
-        //                .stream()
-        //                .map(u -> "\n" + u.toString())
-        //                .collect(Collectors.joining()));
-        //        log.info("findAllChatrooms(): {}", chatroomService
-        //                .findAllChatrooms()
-        //                .stream()
-        //                .map(c -> "\n" + c.toString())
-        //                .collect(Collectors.joining()));
-
-        //        User u2 = new User("githubId2", "githubLogin2");
-        //        chatroomService.addAuthorizedUserToChatroom(u2, 1L);
-        //        User u3 = new User("githubId2", "githubLogin2");
-        //        chatroomService.addActiveUserToChatroom(u3, 1L);
-        //        var chatroom = chatroomRepository.getById(1L);
-        //        chatroom.getAuthorizedUsers().add(u2);
-        //        chatroomRepository.save(chatroom);
-        //        log.info("getOrCreateGithubUser: {}", userService.getOrCreateGithubUser(u2));
-
-        log.info("authorized users: {}", chatroomService
-                .getAuthorizedUsers(4L)
-                .stream().map(u -> "\n\t" + u.toString())
-                .collect(Collectors.joining()));
+        Set<User> users = chatroomService.getAuthorizedUsers(8L);
+        log.info("chatroom.getAuthorizedUsers: {}", users);
+        Set<User> users1 = chatroomService.getActiveUsers(8L);
+        log.info("chatroom.getActiveUsers: {}", users1);
+        Set<User> users2 = chatroomService.getAuthorizedUsers(4L);
+        log.info("chatroom.getAuthorizedUsers: {}", users2);
+        Set<User> users3 = chatroomService.getActiveUsers(5L);
+        log.info("chatroom.getActiveUsers: {}", users3);
     }
 }

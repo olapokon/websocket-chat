@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChatroomService {
 
+    private final String CHATROOM_NOT_FOUND = "Chatroom not found.";
+
     private final ChatroomRepository chatroomRepository;
     private final UserRepository     userRepository;
 
@@ -45,7 +47,7 @@ public class ChatroomService {
     public void addAuthorizedUserToChatroom(User user, Long chatroomId) {
         Chatroom c = chatroomRepository
                 .findById(chatroomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(CHATROOM_NOT_FOUND));
         c.getAuthorizedUsers().add(user);
         chatroomRepository.save(c);
     }
@@ -54,24 +56,24 @@ public class ChatroomService {
     public void addActiveUserToChatroom(User user, Long chatroomId) {
         Chatroom c = chatroomRepository
                 .findById(chatroomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(CHATROOM_NOT_FOUND));
         c.getActiveUsers().add(user);
         chatroomRepository.save(c);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public Set<User> getAuthorizedUsers(Long chatroomId) {
-        Chatroom c = chatroomRepository
-                .findChatroomByIdAndFetchAuthorizedUsers(chatroomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
-        return c.getAuthorizedUsers();
+        return chatroomRepository
+                .getChatroomByIdAndFetchAuthorizedUsers(chatroomId)
+                .orElseThrow(() -> new ResourceNotFoundException(CHATROOM_NOT_FOUND))
+                .getAuthorizedUsers();
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public Set<User> getActiveUsers(Long chatroomId) {
-        Chatroom c = chatroomRepository
-                .findChatroomByIdAndFetchActiveUsers(chatroomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Chatroom not found."));
-        return c.getAuthorizedUsers();
+        return chatroomRepository
+                .getChatroomByIdAndFetchActiveUsers(chatroomId)
+                .orElseThrow(() -> new ResourceNotFoundException(CHATROOM_NOT_FOUND))
+                .getActiveUsers();
     }
 }
