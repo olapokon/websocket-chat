@@ -13,6 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+/**
+ * Tracks the chatrooms each user is connected to.
+ */
 @Component
 public class UserPresenceTracker {
 
@@ -20,7 +23,10 @@ public class UserPresenceTracker {
 
     /**
      * Holds the {@link SessionDestination} pairs for currently connected {@link User}s.
+     * <p>
+     * The same user can be connected to the same chatroom more than once, through a different simp session.
      */
+    // TODO: eventually move to redis or equivalent?
     private final ConcurrentHashMap<User, Set<SessionDestination>> simpSessionDestinations =
             new ConcurrentHashMap<>();
 
@@ -32,6 +38,7 @@ public class UserPresenceTracker {
      * @param sd
      *         the session/destination
      */
+    // TODO: user opens same chatroom in other tab - do not send notification
     public void addSessionDestination(User u, SessionDestination sd) {
         Set<SessionDestination> val = new HashSet<>(List.of(sd));
         simpSessionDestinations.merge(u, val, (sds1, sds2) -> {
@@ -56,6 +63,7 @@ public class UserPresenceTracker {
      * @throws InvalidStateException
      *         if the {@link SessionDestination} is not present
      */
+    // TODO: user leaves chatroom that is open in other tab - do not send notification
     public String removeSessionDestination(User u, SessionDestination sd) {
         AtomicReference<String> destination = new AtomicReference<>();
         simpSessionDestinations.compute(u, (user, sessionDestinations) -> {

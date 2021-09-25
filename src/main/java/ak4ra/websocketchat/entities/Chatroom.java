@@ -51,6 +51,7 @@ public class Chatroom {
                })
     private Set<User> authorizedUsers = new HashSet<>();
 
+    // TODO: will probably be removed
     /**
      * The {@link User}s who are currently the chatroom.
      * <p>
