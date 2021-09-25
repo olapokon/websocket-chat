@@ -35,31 +35,19 @@ public class MessageService {
      * Sends a STOMP message with the given body to the given destination.
      *
      * @param destination
-     *         the destination to be passed to the message broker
-     * @param headers
-     *         the STOMP message's headers
+     *         the message broker destination
+     * @param username
+     *         the sender's username
      * @param message
      *         the body of the message
      */
     public void sendUserMessage(String destination,
-                                Map<String, Object> headers,
+                                String username,
                                 String message) throws JsonProcessingException {
         log.info("-----------------------------------------------------------------");
-        // TODO: use utils
-        OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) headers.get("simpUser");
-        Map<String, Object> userAttributes = oauth2Token.getPrincipal().getAttributes();
-        String username = userAttributes.get("login").toString(); // github username
-        String userId = userAttributes.get("id").toString(); // github id
-
-        //        String s = headers
-        //                .entrySet()
-        //                .stream()
-        //                .map(e -> e.getKey() + ":\n\t" + e.getValue() + "\n")
-        //                .collect(Collectors.joining());
-        log.info("username: {}, user id: {}", username, userId);
+        log.info("username: {}", username);
         log.info("message: {}", message);
-        //        log.info("headers: {}", headers);
-        log.info("destination: /ws-chat{}", destination);
+        log.info("destination: {}", destination);
         ChatMessage body = new ChatMessage(ChatMessageType.USER_MESSAGE,
                                            username,
                                            message,
@@ -75,7 +63,7 @@ public class MessageService {
      * Notifies a chatroom that a user has connected.
      *
      * @param destination
-     *         the chatoroom's message broker destination
+     *         the chatroom's message broker destination
      * @param username
      *         the user's username
      *
@@ -92,7 +80,7 @@ public class MessageService {
      * Notifies a chatroom that a user has disconnected.
      *
      * @param destination
-     *         the chatoroom's message broker destination
+     *         the chatroom's message broker destination
      * @param username
      *         the user's username
      *
@@ -105,7 +93,7 @@ public class MessageService {
     }
 
     /**
-     * Sends a message to a chatroom.
+     * Sends a STOMP message to a chatroom.
      *
      * @param destination
      *         the chatroom's message broker destination

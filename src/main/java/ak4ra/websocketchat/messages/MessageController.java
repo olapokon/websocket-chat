@@ -2,12 +2,14 @@ package ak4ra.websocketchat.messages;
 
 import java.util.Map;
 
+import ak4ra.websocketchat.entities.User;
+import ak4ra.websocketchat.util.SimpMessageHeadersUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
@@ -30,12 +32,13 @@ public class MessageController {
 
     @MessageMapping("/ws-chat/{variableDestination}")
     public void handle(@DestinationVariable("variableDestination") String variableDestination,
-                       @Headers Map<String, Object> headers,
-                       String message) throws JsonProcessingException {
+                       Message<?> message,
+                       String messageBody) throws JsonProcessingException {
 
+        User u = SimpMessageHeadersUtil.extractUser(message);
         String destination = "/topic/" + variableDestination;
-        log.info("user count: {}", simpUserRegistry.getUserCount());
-        log.info("users: {}", simpUserRegistry.getUsers());
-        messageService.sendUserMessage(destination, headers, message);
+        log.info("user count: {}", simpUserRegistry.getUserCount()); // TODO: remove
+        log.info("users: {}", simpUserRegistry.getUsers()); // TODO: remove
+        messageService.sendUserMessage(destination, u.getUsername(), messageBody);
     }
 }
