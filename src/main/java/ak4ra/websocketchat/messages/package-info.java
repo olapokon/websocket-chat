@@ -1,5 +1,5 @@
-@NonNullFields
 @NonNullApi
+@NonNullFields
 package ak4ra.websocketchat.messages;
 
 import org.springframework.lang.NonNullApi;
