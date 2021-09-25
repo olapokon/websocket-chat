@@ -18,7 +18,7 @@ import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 public class SimpSessionEventListener {
 
     private final UserPresenceTracker userPresenceTracker;
-    private final UserService                 userService;
+    private final UserService         userService;
 
     @Autowired
     public SimpSessionEventListener(UserPresenceTracker userPresenceTracker,
@@ -33,8 +33,9 @@ public class SimpSessionEventListener {
         User user = SimpMessageHeadersUtil.extractUser(m);
         SessionDestination sd = SimpMessageHeadersUtil.extractSessionDestination(m);
 
-        userPresenceTracker.addSessionDestination(user, sd);
-        userService.userJoinChatroom(user, sd.destination());
+        final boolean sendJoinNotification = userPresenceTracker.addSessionDestination(user, sd);
+        if (sendJoinNotification)
+            userService.userJoinChatroom(user, sd.destination());
     }
 
     @EventListener
@@ -48,6 +49,7 @@ public class SimpSessionEventListener {
         // The actual destination needs to be retrieved from the tracker, where the destination for
         // the session currently disconnecting is stored.
         String destination = userPresenceTracker.removeSessionDestination(user, sd);
-        userService.userLeaveChatroom(user, destination);
+        if (destination != null)
+            userService.userLeaveChatroom(user, destination);
     }
 }

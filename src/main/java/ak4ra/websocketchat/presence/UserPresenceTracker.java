@@ -2,6 +2,7 @@ package ak4ra.websocketchat.presence;
 
 import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.exceptions.InvalidStateException;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,8 +18,11 @@ public interface UserPresenceTracker {
      *         the user
      * @param sd
      *         the session/destination
+     *
+     * @return true if the user just joined a chatroom by connecting to this destination, false if the user is already
+     *         connected to the chatroom through a different simp session (e.g. from a different browser window)
      */
-    void addSessionDestination(User u, SessionDestination sd);
+    boolean addSessionDestination(User u, SessionDestination sd);
 
     /**
      * Removes a {@link SessionDestination} from the tracker and returns its destination.
@@ -32,8 +36,12 @@ public interface UserPresenceTracker {
      * @param sd
      *         the session/destination
      *
+     * @return the destination of the simp session that is disconnecting or returns null if the user has other active
+     *         simp sessions to that destination
+     *
      * @throws InvalidStateException
      *         if the {@link SessionDestination} is not present
      */
+    @Nullable
     String removeSessionDestination(User u, SessionDestination sd) throws InvalidStateException;
 }

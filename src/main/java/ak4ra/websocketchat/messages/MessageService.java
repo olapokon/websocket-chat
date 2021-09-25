@@ -71,7 +71,7 @@ public class MessageService {
      */
     public void sendUserJoinedMessage(String destination, String username)
     throws JsonProcessingException {
-        log.info("users: {}", simpUserRegistry.getUsers()); // TODO: remove
+        //        log.info("users: {}", simpUserRegistry.getUsers()); // TODO: remove
 
         sendChatroomMessage(destination, username, ChatroomEvent.USER_JOINED);
     }
@@ -87,7 +87,7 @@ public class MessageService {
      * @throws JsonProcessingException
      */
     public void sendUserLeftMessage(String destination, String username) throws JsonProcessingException {
-        log.info("users: {}", simpUserRegistry.getUsers()); // TODO: remove
+        //        log.info("users: {}", simpUserRegistry.getUsers()); // TODO: remove
 
         sendChatroomMessage(destination, username, ChatroomEvent.USER_LEFT);
     }

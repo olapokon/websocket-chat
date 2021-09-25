@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,7 @@ import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.exceptions.InvalidStateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,26 +33,40 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
     private final ConcurrentHashMap<User, Set<SessionDestination>> simpSessionDestinations =
             new ConcurrentHashMap<>();
 
-
     /**
      * {@inheritDoc}
      */
-    // TODO: user opens same chatroom in another tab - do not send notification
-    public void addSessionDestination(User u, SessionDestination sd) {
+    public boolean addSessionDestination(User u, SessionDestination sd) {
+        AtomicBoolean userJoinedChatroom = new AtomicBoolean(true);
         Set<SessionDestination> val = new HashSet<>(List.of(sd));
-        simpSessionDestinations.merge(u, val, (sds1, sds2) -> {
-            sds2.addAll(sds1);
-            return sds2;
+        simpSessionDestinations.compute(u, (user, sessionDestinations) -> {
+            if (sessionDestinations == null)
+                return val;
+            Set<SessionDestination> sameDestinationSds = sessionDestinations
+                    .stream()
+                    .filter(sessD -> sessD.destination().equals(sd.destination()))
+                    .collect(Collectors.toSet());
+            if (!sameDestinationSds.isEmpty()) {
+                // the user is already connected to this destination with a different simp session
+                userJoinedChatroom.set(false);
+            }
+            sessionDestinations.addAll(val);
+            return sessionDestinations;
         });
-        log.info("user {} connected to {}", u.getUsername(), sd.destination());
+        if (userJoinedChatroom.get())
+            log.info("user {} connected to {}", u.getUsername(), sd.destination());
+        else
+            log.info("user {} opened an additional connection to {}", u.getUsername(), sd.destination());
         logTrackerState();
+        return userJoinedChatroom.get();
     }
 
     /**
      * {@inheritDoc}
      */
-    // TODO: user leaves chatroom that is open in another tab - do not send notification
-    public String removeSessionDestination(User u, SessionDestination sd) throws InvalidStateException {
+    public @Nullable
+    String removeSessionDestination(User u, SessionDestination sd) throws InvalidStateException {
+        AtomicBoolean userLeftChatroom = new AtomicBoolean(true);
         AtomicReference<String> destination = new AtomicReference<>();
         simpSessionDestinations.compute(u, (user, sessionDestinations) -> {
             if (sessionDestinations == null)
@@ -60,6 +76,12 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
                     .filter(s -> s.simpSessionId().equals(sd.simpSessionId()))
                     .findFirst()
                     .orElseThrow(() -> new InvalidStateException("Simp session missing."));
+            Set<SessionDestination> sameDestinationSds = sessionDestinations
+                    .stream()
+                    .filter(sessD -> sessD.destination().equals(disconnected.destination()))
+                    .collect(Collectors.toSet());
+            if (sameDestinationSds.size() > 1)
+                userLeftChatroom.set(false);
             sessionDestinations.remove(disconnected);
             destination.set(disconnected.destination());
             if (sessionDestinations.isEmpty())
@@ -67,9 +89,15 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
             return sessionDestinations;
         });
 
-        log.info("user {} disconnected from {}", u.getUsername(), destination);
         logTrackerState();
-        return destination.get();
+        if (userLeftChatroom.get()) {
+            log.info("user {} disconnected from {}", u.getUsername(), destination);
+            return destination.get();
+        }
+        else {
+            log.info("user {} closed one of their connections to {}", u.getUsername(), sd.destination());
+            return null;
+        }
     }
 
     private void logTrackerState() {
