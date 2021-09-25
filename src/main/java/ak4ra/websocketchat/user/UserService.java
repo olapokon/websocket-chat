@@ -54,15 +54,12 @@ public class UserService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public User createUser(User user) {
-        if (user.getType() == null) {
+        if (user.getType() == null)
             throw new ValidationException("Github user must have a type.");
-        }
-        if (user.getProvidedId() == null) {
+        if (user.getProvidedId() == null)
             throw new ValidationException("Github user must have a providedId.");
-        }
-        if (user.getUsername() == null) {
+        if (user.getUsername() == null)
             throw new ValidationException("Github user must have a username.");
-        }
         return userRepository.save(user);
     }
 }

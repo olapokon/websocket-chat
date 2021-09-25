@@ -2,7 +2,6 @@ package ak4ra.websocketchat.messages;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class MessageService {
 
     // TODO: move into constructor, or elsewhere
+    // TODO: probably remove completely
     @Autowired
     private SimpUserRegistry simpUserRegistry; // TODO: only local count, need a different registry if other nodes
 
@@ -45,6 +45,7 @@ public class MessageService {
                                 Map<String, Object> headers,
                                 String message) throws JsonProcessingException {
         log.info("-----------------------------------------------------------------");
+        // TODO: use utils
         OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) headers.get("simpUser");
         Map<String, Object> userAttributes = oauth2Token.getPrincipal().getAttributes();
         String username = userAttributes.get("login").toString(); // github username
@@ -70,27 +71,52 @@ public class MessageService {
         this.template.convertAndSend(destination, messageJson);
     }
 
-    public void sendUserJoinedMessage(String destination, Map<String, Object> userAttributes)
+    /**
+     * Notifies a chatroom that a user has connected.
+     *
+     * @param destination
+     *         the chatoroom's message broker destination
+     * @param username
+     *         the user's username
+     *
+     * @throws JsonProcessingException
+     */
+    public void sendUserJoinedMessage(String destination, String username)
     throws JsonProcessingException {
-        log.info("users: {}", simpUserRegistry.getUsers());
+        log.info("users: {}", simpUserRegistry.getUsers()); // TODO: remove
 
-        sendChatroomMessage(destination, userAttributes, ChatroomEvent.USER_JOINED);
+        sendChatroomMessage(destination, username, ChatroomEvent.USER_JOINED);
     }
 
-    public void sendUserLeftMessage(Map<String, Object> userAttributes) throws JsonProcessingException {
-        // TODO: fox disconnect notification
-        // TODO get the chatroom the user is disconnecting from
-        log.info("users: {}", simpUserRegistry.getUsers());
+    /**
+     * Notifies a chatroom that a user has disconnected.
+     *
+     * @param destination
+     *         the chatoroom's message broker destination
+     * @param username
+     *         the user's username
+     *
+     * @throws JsonProcessingException
+     */
+    public void sendUserLeftMessage(String destination, String username) throws JsonProcessingException {
+        log.info("users: {}", simpUserRegistry.getUsers()); // TODO: remove
 
-        String d = null;
-        sendChatroomMessage(d, userAttributes, ChatroomEvent.USER_LEFT);
+        sendChatroomMessage(destination, username, ChatroomEvent.USER_LEFT);
     }
 
+    /**
+     * Sends a message to a chatroom.
+     *
+     * @param destination
+     *         the chatroom's message broker destination
+     * @param username
+     *         the username of the user on whose behalf the message is being sent.
+     *
+     * @throws JsonProcessingException
+     */
     public void sendChatroomMessage(String destination,
-                                    Map<String, Object> userAttributes,
+                                    String username,
                                     ChatroomEvent event) throws JsonProcessingException {
-        String username = userAttributes.get("login").toString(); // github username
-        //        String userId = userAttributes.get("id").toString(); // github id
         ChatMessage body = new ChatMessage(ChatMessageType.CHATROOM_MESSAGE,
                                            username,
                                            event.toString(),

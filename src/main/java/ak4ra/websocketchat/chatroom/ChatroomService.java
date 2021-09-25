@@ -34,12 +34,10 @@ public class ChatroomService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Chatroom createChatroom(Chatroom c) {
-        if (c.getName() == null || c.getName().isBlank()) {
+        if (c.getName() == null || c.getName().isBlank())
             throw new ValidationException("Chatroom name cannot be empty");
-        }
-        if (c.getEndpoint() == null || c.getEndpoint().isBlank()) {
+        if (c.getEndpoint() == null || c.getEndpoint().isBlank())
             throw new ValidationException("Chatroom endpoint cannot be empty");
-        }
         return chatroomRepository.save(c);
     }
 

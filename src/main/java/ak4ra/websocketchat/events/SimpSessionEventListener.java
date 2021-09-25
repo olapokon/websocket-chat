@@ -9,9 +9,12 @@ import java.util.stream.Collectors;
 
 import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.exceptions.InvalidStateException;
+import ak4ra.websocketchat.messages.MessageService;
 import ak4ra.websocketchat.util.SimpMessageHeadersUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
@@ -29,8 +32,15 @@ public class SimpSessionEventListener {
     private final ConcurrentHashMap<User, Set<SessionDestination>> simpSessionDestinations =
             new ConcurrentHashMap<>();
 
+    private final MessageService messageService;
+
+    @Autowired
+    public SimpSessionEventListener(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
     @EventListener
-    public void sessionSubscribe(SessionSubscribeEvent e) {
+    public void sessionSubscribe(SessionSubscribeEvent e) throws JsonProcessingException {
         Message<?> m = e.getMessage();
         User user = SimpMessageHeadersUtil.extractUser(m);
         SessionDestination sessDest = SimpMessageHeadersUtil.extractSessionDestination(m);
@@ -40,13 +50,20 @@ public class SimpSessionEventListener {
             sessDests1.addAll(sessDests2);
             return sessDests1;
         });
-        log.warn("user {} connected to {}", user.getUsername(), sessDest.destination());
+
+        String username = user.getUsername();
+        String destination = sessDest.destination();
+        log.info("user {} connected to {}", username, destination);
         String map = formatMap(simpSessionDestinations);
         log.info("sessions currently in the map: {}", map);
+
+        // TODO: move to user service
+        messageService.sendUserJoinedMessage(destination, username);
+        // TODO: update the database
     }
 
     @EventListener
-    public void sessionDisconnect(SessionDisconnectEvent e) {
+    public void sessionDisconnect(SessionDisconnectEvent e) throws JsonProcessingException {
         Message<?> m = e.getMessage();
         User user = SimpMessageHeadersUtil.extractUser(m);
         SessionDestination sessDest = SimpMessageHeadersUtil.extractSessionDestination(m);
@@ -54,9 +71,8 @@ public class SimpSessionEventListener {
         // the session that was just disconnected must be in the map, holding its destination
         AtomicReference<String> destination = new AtomicReference<>();
         simpSessionDestinations.compute(user, (user1, sessionDestinations) -> {
-            if (sessionDestinations == null) {
+            if (sessionDestinations == null)
                 throw new InvalidStateException("Simp session missing.");
-            }
             SessionDestination disconnected = sessionDestinations
                     .stream()
                     .filter(s -> s.simpSessionId().equals(sessDest.simpSessionId()))
@@ -67,15 +83,18 @@ public class SimpSessionEventListener {
             return sessionDestinations;
         });
 
-        // TODO: send notification to the destination that the user has disconnected
-        log.warn("user {} disconnected from {}", user.getUsername(), destination);
+        String username = user.getUsername();
+        log.info("user {} disconnected from {}", username, destination);
         String map = formatMap(simpSessionDestinations);
         log.info("sessions currently in the map: {}", map);
+
+        // TODO: move to user service
+        messageService.sendUserLeftMessage(destination.get(), username);
+        // TODO: update the database
     }
 
     private static String formatMap(ConcurrentHashMap<User, Set<SessionDestination>> m) {
-        return m
-                .entrySet()
+        return m.entrySet()
                 .stream()
                 .map(entry -> "\n" + entry.getKey().toString()
                               + entry.getValue()
