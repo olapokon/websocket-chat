@@ -18,7 +18,7 @@ import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 public class SimpSessionEventListener {
 
     private final UserPresenceTracker userPresenceTracker;
-    private final UserService         userService;
+    private final UserService                 userService;
 
     @Autowired
     public SimpSessionEventListener(UserPresenceTracker userPresenceTracker,
