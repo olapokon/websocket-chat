@@ -43,10 +43,12 @@ public class User {
     private String username;
 
     /**
-     * The {@link Chatroom}s to which the user is currently in.
+     * The private {@link Chatroom}s to which the user has access.
+     * <p>
+     * Bi-directional many-to-many relationship.
      */
-    @ManyToMany(mappedBy = "activeUsers")
-    private Set<Chatroom> activeChatrooms = new HashSet<>();
+    @ManyToMany(mappedBy = "authorizedUsers")
+    private Set<Chatroom> accessibleChatrooms = new HashSet<>();
 
     public User() {}
 
@@ -80,12 +82,12 @@ public class User {
         this.username = username;
     }
 
-    public Set<Chatroom> getActiveChatrooms() {
-        return activeChatrooms;
+    public Set<Chatroom> getAccessibleChatrooms() {
+        return accessibleChatrooms;
     }
 
-    public void setActiveChatrooms(Set<Chatroom> activeChatrooms) {
-        this.activeChatrooms = activeChatrooms;
+    public void setAccessibleChatrooms(Set<Chatroom> accessibleChatrooms) {
+        this.accessibleChatrooms = accessibleChatrooms;
     }
 
     @Override

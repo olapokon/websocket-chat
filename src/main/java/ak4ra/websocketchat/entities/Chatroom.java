@@ -41,7 +41,7 @@ public class Chatroom {
     /**
      * The {@link User}s who are authorized to access the chatroom.
      * <p>
-     * Uni-directional many-to-many relationship.
+     * Bi-directional many-to-many relationship.
      */
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "chatroom_authorized_user",
@@ -54,7 +54,7 @@ public class Chatroom {
     /**
      * The {@link User}s who are currently the chatroom.
      * <p>
-     * Bi-directional many-to-many relationship.
+     * Uni-directional many-to-many relationship.
      */
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "chatroom_active_user",

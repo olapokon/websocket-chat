@@ -14,6 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findUserByProvidedIdAndType(String id, UserType type);
 
-    @Query(value = "SELECT u FROM User u LEFT JOIN FETCH u.activeChatrooms WHERE u.providedId = :id AND u.type = :type")
-    Optional<User> getUserByProvidedIdAndTypeAndFetchActiveChatrooms(@Param("id") String id, @Param("type") UserType type);
+    @Query(value = "SELECT u FROM User u LEFT JOIN FETCH u.accessibleChatrooms WHERE u.providedId = :id AND u.type = :type")
+    Optional<User> getUserByProvidedIdAndTypeAndFetchAccessibleChatrooms(@Param("id") String id, @Param("type") UserType type);
 }

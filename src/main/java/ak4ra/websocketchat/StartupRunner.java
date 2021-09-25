@@ -52,8 +52,8 @@ public class StartupRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        //        DEFAULT_USERS.forEach(userService::createUser);
-        //        DEFAULT_CHATROOMS.forEach(chatroomService::createChatroom);
+        DEFAULT_USERS.forEach(userService::createUser);
+        DEFAULT_CHATROOMS.forEach(chatroomService::createChatroom);
 
         //        Set<Chatroom> chatrooms = userService.getActiveChatrooms("githubId1", UserType.GITHUB);
         //        log.info("user active chatrooms: {}", chatrooms);
@@ -69,6 +69,6 @@ public class StartupRunner implements CommandLineRunner {
         //        Set<User> users3 = chatroomService.getActiveUsers(5L);
         //        log.info("chatroom.getActiveUsers: {}", users3);
 
-        chatroomService.addAuthorizedUserToChatroom(new User(UserType.GITHUB, "githubId14", "githubLogin14"), 8L);
+        chatroomService.addAuthorizedUserToChatroom(new User(UserType.GITHUB, "githubId14", "githubLogin14"), 1L);
     }
 }

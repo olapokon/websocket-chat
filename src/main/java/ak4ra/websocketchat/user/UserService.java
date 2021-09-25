@@ -52,11 +52,11 @@ public class UserService {
      * @return the set of chatrooms
      */
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    public Set<Chatroom> getActiveChatrooms(String providedId, UserType type) {
+    public Set<Chatroom> getAccessibleChatrooms(String providedId, UserType type) {
         return userRepository
-                .getUserByProvidedIdAndTypeAndFetchActiveChatrooms(providedId, type)
+                .getUserByProvidedIdAndTypeAndFetchAccessibleChatrooms(providedId, type)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND))
-                .getActiveChatrooms();
+                .getAccessibleChatrooms();
     }
 
     /**
@@ -90,7 +90,7 @@ public class UserService {
      */
     public void userJoinChatroom(User user, String destination) throws JsonProcessingException {
         messageService.sendUserJoinedMessage(destination, user.getUsername());
-        // TODO: update the database
+        // TODO: update the database?
     }
 
     /**
@@ -105,6 +105,6 @@ public class UserService {
      */
     public void userLeaveChatroom(User user, String destination) throws JsonProcessingException {
         messageService.sendUserLeftMessage(destination, user.getUsername());
-        // TODO: update the database
+        // TODO: update the database?
     }
 }
