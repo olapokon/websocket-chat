@@ -1,4 +1,4 @@
-package ak4ra.websocketchat.events;
+package ak4ra.websocketchat.userpresence;
 
 /**
  * Holds the simp session id and destination of a simp session.

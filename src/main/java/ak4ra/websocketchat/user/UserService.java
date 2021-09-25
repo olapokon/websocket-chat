@@ -41,6 +41,16 @@ public class UserService {
         return userRepository.findUserByProvidedIdAndType(providedId, type);
     }
 
+    /**
+     * Gets all the chatrooms the user is currently in or throws.
+     *
+     * @param providedId
+     *         the user's providedId
+     * @param type
+     *         the user's {@link UserType}
+     *
+     * @return the set of chatrooms
+     */
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public Set<Chatroom> getActiveChatrooms(String providedId, UserType type) {
         return userRepository
@@ -93,7 +103,7 @@ public class UserService {
      *
      * @throws JsonProcessingException
      */
-    public void userLeaveChatroom(User user, String destination) throws JsonProcessingException{
+    public void userLeaveChatroom(User user, String destination) throws JsonProcessingException {
         messageService.sendUserLeftMessage(destination, user.getUsername());
         // TODO: update the database
     }
