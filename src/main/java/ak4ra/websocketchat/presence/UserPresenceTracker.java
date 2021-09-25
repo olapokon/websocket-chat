@@ -1,4 +1,4 @@
-package ak4ra.websocketchat.userpresence;
+package ak4ra.websocketchat.presence;
 
 import java.util.HashSet;
 import java.util.List;

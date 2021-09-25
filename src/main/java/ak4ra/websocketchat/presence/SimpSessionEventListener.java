@@ -1,14 +1,6 @@
-package ak4ra.websocketchat.userpresence;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
+package ak4ra.websocketchat.presence;
 
 import ak4ra.websocketchat.entities.User;
-import ak4ra.websocketchat.exceptions.InvalidStateException;
 import ak4ra.websocketchat.user.UserService;
 import ak4ra.websocketchat.util.SimpMessageHeadersUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;

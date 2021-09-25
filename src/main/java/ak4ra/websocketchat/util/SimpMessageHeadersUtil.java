@@ -4,7 +4,7 @@ import java.util.Map;
 
 import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.entities.UserType;
-import ak4ra.websocketchat.userpresence.SessionDestination;
+import ak4ra.websocketchat.presence.SessionDestination;
 import ak4ra.websocketchat.exceptions.ValidationException;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
