@@ -68,6 +68,8 @@ public class UserPresenceTracker {
                     .orElseThrow(() -> new InvalidStateException("Simp session missing."));
             sessionDestinations.remove(disconnected);
             destination.set(disconnected.destination());
+            if (sessionDestinations.isEmpty())
+                return null;
             return sessionDestinations;
         });
 
