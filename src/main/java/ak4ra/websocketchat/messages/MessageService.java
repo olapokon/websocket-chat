@@ -44,17 +44,17 @@ public class MessageService {
     public void sendUserMessage(String destination,
                                 String username,
                                 String message) throws JsonProcessingException {
-        log.info("-----------------------------------------------------------------"); // TODO: remove
-        log.info("username: {}", username);
-        log.info("message: {}", message);
-        log.info("destination: {}", destination);
+        log.debug("-----------------------------------------------------------------"); // TODO: remove
+        log.debug("username: {}", username);
+        log.debug("message: {}", message);
+        log.debug("destination: {}", destination);
         ChatMessage body = new ChatMessage(ChatMessageType.USER_MESSAGE,
                                            username,
                                            message,
                                            LocalDateTime.now().toString());
         String messageJson = objectMapper.writeValueAsString(body);
-        log.info("messageJson: {}", messageJson);
-        log.info("-----------------------------------------------------------------");
+        log.debug("messageJson: {}", messageJson);
+        log.debug("-----------------------------------------------------------------");
 
         this.template.convertAndSend(destination, messageJson);
     }

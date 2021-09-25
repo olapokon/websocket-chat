@@ -28,7 +28,7 @@ public class InboundChannelInterceptor implements ChannelInterceptor {
         SimpMessageType type = accessor.getMessageType();
 
         if (type != SimpMessageType.HEARTBEAT) {
-            log.info("inbound message type: {}", accessor.getMessageType());
+            log.debug("inbound message type: {}", accessor.getMessageType());
         }
 
         return message;

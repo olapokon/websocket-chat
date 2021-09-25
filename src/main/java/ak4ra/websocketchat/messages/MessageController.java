@@ -37,8 +37,8 @@ public class MessageController {
 
         User u = SimpMessageHeadersUtil.extractUser(message);
         String destination = "/topic/" + variableDestination;
-        log.info("user count: {}", simpUserRegistry.getUserCount()); // TODO: remove
-        log.info("users: {}", simpUserRegistry.getUsers()); // TODO: remove
+        log.debug("user count: {}", simpUserRegistry.getUserCount()); // TODO: remove
+        log.debug("users: {}", simpUserRegistry.getUsers()); // TODO: remove
         messageService.sendUserMessage(destination, u.getUsername(), messageBody);
     }
 }

@@ -54,9 +54,9 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
             return sessionDestinations;
         });
         if (userJoinedChatroom.get())
-            log.info("user {} connected to {}", u.getUsername(), sd.destination());
+            log.debug("user {} connected to {}", u.getUsername(), sd.destination());
         else
-            log.info("user {} opened an additional connection to {}", u.getUsername(), sd.destination());
+            log.debug("user {} opened an additional connection to {}", u.getUsername(), sd.destination());
         logTrackerState();
         return userJoinedChatroom.get();
     }
@@ -91,18 +91,18 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
 
         logTrackerState();
         if (userLeftChatroom.get()) {
-            log.info("user {} disconnected from {}", u.getUsername(), destination);
+            log.debug("user {} disconnected from {}", u.getUsername(), destination);
             return destination.get();
         }
         else {
-            log.info("user {} closed one of their connections to {}", u.getUsername(), sd.destination());
+            log.debug("user {} closed one of their connections to {}", u.getUsername(), sd.destination());
             return null;
         }
     }
 
     private void logTrackerState() {
         String formatted = formatMap(simpSessionDestinations);
-        log.info("user presence: {}", formatted);
+        log.debug("user presence: {}", formatted);
     }
 
     private static String formatMap(ConcurrentHashMap<User, Set<SessionDestination>> m) {

@@ -17,7 +17,7 @@ public class OutboundChannelInterceptor implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         SimpMessageType type = accessor.getMessageType();
         if (type != SimpMessageType.HEARTBEAT)
-            log.info("outbound message type: {}", accessor.getMessageType());
+            log.debug("outbound message type: {}", accessor.getMessageType());
         return message;
     }
 }

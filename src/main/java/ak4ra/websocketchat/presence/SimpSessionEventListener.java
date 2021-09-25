@@ -12,7 +12,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 /**
- * Contains listeners for simp session events, in order to track the user's entering and leaving chatrooms.
+ * Listens for simp session events.
  */
 @Component
 public class SimpSessionEventListener {
