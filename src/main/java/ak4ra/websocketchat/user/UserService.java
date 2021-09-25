@@ -9,6 +9,8 @@ import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.entities.UserType;
 import ak4ra.websocketchat.exceptions.ResourceNotFoundException;
 import ak4ra.websocketchat.exceptions.ValidationException;
+import ak4ra.websocketchat.messages.MessageService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,10 +22,13 @@ public class UserService {
     private static final String USER_NOT_FOUND = "User not found.";
 
     private final UserRepository userRepository;
+    private final MessageService messageService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       MessageService messageService) {
         this.userRepository = userRepository;
+        this.messageService = messageService;
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -61,5 +66,35 @@ public class UserService {
         if (user.getUsername() == null)
             throw new ValidationException("Github user must have a username.");
         return userRepository.save(user);
+    }
+
+    /**
+     * Handles the subscription of a user to a chatroom.
+     *
+     * @param user
+     *         the user that is connecting to the chatroom
+     * @param destination
+     *         the chatroom's destination in the message broker
+     *
+     * @throws JsonProcessingException
+     */
+    public void userJoinChatroom(User user, String destination) throws JsonProcessingException {
+        messageService.sendUserJoinedMessage(destination, user.getUsername());
+        // TODO: update the database
+    }
+
+    /**
+     * Handles a user's disconnection from a chatroom.
+     *
+     * @param user
+     *         the user that is disconnecting
+     * @param destination
+     *         the chatroom's destination in the message broker
+     *
+     * @throws JsonProcessingException
+     */
+    public void userLeaveChatroom(User user, String destination) throws JsonProcessingException{
+        messageService.sendUserLeftMessage(destination, user.getUsername());
+        // TODO: update the database
     }
 }

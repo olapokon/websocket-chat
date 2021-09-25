@@ -44,7 +44,7 @@ public class MessageService {
     public void sendUserMessage(String destination,
                                 String username,
                                 String message) throws JsonProcessingException {
-        log.info("-----------------------------------------------------------------");
+        log.info("-----------------------------------------------------------------"); // TODO: remove
         log.info("username: {}", username);
         log.info("message: {}", message);
         log.info("destination: {}", destination);

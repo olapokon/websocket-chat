@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.exceptions.InvalidStateException;
-import ak4ra.websocketchat.messages.MessageService;
+import ak4ra.websocketchat.user.UserService;
 import ak4ra.websocketchat.util.SimpMessageHeadersUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
@@ -32,11 +32,11 @@ public class SimpSessionEventListener {
     private final ConcurrentHashMap<User, Set<SessionDestination>> simpSessionDestinations =
             new ConcurrentHashMap<>();
 
-    private final MessageService messageService;
+    private final UserService userService;
 
     @Autowired
-    public SimpSessionEventListener(MessageService messageService) {
-        this.messageService = messageService;
+    public SimpSessionEventListener(UserService userService) {
+        this.userService = userService;
     }
 
     @EventListener
@@ -57,9 +57,7 @@ public class SimpSessionEventListener {
         String map = formatMap(simpSessionDestinations);
         log.info("sessions currently in the map: {}", map);
 
-        // TODO: move to user service
-        messageService.sendUserJoinedMessage(destination, username);
-        // TODO: update the database
+        userService.userJoinChatroom(user, destination);
     }
 
     @EventListener
@@ -88,9 +86,7 @@ public class SimpSessionEventListener {
         String map = formatMap(simpSessionDestinations);
         log.info("sessions currently in the map: {}", map);
 
-        // TODO: move to user service
-        messageService.sendUserLeftMessage(destination.get(), username);
-        // TODO: update the database
+        userService.userLeaveChatroom(user, destination.get());
     }
 
     private static String formatMap(ConcurrentHashMap<User, Set<SessionDestination>> m) {
