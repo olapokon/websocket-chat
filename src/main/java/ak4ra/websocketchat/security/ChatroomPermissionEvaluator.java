@@ -38,7 +38,7 @@ public class ChatroomPermissionEvaluator implements PermissionEvaluator {
     }
 
     /**
-     * Unimplemented, the other overload is used instead.
+     * @deprecated Unimplemented, the other overload is used instead.
      */
     @Override
     @Deprecated(since = "0.0")

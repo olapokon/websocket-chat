@@ -7,7 +7,7 @@ import ak4ra.websocketchat.entities.Chatroom;
 import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.exceptions.ResourceNotFoundException;
 import ak4ra.websocketchat.exceptions.ValidationException;
-import ak4ra.websocketchat.user.UserRepository;
+import ak4ra.websocketchat.presence.UserPresenceTracker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,13 +18,13 @@ public class ChatroomService {
 
     private static final String CHATROOM_NOT_FOUND = "Chatroom not found.";
 
-    private final ChatroomRepository chatroomRepository;
-    private final UserRepository     userRepository;
+    private final ChatroomRepository  chatroomRepository;
+    private final UserPresenceTracker userPresenceTracker;
 
     @Autowired
-    public ChatroomService(ChatroomRepository chatroomRepository, UserRepository userRepository) {
+    public ChatroomService(ChatroomRepository chatroomRepository, UserPresenceTracker userPresenceTracker) {
         this.chatroomRepository = chatroomRepository;
-        this.userRepository = userRepository;
+        this.userPresenceTracker = userPresenceTracker;
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -50,15 +50,6 @@ public class ChatroomService {
         chatroomRepository.save(c);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void addActiveUserToChatroom(User user, Long chatroomId) {
-        Chatroom c = chatroomRepository
-                .findById(chatroomId)
-                .orElseThrow(() -> new ResourceNotFoundException(CHATROOM_NOT_FOUND));
-        c.getActiveUsers().add(user);
-        chatroomRepository.save(c);
-    }
-
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public Set<User> getAuthorizedUsers(Long chatroomId) {
         return chatroomRepository
@@ -67,11 +58,10 @@ public class ChatroomService {
                 .getAuthorizedUsers();
     }
 
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public Set<User> getActiveUsers(Long chatroomId) {
-        return chatroomRepository
-                .getChatroomByIdAndFetchActiveUsers(chatroomId)
-                .orElseThrow(() -> new ResourceNotFoundException(CHATROOM_NOT_FOUND))
-                .getActiveUsers();
+        Chatroom c = chatroomRepository
+                .findById(chatroomId)
+                .orElseThrow(() -> new ResourceNotFoundException(CHATROOM_NOT_FOUND));
+        return userPresenceTracker.getUserList(c);
     }
 }

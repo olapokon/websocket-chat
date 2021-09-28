@@ -1,5 +1,8 @@
 package ak4ra.websocketchat.presence;
 
+import java.util.Set;
+
+import ak4ra.websocketchat.entities.Chatroom;
 import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.exceptions.InvalidStateException;
 import org.springframework.lang.Nullable;
@@ -44,4 +47,14 @@ public interface UserPresenceTracker {
      */
     @Nullable
     String removeSessionDestination(User u, SessionDestination sd) throws InvalidStateException;
+
+    /**
+     * Returns all {@link User}s currently connected to the given chatroom.
+     *
+     * @param chatroom
+     *         the chatroom for which the user list is being requested
+     *
+     * @return the chatroom's list of users
+     */
+    Set<User> getUserList(Chatroom chatroom);
 }

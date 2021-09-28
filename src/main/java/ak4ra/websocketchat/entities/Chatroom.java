@@ -51,20 +51,6 @@ public class Chatroom {
                })
     private Set<User> authorizedUsers = new HashSet<>();
 
-    // TODO: will probably be removed
-    /**
-     * The {@link User}s who are currently the chatroom.
-     * <p>
-     * Uni-directional many-to-many relationship.
-     */
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(name = "chatroom_active_user",
-               joinColumns = @JoinColumn(name = "chatroom_id"),
-               inverseJoinColumns = {@JoinColumn(name = "user_type"),
-                                     @JoinColumn(name = "user_provided_id")
-               })
-    private Set<User> activeUsers = new HashSet<>();
-
     public Chatroom() {}
 
     public Chatroom(String name, String endpoint) {
@@ -102,14 +88,6 @@ public class Chatroom {
 
     public void setAuthorizedUsers(Set<User> authorizedUsers) {
         this.authorizedUsers = authorizedUsers;
-    }
-
-    public Set<User> getActiveUsers() {
-        return activeUsers;
-    }
-
-    public void setActiveUsers(Set<User> activeUsers) {
-        this.activeUsers = activeUsers;
     }
 
     @Override

@@ -2,12 +2,14 @@ package ak4ra.websocketchat.presence;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import ak4ra.websocketchat.entities.Chatroom;
 import ak4ra.websocketchat.entities.User;
 import ak4ra.websocketchat.exceptions.InvalidStateException;
 import org.slf4j.Logger;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Component;
  * {@inheritDoc}
  * <p>
  * An in-memory implementation of {@link UserPresenceTracker}.
+ * <p>
+ * A different tracker should be implemented eventually, maybe using Redis?
  */
 @Component
 public class InMemoryUserPresenceTracker implements UserPresenceTracker {
@@ -81,6 +85,7 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
                     .filter(sessD -> sessD.destination().equals(disconnected.destination()))
                     .collect(Collectors.toSet());
             if (sameDestinationSds.size() > 1)
+                // the user is connected to this destination with more than one simp sessions
                 userLeftChatroom.set(false);
             sessionDestinations.remove(disconnected);
             destination.set(disconnected.destination());
@@ -98,6 +103,25 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
             log.debug("user {} closed one of their connections to {}", u.getUsername(), sd.destination());
             return null;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * @deprecated Inefficient as it goes through all active simp sessions. The data structures should be refactored
+     * or a different {@link UserPresenceTracker} implementation should be used instead .
+     */
+    @Deprecated(since = "0.0")
+    public Set<User> getUserList(Chatroom chatroom) {
+        return simpSessionDestinations
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue()
+                                      .stream()
+                                      .anyMatch(sd -> sd.destination()
+                                                        .equals(chatroom.getEndpoint())))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
 
     private void logTrackerState() {
