@@ -8,7 +8,7 @@
         <version>2.5.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>ak4ra</groupId>
+    <groupId>olapokon</groupId>
     <artifactId>websocket-chat</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>websocket-chat</name>
