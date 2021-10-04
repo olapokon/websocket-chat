@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${errorReasonPhrase}"></title>
+</head>
+<body>
+<h1 th:text="${errorCode} + ' ' + ${errorReasonPhrase}"></h1>
+<h3><a href="/">Back to home</a></h3>
+</body>
+</html>

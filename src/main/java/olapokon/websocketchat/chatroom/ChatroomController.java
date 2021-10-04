@@ -1,5 +1,7 @@
 package olapokon.websocketchat.chatroom;
 
+import olapokon.websocketchat.exceptions.InvalidStateException;
+import olapokon.websocketchat.exceptions.ResourceNotFoundException;
 import olapokon.websocketchat.messages.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
