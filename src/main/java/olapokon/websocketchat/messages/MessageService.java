@@ -1,9 +1,12 @@
 package olapokon.websocketchat.messages;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import olapokon.websocketchat.entities.User;
+import olapokon.websocketchat.presence.UserPresenceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +25,13 @@ public class MessageService {
     private final Logger log = LoggerFactory.getLogger(MessageService.class);
 
     private final SimpMessagingTemplate template;
+    private final UserPresenceTracker   userPresenceTracker;
     private final ObjectMapper          objectMapper = new ObjectMapper();
 
     @Autowired
-    public MessageService(SimpMessagingTemplate template) {
+    public MessageService(SimpMessagingTemplate template, UserPresenceTracker userPresenceTracker) {
         this.template = template;
+        this.userPresenceTracker = userPresenceTracker;
     }
 
     /**
@@ -58,6 +63,30 @@ public class MessageService {
     }
 
     /**
+     * Sends the list of the usernames of the users currently connected to a chatroom, so it can be updated in the UI.
+     *
+     * @param destination
+     *         the chatroom's message broker destination
+     *
+     * @throws JsonProcessingException
+     */
+    public void sendUserListUpdate(String destination) throws JsonProcessingException {
+        List<String> userList = userPresenceTracker.getUserList(destination).stream().map(User::getUsername).toList();
+        String userListJson = objectMapper.writeValueAsString(userList);
+        log.trace("-----------------------------------------------------------------"); // TODO: remove
+        log.trace("destination: {}", destination);
+        ChatMessage body = new ChatMessage(ChatMessageType.USER_LIST_UPDATE,
+                                           "",
+                                           userListJson,
+                                           LocalDateTime.now().toString());
+        String messageJson = objectMapper.writeValueAsString(body);
+        log.trace("messageJson: {}", messageJson);
+        log.trace("-----------------------------------------------------------------");
+
+        this.template.convertAndSend(destination, messageJson);
+    }
+
+    /**
      * Notifies a chatroom that a user has connected.
      *
      * @param destination
@@ -69,8 +98,6 @@ public class MessageService {
      */
     public void sendUserJoinedMessage(String destination, String username)
     throws JsonProcessingException {
-        //        log.info("users: {}", simpUserRegistry.getUsers()); // TODO: remove
-
         sendChatroomMessage(destination, username, ChatroomEvent.USER_JOINED);
     }
 
@@ -85,8 +112,6 @@ public class MessageService {
      * @throws JsonProcessingException
      */
     public void sendUserLeftMessage(String destination, String username) throws JsonProcessingException {
-        //        log.info("users: {}", simpUserRegistry.getUsers()); // TODO: remove
-
         sendChatroomMessage(destination, username, ChatroomEvent.USER_LEFT);
     }
 

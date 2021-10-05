@@ -98,8 +98,7 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
         if (userLeftChatroom.get()) {
             log.debug("user {} disconnected from {}", u.getUsername(), destination);
             return destination.get();
-        }
-        else {
+        } else {
             log.debug("user {} closed one of their connections to {}", u.getUsername(), sd.destination());
             return null;
         }
@@ -108,20 +107,23 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
     /**
      * {@inheritDoc}
      * <p>
-     * @deprecated Inefficient as it goes through all active simp sessions. The data structures should be refactored
-     * or a different {@link UserPresenceTracker} implementation should be used instead .
+     *
+     * @deprecated Inefficient as it goes through all active simp sessions. The data structures should be refactored or
+     *         a different {@link UserPresenceTracker} implementation should be used instead .
      */
     @Deprecated(since = "0.0")
-    public Set<User> getUserList(Chatroom chatroom) {
+    public List<User> getUserList(String destination) {
         return simpSessionDestinations
                 .entrySet()
                 .stream()
                 .filter(entry -> entry.getValue()
                                       .stream()
                                       .anyMatch(sd -> sd.destination()
-                                                        .equals(chatroom.getEndpoint())))
+                                                        .equals(destination)))
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toSet());
+                .distinct()
+                .sorted((u1, u2) -> u1.getUsername().compareToIgnoreCase(u2.getUsername()))
+                .toList();
     }
 
     private void logTrackerState() {

@@ -1,8 +1,7 @@
 package olapokon.websocketchat.presence;
 
-import java.util.Set;
+import java.util.List;
 
-import olapokon.websocketchat.entities.Chatroom;
 import olapokon.websocketchat.entities.User;
 import olapokon.websocketchat.exceptions.InvalidStateException;
 import org.springframework.lang.Nullable;
@@ -51,10 +50,10 @@ public interface UserPresenceTracker {
     /**
      * Returns all {@link User}s currently connected to the given chatroom.
      *
-     * @param chatroom
-     *         the chatroom for which the user list is being requested
+     * @param destination
+     *         the chatroom 's destination in the message broker, for which the user list is being requested
      *
      * @return the chatroom's list of users
      */
-    Set<User> getUserList(Chatroom chatroom);
+    List<User> getUserList(String destination);
 }

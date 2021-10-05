@@ -27,11 +27,13 @@ public class ChatroomService {
         this.userPresenceTracker = userPresenceTracker;
     }
 
+    // TODO: remove - unimplemented/will not be implemented?
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public List<Chatroom> findAllChatrooms() {
         return chatroomRepository.findAll();
     }
 
+    // TODO: remove - unimplemented/will not be implemented?
     @Transactional(propagation = Propagation.REQUIRED)
     public Chatroom createChatroom(Chatroom c) {
         if (c.getName() == null || c.getName().isBlank())
@@ -41,6 +43,7 @@ public class ChatroomService {
         return chatroomRepository.save(c);
     }
 
+    // TODO: remove - unimplemented/will not be implemented?
     @Transactional(propagation = Propagation.REQUIRED)
     public void addAuthorizedUserToChatroom(User user, Long chatroomId) {
         Chatroom c = chatroomRepository
@@ -50,6 +53,7 @@ public class ChatroomService {
         chatroomRepository.save(c);
     }
 
+    // TODO: remove - unimplemented/will not be implemented?
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public Set<User> getAuthorizedUsers(Long chatroomId) {
         return chatroomRepository
@@ -58,10 +62,11 @@ public class ChatroomService {
                 .getAuthorizedUsers();
     }
 
-    public Set<User> getActiveUsers(Long chatroomId) {
+    // TODO: remove
+    public List<User> getActiveUsers(Long chatroomId) {
         Chatroom c = chatroomRepository
                 .findById(chatroomId)
                 .orElseThrow(() -> new ResourceNotFoundException(CHATROOM_NOT_FOUND));
-        return userPresenceTracker.getUserList(c);
+        return userPresenceTracker.getUserList(c.getEndpoint());
     }
 }

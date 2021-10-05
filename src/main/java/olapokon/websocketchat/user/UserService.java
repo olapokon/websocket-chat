@@ -90,7 +90,7 @@ public class UserService {
      */
     public void userJoinChatroom(User user, String destination) throws JsonProcessingException {
         messageService.sendUserJoinedMessage(destination, user.getUsername());
-        // TODO: update the database?
+        messageService.sendUserListUpdate(destination);
     }
 
     /**
@@ -105,6 +105,6 @@ public class UserService {
      */
     public void userLeaveChatroom(User user, String destination) throws JsonProcessingException {
         messageService.sendUserLeftMessage(destination, user.getUsername());
-        // TODO: update the database?
+        messageService.sendUserListUpdate(destination);
     }
 }
