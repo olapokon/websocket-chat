@@ -21,6 +21,9 @@
 </head>
 <body>
 <div id="chat-container">
+    <header>
+        <div th:replace="fragments/navbar.html :: navbar"></div>
+    </header>
     <h1 id="chat-title" th:text="${chatroomId}"></h1>
     <div id="chat-main-section">
         <section id="messages-container">

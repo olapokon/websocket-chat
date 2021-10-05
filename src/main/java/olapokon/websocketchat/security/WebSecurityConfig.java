@@ -3,12 +3,11 @@ package olapokon.websocketchat.security;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-// TODO: https://docs.spring.io/spring-security/site/docs/current/reference/html5/#servlet-authentication
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // TODO: openid?
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -19,6 +18,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .permitAll()
             .and()
             .oauth2Login()
-            .loginPage("/login");
+            .loginPage("/login")
+            .and()
+            .logout()
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+            .logoutSuccessUrl("/")
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID");
     }
 }

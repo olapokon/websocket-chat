@@ -6,8 +6,11 @@
     <link th:href="@{/styles/main.css}" rel="stylesheet"/>
 </head>
 <body>
-    <ul th:each="c: ${chatrooms}">
-        <li th:text="${c.getName()}"></li>
-    </ul>
+<header>
+    <div th:replace="fragments/navbar.html :: navbar"></div>
+</header>
+<ul th:each="c: ${chatrooms}">
+    <li th:text="${c.getName()}"></li>
+</ul>
 </body>
 </html>

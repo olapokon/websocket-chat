@@ -22,3 +22,19 @@ body {
     font-size: 2.5rem;
     min-height: 100vh;
 }
+
+#navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+}
+
+#navbar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#navbar a:hover {
+    text-decoration: underline;
+}
+
