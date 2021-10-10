@@ -12,6 +12,58 @@ const client = createClient(onMessage);
 autoscroll(document.getElementById("messages-container"));
 
 /**
+ * Keeps track of whether the user list has been updated at least once,
+ * to make sure it does not remain empty after first loading the page and connecting to the destination.
+ *
+ * @type {boolean}
+ */
+let initialUserListAcquired = false;
+
+/**
+ * Fetches and returns the a Promise that resolves to a json string
+ * containing the list of usernames for the users
+ * currently connected to this chatroom/destination, or null if it is unsuccessful.
+ *
+ * @return {Promise<string>}
+ */
+function fetchUserList() {
+    // TODO refactor to request the user list through a websocket message?
+    return fetch(`/chat/${chatroomId}/user-list`)
+        .then(userList => userList.text())
+        .catch(() => null);
+}
+
+/**
+ * Sends requests to the server until an initial list of users has been fetched.
+ *
+ * This is to ensure that the list of users does not remain empty when first connected to a chatroom.
+ */
+(async function onWebSocketConnectionActive() {
+    const TIMEOUT = 200;
+    if (initialUserListAcquired) {
+        // stop attempting to retrieve a user list if it has already been fetched once
+        return;
+    }
+    if (!client.connected) {
+        console.log("CLIENT NOT CONNECTED");
+        setTimeout(onWebSocketConnectionActive, TIMEOUT);
+        return;
+    }
+    const userListFetched = await fetchUserList();
+    console.log("userListFetched:\n", userListFetched);
+    if (!userListFetched) {
+        setTimeout(onWebSocketConnectionActive, TIMEOUT);
+        return;
+    }
+    try {
+        updateUserList(userListFetched);
+    } catch (_) {
+        setTimeout(onWebSocketConnectionActive, TIMEOUT);
+        return;
+    }
+})();
+
+/**
  * The possible types of the body of a STOMP message. See ChatMessageType in the "messages" package of the chat server.
  * @readonly
  * @enum
@@ -67,9 +119,6 @@ function onMessage(message) {
  * @param messageText {string} the text of the message
  */
 function appendChatMessage(messageText) {
-    // console.log("message:\n", messageBody);
-    // const timeStamp = new Date(Date.parse(messageBody.timeStamp)).toISOString();
-    // console.log("messageBody.timeStamp:\n", timeStamp);
     const li = document.createElement("li");
     li.appendChild(document.createTextNode(messageText));
     document.getElementById("messages").appendChild(li);
@@ -82,6 +131,7 @@ function appendChatMessage(messageText) {
  */
 function updateUserList(userListJson) {
     const userList = JSON.parse(userListJson);
+    console.log("UPDATING USER LIST: " + (userList instanceof Array));
     if (!(userList instanceof Array)) {
         throw new Error("Invalid user list");
     }
@@ -91,7 +141,8 @@ function updateUserList(userListJson) {
         const li = document.createElement("li");
         li.appendChild(document.createTextNode(u));
         e.appendChild(li);
-    })
+    });
+    initialUserListAcquired = true;
 }
 
 // when Enter is pressed in the chat input, send a websocket message with the text content
@@ -105,8 +156,4 @@ chatInput.addEventListener("keyup", (e) => {
         return;
     chatInput.value = "";
     sendMessage(client, text);
-});
-
-window.addEventListener("unload", function (event) {
-    client.onS(SUBSCRIBE_DESTINATION);
 });

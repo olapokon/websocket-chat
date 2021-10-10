@@ -62,11 +62,13 @@ public class ChatroomService {
                 .getAuthorizedUsers();
     }
 
-    // TODO: remove
-    public List<User> getActiveUsers(Long chatroomId) {
-        Chatroom c = chatroomRepository
-                .findById(chatroomId)
-                .orElseThrow(() -> new ResourceNotFoundException(CHATROOM_NOT_FOUND));
-        return userPresenceTracker.getUserList(c.getEndpoint());
+    /**
+     * Returns the usernames of the users currently connected to the chatroom.
+     */
+    public List<String> getActiveUsersList(String destination) {
+        return userPresenceTracker.getUserList(destination)
+                                  .stream()
+                                  .map(User::getUsername)
+                                  .toList();
     }
 }

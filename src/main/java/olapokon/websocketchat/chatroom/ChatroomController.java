@@ -1,7 +1,7 @@
 package olapokon.websocketchat.chatroom;
 
-import olapokon.websocketchat.exceptions.InvalidStateException;
-import olapokon.websocketchat.exceptions.ResourceNotFoundException;
+import java.util.List;
+
 import olapokon.websocketchat.messages.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/chat")
@@ -45,15 +46,21 @@ public class ChatroomController {
 
     /**
      * Returns a webpage with the list of chatrooms.
-     *
-     * @param model
-     *
-     * @return
      */
     @GetMapping("/list")
     public String chatroomList(Model model) {
         model.addAttribute("chatrooms", chatroomService.findAllChatrooms());
         return "chatroom-list";
+    }
+
+    /**
+     * Returns a {@link List} with the usernames of the users currently connected to the provided chatroom destination.
+     */
+    @ResponseBody
+    @GetMapping("/{destination}/user-list")
+    public List<String> getActiveUsersList(@PathVariable String destination) {
+        return chatroomService
+                .getActiveUsersList(SUBSCRIBE_DESTINATION + "/" + destination);
     }
 
     /**
@@ -81,41 +88,5 @@ public class ChatroomController {
         return "chatroom";
     }
 
-//    /**
-//     * This is called when a chatroom user navigates to a chatroom page and establishes a websocket connection for the
-//     * first time.
-//     *
-//     * @param chatroomId
-//     *         the id of the chatroom that user left
-//     */
-//    @GetMapping("/room/{chatroomId}/join")
-//    @ResponseBody
-//    public void joinChatroom(@PathVariable String chatroomId) throws JsonProcessingException {
-//        // TODO: put in method
-//        DefaultOAuth2User ud
-//                = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String username = ud.getAttributes().getOrDefault("login", "").toString();
-//        log.info("user {} joined chatroom {}", username, chatroomId);
-//
-//        messageService.sendChatroomMessage(ChatroomEvent.USER_JOINED, chatroomId, username);
-//    }
-//
-//
-//    /**
-//     * This is called when a chatroom user navigates away from the chatroom page.
-//     *
-//     * @param chatroomId
-//     *         the id of the chatroom that user left
-//     */
-//    @GetMapping("/room/{chatroomId}/exit")
-//    @ResponseBody
-//    public void exitChatroom(@PathVariable String chatroomId) throws JsonProcessingException {
-//        // TODO: put in method
-//        DefaultOAuth2User ud
-//                = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String username = ud.getAttributes().getOrDefault("login", "").toString();
-//        log.info("user {} exited chatroom {}", username, chatroomId);
-//
-//        messageService.sendChatroomMessage(ChatroomEvent.USER_LEFT, chatroomId, username);
-//    }
+
 }

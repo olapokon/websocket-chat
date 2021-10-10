@@ -10,8 +10,8 @@ package olapokon.websocketchat.messages;
  *         joins a channel)
  * @param message
  *         a JSON string containing the text input by the chat user, a {@link ChatroomEvent} value, if the type is
- *         {@link ChatMessageType#CHATROOM_MESSAGE}, or a list of connected {@link olapokon.websocketchat.entities.User}s,
- *         if the type is {@link ChatMessageType#USER_LIST_UPDATE}
+ *         {@link ChatMessageType#CHATROOM_MESSAGE}, or a list of the usernames of the connected {@link
+ *         olapokon.websocketchat.entities.User}s, if the type is {@link ChatMessageType#USER_LIST_UPDATE}
  * @param timeStamp
  *         the time the message is sent
  */

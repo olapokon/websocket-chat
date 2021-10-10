@@ -5,8 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import olapokon.websocketchat.entities.User;
-import olapokon.websocketchat.presence.UserPresenceTracker;
+import olapokon.websocketchat.chatroom.ChatroomService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +24,13 @@ public class MessageService {
     private final Logger log = LoggerFactory.getLogger(MessageService.class);
 
     private final SimpMessagingTemplate template;
-    private final UserPresenceTracker   userPresenceTracker;
+    private final ChatroomService       chatroomService;
     private final ObjectMapper          objectMapper = new ObjectMapper();
 
     @Autowired
-    public MessageService(SimpMessagingTemplate template, UserPresenceTracker userPresenceTracker) {
+    public MessageService(SimpMessagingTemplate template, ChatroomService chatroomService) {
         this.template = template;
-        this.userPresenceTracker = userPresenceTracker;
+        this.chatroomService = chatroomService;
     }
 
     /**
@@ -71,7 +70,7 @@ public class MessageService {
      * @throws JsonProcessingException
      */
     public void sendUserListUpdate(String destination) throws JsonProcessingException {
-        List<String> userList = userPresenceTracker.getUserList(destination).stream().map(User::getUsername).toList();
+        List<String> userList = chatroomService.getActiveUsersList(destination);
         String userListJson = objectMapper.writeValueAsString(userList);
         log.trace("-----------------------------------------------------------------"); // TODO: remove
         log.trace("destination: {}", destination);
