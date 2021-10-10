@@ -72,21 +72,14 @@ public class ChatroomController {
      *
      * @return
      */
+    // TODO: make protected
     @GetMapping("/room/{chatroomId}")
     @PostAuthorize("hasPermission(#chatroomId, null)")
     public String chatroom(@PathVariable String chatroomId, Model model) {
-        // TODO: put in method
-        //        DefaultOAuth2User ud
-        //                = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //        String username = ud.getAttributes().getOrDefault("login", "").toString();
-        //        log.info("user attribute: {}", username);
-
         model.addAttribute("chatroomId", chatroomId);
         model.addAttribute("WEBSOCKET_URL", WEBSOCKET_URL);
         model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION + "/" + chatroomId);
         model.addAttribute("PUBLISH_DESTINATION", PUBLISH_DESTINATION + "/" + chatroomId);
         return "chatroom";
     }
-
-
 }
