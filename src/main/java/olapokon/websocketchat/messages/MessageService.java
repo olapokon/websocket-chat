@@ -48,8 +48,8 @@ public class MessageService {
                                 String username,
                                 String message) {
         Map<String, Object> headers = new CustomStompHeaders()
-                .setMessageType(ChatMessageType.USER_MESSAGE, username)
-                .setTimestamp(ZonedDateTime.now().toString())
+                .addMessageType(ChatMessageType.USER_MESSAGE, username)
+                .addTimestamp(ZonedDateTime.now().toString())
                 .build();
         log.trace("-----------------------------------------------------------------"); // TODO: remove
         log.trace("SENDING STOMP FRAME:");
@@ -74,8 +74,8 @@ public class MessageService {
         List<String> userList = chatroomService.getActiveUsersList(destination);
         String userListJson = objectMapper.writeValueAsString(userList);
         Map<String, Object> headers = new CustomStompHeaders()
-                .setMessageType(ChatMessageType.USER_LIST_UPDATE, userListJson)
-                .setTimestamp(ZonedDateTime.now().toString())
+                .addMessageType(ChatMessageType.USER_LIST_UPDATE, userListJson)
+                .addTimestamp(ZonedDateTime.now().toString())
                 .build();
         log.trace("-----------------------------------------------------------------"); // TODO: remove
         log.trace("SENDING STOMP FRAME:");
@@ -98,8 +98,8 @@ public class MessageService {
      */
     public void sendUserJoinedMessage(String destination, String username) {
         Map<String, Object> headers = new CustomStompHeaders()
-                .setMessageType(ChatMessageType.USER_JOINED, username)
-                .setTimestamp(ZonedDateTime.now().toString())
+                .addMessageType(ChatMessageType.USER_JOINED, username)
+                .addTimestamp(ZonedDateTime.now().toString())
                 .build();
         log.trace("-----------------------------------------------------------------"); // TODO: remove
         log.trace("SENDING STOMP FRAME:");
@@ -120,8 +120,8 @@ public class MessageService {
      */
     public void sendUserLeftMessage(String destination, String username) {
         Map<String, Object> headers = new CustomStompHeaders()
-                .setMessageType(ChatMessageType.USER_LEFT, username)
-                .setTimestamp(ZonedDateTime.now().toString())
+                .addMessageType(ChatMessageType.USER_LEFT, username)
+                .addTimestamp(ZonedDateTime.now().toString())
                 .build();
         log.trace("-----------------------------------------------------------------"); // TODO: remove
         log.trace("SENDING STOMP FRAME:");

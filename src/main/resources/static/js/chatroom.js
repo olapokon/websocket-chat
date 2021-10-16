@@ -131,13 +131,16 @@ function onMessage(message) {
     }
 
     const timestamp = headers[CustomStompHeader.TIMESTAMP]; // TODO: parse
+    if (!timestamp) {
+        throw new Error("Invalid " + CustomStompHeader.MESSAGE_TYPE + " header")
+    }
 
     const [messageType, messageTypeValue] = parseMessageTypeHeaderValue(messageTypeHeader);
     let username = "";
     switch (messageType) {
         case ChatMessageType.USER_MESSAGE:
             username = messageTypeValue;
-            appendChatMessage(`[${timestamp}] ${username}: ${messageBody}`); // refactor appendChatMessage
+            appendChatMessage(`[${timestamp}] ${username}: ${messageBody}`);
             break;
         case ChatMessageType.USER_JOINED:
             username = messageTypeValue;
@@ -145,7 +148,7 @@ function onMessage(message) {
             break;
         case ChatMessageType.USER_LEFT:
             username = messageTypeValue;
-            appendChatMessage(`${username}: has left the chat.`);
+            appendChatMessage(`${username} has left the chat.`);
             break;
         case ChatMessageType.USER_LIST_UPDATE:
             updateUserList(messageTypeValue);
