@@ -60,13 +60,13 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // STOMP messages whose destination header begins with these prefixes
+        // STOMP frames whose destination header begins with these prefixes
         // are routed to @MessageMapping methods in @Controller classes,
         // before they're sent to the message broker?
         registry.setApplicationDestinationPrefixes("/app");
 
         // TODO: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-handle-broker-relay-configure
-        // STOMP messages whose destination header begins with these prefixes
+        // STOMP frames whose destination header begins with these prefixes
         // are routed directly to the message broker.
         registry.enableStompBrokerRelay("/topic")
                 .setRelayHost(host)

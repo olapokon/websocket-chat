@@ -5,7 +5,7 @@ package olapokon.websocketchat.messages;
  */
 public enum ChatMessageType {
     /**
-     * The message is sent by a chat room user.
+     * A message sent by a chat room user. The text of the message should be in the STOMP frame body.
      */
     USER_MESSAGE,
 

@@ -34,7 +34,7 @@ public class MessageService {
     }
 
     /**
-     * Sends a STOMP message with the given body to the given destination.
+     * Sends a STOMP frame with the given body to the given destination.
      *
      * @param destination
      *         the message broker destination
@@ -115,7 +115,7 @@ public class MessageService {
     }
 
     /**
-     * Sends a STOMP message to a chatroom.
+     * Sends a STOMP frame to a chatroom.
      *
      * @param destination
      *         the chatroom's message broker destination

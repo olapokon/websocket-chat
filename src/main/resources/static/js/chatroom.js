@@ -64,7 +64,7 @@ function fetchUserList() {
 })();
 
 /**
- * The possible types of the body of a STOMP message. See ChatMessageType in the "messages" package of the chat server.
+ * The possible types of the body of a STOMP frame. See ChatMessageType in the "messages" package of the chat server.
  * @readonly
  * @enum
  */
@@ -75,7 +75,7 @@ const ChatMessageType = {
 }
 
 /**
- * The body of a STOMP message. See ChatMessage in the "messages" package of the chat server.
+ * The body of a STOMP frame. See ChatMessage in the "messages" package of the chat server.
  *
  * @typedef MessageBody
  * @property {ChatMessageType} type the type of message
@@ -94,6 +94,7 @@ function onMessage(message) {
      * @type {MessageBody}
      */
     const messageBody = JSON.parse(message.body);
+    console.log("messageHeaders:\n:", message.headers);
 
     /**
      * @type {ChatMessageType}

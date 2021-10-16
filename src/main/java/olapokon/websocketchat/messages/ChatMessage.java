@@ -1,7 +1,7 @@
 package olapokon.websocketchat.messages;
 
 /**
- * The body of a STOMP message to be sent to a chatroom.
+ * The body of a STOMP frame to be sent to a chatroom.
  *
  * @param type
  *         the type of the message

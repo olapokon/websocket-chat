@@ -23,14 +23,14 @@ public class ChatroomController {
     private static final String WEBSOCKET_URL = "ws://localhost:8080/ws";
 
     /**
-     * Subscribe destination for STOMP messages. Additional segments can be appended.
+     * Subscribe destination for STOMP frames. Additional segments can be appended.
      * <p>
      * (can subscript to all with "topic/all:
      */
     private static final String SUBSCRIBE_DESTINATION = "/topic";
 
     /**
-     * Destination for STOMP messages. Additional segments can be appended.
+     * Destination for STOMP frames. Additional segments can be appended.
      */
     private static final String PUBLISH_DESTINATION = "/app/ws-chat";
 

@@ -62,7 +62,7 @@ export function sendMessage(client, messageBody) {
 
     client.publish({
         destination: PUBLISH_DESTINATION,
-        body: messageBody + ` #${++messageCount}`,
+        body: messageBody + ` #${++messageCount}`, // TODO: remove count
         skipContentLengthHeader: true,
     });
 }
