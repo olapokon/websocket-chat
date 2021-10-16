@@ -1,6 +1,6 @@
 package olapokon.websocketchat.messages;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +49,7 @@ public class MessageService {
                                 String message) {
         Map<String, Object> headers = new CustomStompHeaders()
                 .setMessageType(ChatMessageType.USER_MESSAGE, username)
-                .setTimestamp(LocalDateTime.now().toString())
+                .setTimestamp(ZonedDateTime.now().toString())
                 .build();
         log.trace("-----------------------------------------------------------------"); // TODO: remove
         log.trace("SENDING STOMP FRAME:");
@@ -75,7 +75,7 @@ public class MessageService {
         String userListJson = objectMapper.writeValueAsString(userList);
         Map<String, Object> headers = new CustomStompHeaders()
                 .setMessageType(ChatMessageType.USER_LIST_UPDATE, userListJson)
-                .setTimestamp(LocalDateTime.now().toString())
+                .setTimestamp(ZonedDateTime.now().toString())
                 .build();
         log.trace("-----------------------------------------------------------------"); // TODO: remove
         log.trace("SENDING STOMP FRAME:");
@@ -99,7 +99,7 @@ public class MessageService {
     public void sendUserJoinedMessage(String destination, String username) {
         Map<String, Object> headers = new CustomStompHeaders()
                 .setMessageType(ChatMessageType.USER_JOINED, username)
-                .setTimestamp(LocalDateTime.now().toString())
+                .setTimestamp(ZonedDateTime.now().toString())
                 .build();
         log.trace("-----------------------------------------------------------------"); // TODO: remove
         log.trace("SENDING STOMP FRAME:");
@@ -121,7 +121,7 @@ public class MessageService {
     public void sendUserLeftMessage(String destination, String username) {
         Map<String, Object> headers = new CustomStompHeaders()
                 .setMessageType(ChatMessageType.USER_LEFT, username)
-                .setTimestamp(LocalDateTime.now().toString())
+                .setTimestamp(ZonedDateTime.now().toString())
                 .build();
         log.trace("-----------------------------------------------------------------"); // TODO: remove
         log.trace("SENDING STOMP FRAME:");

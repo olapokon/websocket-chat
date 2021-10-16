@@ -73,7 +73,7 @@ function fetchUserList() {
  */
 const CustomStompHeader = {
     MESSAGE_TYPE: "message-type",
-    TIMESTAMP: "timestamp",
+    TIMESTAMP: "chat-timestamp",
 }
 
 /**
@@ -125,12 +125,12 @@ function onMessage(message) {
     const messageBody = message.body;
 
     console.log("messageHeaders:\n:", headers);
-    const messageTypeHeader = headers.get(CustomStompHeader.MESSAGE_TYPE);
+    const messageTypeHeader = headers[CustomStompHeader.MESSAGE_TYPE];
     if (!messageTypeHeader) {
         return;
     }
 
-    const timestamp = headers.get(CustomStompHeader.TIMESTAMP); // TODO: parse
+    const timestamp = headers[CustomStompHeader.TIMESTAMP]; // TODO: parse
 
     const [messageType, messageTypeValue] = parseMessageTypeHeaderValue(messageTypeHeader);
     let username = "";

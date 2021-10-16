@@ -24,7 +24,7 @@ public class CustomStompHeaders {
      * <p>
      * The value of this header is a {@link java.time.ZonedDateTime} string.
      */
-    public static final String TIMESTAMP = "timestamp";
+    public static final String TIMESTAMP = "chat-timestamp";
 
     public CustomStompHeaders setMessageType(ChatMessageType type, @Nullable String value) {
         String v = switch (type) {
