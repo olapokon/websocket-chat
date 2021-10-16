@@ -31,7 +31,7 @@ public class MessageController {
     @MessageMapping("/ws-chat/{variableDestination}")
     public void handle(@DestinationVariable("variableDestination") String variableDestination,
                        Message<?> message,
-                       String messageBody) throws JsonProcessingException {
+                       String messageBody) {
 
         User u = SimpMessageHeadersUtil.extractUser(message);
         String destination = "/topic/" + variableDestination;

@@ -2,6 +2,7 @@ package olapokon.websocketchat.messages;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,31 +35,31 @@ public class MessageService {
     }
 
     /**
-     * Sends a STOMP frame with the given body to the given destination.
+     * Sends a user message coming from a chatroom to the given broker destination.
      *
      * @param destination
      *         the message broker destination
      * @param username
-     *         the sender's username
+     *         the user's username
      * @param message
      *         the body of the message
      */
     public void sendUserMessage(String destination,
                                 String username,
-                                String message) throws JsonProcessingException {
+                                String message) {
+        Map<String, Object> headers = new CustomStompHeaders()
+                .setMessageType(ChatMessageType.USER_MESSAGE, username)
+                .setTimestamp(LocalDateTime.now().toString())
+                .build();
         log.trace("-----------------------------------------------------------------"); // TODO: remove
+        log.trace("SENDING STOMP FRAME:");
+        log.trace("headers: {}", headers);
         log.trace("username: {}", username);
         log.trace("message: {}", message);
         log.trace("destination: {}", destination);
-        ChatMessage body = new ChatMessage(ChatMessageType.USER_MESSAGE,
-                                           username,
-                                           message,
-                                           LocalDateTime.now().toString());
-        String messageJson = objectMapper.writeValueAsString(body);
-        log.trace("messageJson: {}", messageJson);
         log.trace("-----------------------------------------------------------------");
 
-        this.template.convertAndSend(destination, messageJson);
+        this.template.convertAndSend(destination, message, headers);
     }
 
     /**
@@ -72,17 +73,17 @@ public class MessageService {
     public void sendUserListUpdate(String destination) throws JsonProcessingException {
         List<String> userList = chatroomService.getActiveUsersList(destination);
         String userListJson = objectMapper.writeValueAsString(userList);
+        Map<String, Object> headers = new CustomStompHeaders()
+                .setMessageType(ChatMessageType.USER_LIST_UPDATE, userListJson)
+                .setTimestamp(LocalDateTime.now().toString())
+                .build();
         log.trace("-----------------------------------------------------------------"); // TODO: remove
+        log.trace("SENDING STOMP FRAME:");
+        log.trace("headers: {}", headers);
         log.trace("destination: {}", destination);
-        ChatMessage body = new ChatMessage(ChatMessageType.USER_LIST_UPDATE,
-                                           "",
-                                           userListJson,
-                                           LocalDateTime.now().toString());
-        String messageJson = objectMapper.writeValueAsString(body);
-        log.trace("messageJson: {}", messageJson);
         log.trace("-----------------------------------------------------------------");
 
-        this.template.convertAndSend(destination, messageJson);
+        this.template.convertAndSend(destination, "", headers);
     }
 
     /**
@@ -95,9 +96,18 @@ public class MessageService {
      *
      * @throws JsonProcessingException
      */
-    public void sendUserJoinedMessage(String destination, String username)
-    throws JsonProcessingException {
-        sendChatroomMessage(destination, username, ChatroomEvent.USER_JOINED);
+    public void sendUserJoinedMessage(String destination, String username) {
+        Map<String, Object> headers = new CustomStompHeaders()
+                .setMessageType(ChatMessageType.USER_JOINED, username)
+                .setTimestamp(LocalDateTime.now().toString())
+                .build();
+        log.trace("-----------------------------------------------------------------"); // TODO: remove
+        log.trace("SENDING STOMP FRAME:");
+        log.trace("headers: {}", headers);
+        log.trace("destination: {}", destination);
+        log.trace("-----------------------------------------------------------------");
+
+        this.template.convertAndSend(destination, "", headers);
     }
 
     /**
@@ -107,32 +117,18 @@ public class MessageService {
      *         the chatroom's message broker destination
      * @param username
      *         the user's username
-     *
-     * @throws JsonProcessingException
      */
-    public void sendUserLeftMessage(String destination, String username) throws JsonProcessingException {
-        sendChatroomMessage(destination, username, ChatroomEvent.USER_LEFT);
-    }
+    public void sendUserLeftMessage(String destination, String username) {
+        Map<String, Object> headers = new CustomStompHeaders()
+                .setMessageType(ChatMessageType.USER_LEFT, username)
+                .setTimestamp(LocalDateTime.now().toString())
+                .build();
+        log.trace("-----------------------------------------------------------------"); // TODO: remove
+        log.trace("SENDING STOMP FRAME:");
+        log.trace("headers: {}", headers);
+        log.trace("destination: {}", destination);
+        log.trace("-----------------------------------------------------------------");
 
-    /**
-     * Sends a STOMP frame to a chatroom.
-     *
-     * @param destination
-     *         the chatroom's message broker destination
-     * @param username
-     *         the username of the user on whose behalf the message is being sent.
-     *
-     * @throws JsonProcessingException
-     */
-    public void sendChatroomMessage(String destination,
-                                    String username,
-                                    ChatroomEvent event) throws JsonProcessingException {
-        ChatMessage body = new ChatMessage(ChatMessageType.CHATROOM_MESSAGE,
-                                           username,
-                                           event.toString(),
-                                           LocalDateTime.now().toString());
-        String messageJson = objectMapper.writeValueAsString(body);
-
-        this.template.convertAndSend(destination, messageJson);
+        this.template.convertAndSend(destination, "", headers);
     }
 }

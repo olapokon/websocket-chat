@@ -64,25 +64,56 @@ function fetchUserList() {
 })();
 
 /**
- * The possible types of the body of a STOMP frame. See ChatMessageType in the "messages" package of the chat server.
+ * Enumeration of custom STOMP headers used by the chat server.
+ * <p>
+ * In sync with CustomStompHeader in the "messages" package of the chat server.
  * @readonly
  * @enum
+ * @see CustomStompHeader in the chat server
  */
-const ChatMessageType = {
-    USER_MESSAGE: "USER_MESSAGE",
-    CHATROOM_MESSAGE: "CHATROOM_MESSAGE",
-    USER_LIST_UPDATE: "USER_LIST_UPDATE",
+const CustomStompHeader = {
+    MESSAGE_TYPE: "message-type",
+    TIMESTAMP: "timestamp",
 }
 
 /**
- * The body of a STOMP frame. See ChatMessage in the "messages" package of the chat server.
+ * Enumeration of types of value of a {CustomStompHeader}.
+ * <p>
+ * In sync with ChatMessageType in the "messages" package of the chat server.
+ * @readonly
+ * @enum
+ * @see ChatMessageType in the chat server
+ */
+const ChatMessageType = {
+    USER_MESSAGE: "user-message",
+    USER_JOINED: "user-joined",
+    USER_LEFT: "user-left",
+    USER_LIST_UPDATE: "user-list-update",
+    USER_LIST_UPDATE_REQUEST: "user-list-update-request",
+}
+
+/**
+ * Parses a {CustomStompHeader#MESSAGE_TYPE} header.
  *
- * @typedef MessageBody
- * @property {ChatMessageType} type the type of message
- * @property {string} username the username of the sender
- * @property {string | Array<string>} message the message text, or a list of usernames depending on message type
- * @property {string} timeStamp the date and time when the message was sent
- * */
+ * @param headerValue {string} the value of the header
+ * @return {[string, string]} the type and value of the header value
+ */
+function parseMessageTypeHeaderValue(headerValue) {
+    const HEADER_VALUE_SEPARATOR = "; ";
+    const h = headerValue.split(HEADER_VALUE_SEPARATOR);
+    if (h.length > 2) {
+        throw new Error("Invalid " + CustomStompHeader.MESSAGE_TYPE + " header")
+    }
+
+    /**
+     * @enum {ChatMessageType}
+     */
+    const type = h[0];
+    if (!Object.values(ChatMessageType).includes(type))
+        throw new Error("Invalid " + CustomStompHeader.MESSAGE_TYPE + " header")
+    const value = h[1];
+    return [type, value];
+}
 
 /**
  * Handles a websocket message event.
@@ -90,27 +121,38 @@ const ChatMessageType = {
  * @param message {StompJs.Message} the websocket message received
  */
 function onMessage(message) {
-    /**
-     * @type {MessageBody}
-     */
-    const messageBody = JSON.parse(message.body);
-    console.log("messageHeaders:\n:", message.headers);
+    const headers = message.headers;
+    const messageBody = message.body;
 
-    /**
-     * @type {ChatMessageType}
-     */
-    const messageType = messageBody.type
+    console.log("messageHeaders:\n:", headers);
+    const messageTypeHeader = headers.get(CustomStompHeader.MESSAGE_TYPE);
+    if (!messageTypeHeader) {
+        return;
+    }
 
+    const timestamp = headers.get(CustomStompHeader.TIMESTAMP); // TODO: parse
+
+    const [messageType, messageTypeValue] = parseMessageTypeHeaderValue(messageTypeHeader);
+    let username = "";
     switch (messageType) {
         case ChatMessageType.USER_MESSAGE:
-        case ChatMessageType.CHATROOM_MESSAGE:
-            appendChatMessage(message.body); // refactor appendChatMessage
+            username = messageTypeValue;
+            appendChatMessage(`[${timestamp}] ${username}: ${messageBody}`); // refactor appendChatMessage
+            break;
+        case ChatMessageType.USER_JOINED:
+            username = messageTypeValue;
+            appendChatMessage(`${username} has joined the chat.`);
+            break;
+        case ChatMessageType.USER_LEFT:
+            username = messageTypeValue;
+            appendChatMessage(`${username}: has left the chat.`);
             break;
         case ChatMessageType.USER_LIST_UPDATE:
-            updateUserList(messageBody.message);
+            updateUserList(messageTypeValue);
             break;
+        case ChatMessageType.USER_LIST_UPDATE_REQUEST:
         default:
-            throw new Error("Invalid message type")
+            throw new Error("Invalid " + CustomStompHeader.MESSAGE_TYPE + " header")
     }
 }
 
