@@ -41,6 +41,7 @@ function fetchUserList() {
  * This is to ensure that the list of users does not remain empty when first connected to a chatroom.
  */
 (async function onWebSocketConnectionActive() {
+    // TODO: add "connecting..." message while not connected
     const TIMEOUT = 200;
     if (initialUserListAcquired) {
         // stop attempting to retrieve a user list if it has already been fetched once
