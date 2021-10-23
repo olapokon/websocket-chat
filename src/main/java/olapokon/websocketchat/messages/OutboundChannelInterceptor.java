@@ -1,5 +1,6 @@
 package olapokon.websocketchat.messages;
 
+import olapokon.websocketchat.util.SimpMessageHeadersUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
@@ -16,8 +17,13 @@ public class OutboundChannelInterceptor implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         SimpMessageType type = accessor.getMessageType();
-        if (type != SimpMessageType.HEARTBEAT)
-            log.debug("outbound message type: {}", accessor.getMessageType());
+        if (type == SimpMessageType.HEARTBEAT)
+            return message;
+
+        log.debug("outbound STOMP message type: {}", accessor.getMessageType());
+        String t = SimpMessageHeadersUtil.getChatMessageType(message);
+        if (t != null)
+            log.debug("outbound STOMP message ChatMessageType: {}", t);
         return message;
     }
 }

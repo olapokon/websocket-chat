@@ -1,5 +1,6 @@
 package olapokon.websocketchat.messages;
 
+import olapokon.websocketchat.util.SimpMessageHeadersUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
@@ -18,16 +19,18 @@ public class InboundChannelInterceptor implements ChannelInterceptor {
         this.messageService = messageService;
     }
 
-    // When you throw any exception from ClientInboundChannelInterceptor, it will be sent as ERROR frame
+    // When you throw any exception from ClientInboundChannelInterceptor, it will be sent as an ERROR frame
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         SimpMessageType type = accessor.getMessageType();
+        if (type == SimpMessageType.HEARTBEAT)
+            return message;
 
-        if (type != SimpMessageType.HEARTBEAT) {
-            log.debug("inbound message type: {}", accessor.getMessageType());
-        }
-
+        log.debug("inbound STOMP message type: {}", accessor.getMessageType());
+        String t = SimpMessageHeadersUtil.getChatMessageType(message);
+        if (t != null)
+            log.debug("inbound STOMP message ChatMessageType: {}", t);
         return message;
     }
 }

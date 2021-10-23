@@ -40,13 +40,9 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // the HTTP URL for the endpoint to which a WebSocket client will need to connect to
-        // for the WebSocket handshake
+        // the HTTP URL for the WebSocket handshake
         registry.addEndpoint("/ws");
     }
-
-    // TODO: ApplicationContext event listeners
-    // https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-appplication-context-events
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
@@ -61,8 +57,7 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // STOMP frames whose destination header begins with these prefixes
-        // are routed to @MessageMapping methods in @Controller classes,
-        // before they're sent to the message broker?
+        // are routed to @MessageMapping methods in @Controller classes
         registry.setApplicationDestinationPrefixes("/app");
 
         // TODO: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-handle-broker-relay-configure
@@ -74,9 +69,6 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
                 .setSystemLogin(userName)
                 .setSystemPasscode(password);
 
-        // use a simple broker from spring
-        //         registry.enableSimpleBroker("/topic", "/queue");
-
 
         // Messages from the broker are published to the clientOutboundChannel,
         // from where they are written to WebSocket sessions.
@@ -87,11 +79,4 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
         //If this is an issue, enable the setPreservePublishOrder flag
         registry.setPreservePublishOrder(true);
     }
-
-    // TODO: configure time limit and buffer size, if needed
-    //	@Override
-    //	public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
-    //		registry.setSendTimeLimit(15 * 1000)
-    //				.setSendBufferSizeLimit(512 * 1024);
-    //	}
 }

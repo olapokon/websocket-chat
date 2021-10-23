@@ -4,8 +4,10 @@ import java.util.Map;
 
 import olapokon.websocketchat.entities.User;
 import olapokon.websocketchat.entities.UserType;
+import olapokon.websocketchat.messages.CustomStompHeaders;
 import olapokon.websocketchat.presence.SessionDestination;
 import olapokon.websocketchat.exceptions.ValidationException;
+import org.springframework.lang.Nullable;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -65,6 +67,15 @@ public final class SimpMessageHeadersUtil {
         } catch (Exception ignored) {
             throw new ValidationException("Invalid simp message headers");
         }
+    }
+
+    /**
+     * Returns the value of the STOMP frame's {@link CustomStompHeaders#MESSAGE_TYPE} or null.
+     */
+    public static @Nullable
+    String getChatMessageType(Message<?> m) {
+        SimpMessageHeaderAccessor accessor = SimpMessageHeaderAccessor.wrap(m);
+        return accessor.getFirstNativeHeader(CustomStompHeaders.MESSAGE_TYPE);
     }
 
     /**

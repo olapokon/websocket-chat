@@ -34,6 +34,8 @@ function fetchUserList() {
 }
 
 /**
+ * Runs once when the page is first loaded.
+ *
  * Sends requests to the server until an initial list of users has been fetched.
  *
  * This is to ensure that the list of users does not remain empty when first connected to a chatroom.
@@ -116,6 +118,11 @@ function parseMessageTypeHeaderValue(headerValue) {
 }
 
 /**
+ * Keeps track of the last ACKed STOMP message.
+ */
+let lastAckedMessage;
+
+/**
  * Handles a websocket message event.
  *
  * @param message {StompJs.Message} the websocket message received
@@ -124,7 +131,6 @@ function onMessage(message) {
     const headers = message.headers;
     const messageBody = message.body;
 
-    console.log("messageHeaders:\n:", headers);
     const messageTypeHeader = headers[CustomStompHeader.MESSAGE_TYPE];
     if (!messageTypeHeader) {
         return;
@@ -157,6 +163,10 @@ function onMessage(message) {
         default:
             throw new Error("Invalid " + CustomStompHeader.MESSAGE_TYPE + " header")
     }
+
+    // TODO message ACK or NACK
+    message.ack();
+    lastAckedMessage = message;
 }
 
 /**
