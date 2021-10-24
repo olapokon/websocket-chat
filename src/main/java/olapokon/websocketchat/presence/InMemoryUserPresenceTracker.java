@@ -1,10 +1,10 @@
 package olapokon.websocketchat.presence;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -42,7 +42,7 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
      */
     public boolean addSessionDestination(User u, SessionDestination sd) {
         AtomicBoolean userJoinedChatroom = new AtomicBoolean(true);
-        Set<SessionDestination> val = new HashSet<>(List.of(sd));
+        Set<SessionDestination> val = new CopyOnWriteArraySet<>(List.of(sd));
         simpSessionDestinations.compute(u, (user, sessionDestinations) -> {
             if (sessionDestinations == null)
                 return val;
@@ -128,7 +128,7 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
 
     private void logTrackerState() {
         String formatted = formatMap(simpSessionDestinations);
-        log.debug("user presence: {}", formatted);
+        log.trace("user presence: {}", formatted);
     }
 
     private static String formatMap(ConcurrentHashMap<User, Set<SessionDestination>> m) {
