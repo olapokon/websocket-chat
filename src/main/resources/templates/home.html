@@ -14,14 +14,12 @@
     <p>A GitHub account is required to use the chat.</p>
     <p>Names can only contain characters, numbers, and spaces. </p>
 </div>
-<input id="join-input">
-<!--<button id="join-button" onclick="onJoinClick()">Join or create</button>-->
-<button id="join-button" onclick="displayValidationError()">Join or create</button>
+<label for="join-input">Chatroom name: </label><input id="join-input">
+<button id="join-button" onclick="onJoinClick()" style="font: inherit">Join or create</button>
 
 </body>
 <script>
     const joinInput = document.getElementById("join-input");
-    const joinButton = document.getElementById("join-button");
     const ERROR_MESSAGE_ID = "error-message";
 
     /**
@@ -35,14 +33,14 @@
 
     function onJoinClick() {
         clearValidationError();
-        const name = joinInput.value;
+        const name = joinInput.value.trim();
+        if (!name) return;
         if (isInValidChatroomName(name)) {
             displayValidationError();
             return;
         }
         joinInput.value = "";
-        // navigate
-        console.log("navigate");
+        window.location.href = `/chat/room/${name}`;
     }
 
     function displayValidationError() {
@@ -59,7 +57,7 @@
 
     function clearValidationError() {
         const errorDiv = document.getElementById(ERROR_MESSAGE_ID);
-        errorDiv.remove();
+        if (errorDiv) errorDiv.remove();
     }
 </script>
 </html>
