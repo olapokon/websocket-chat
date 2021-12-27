@@ -1,4 +1,4 @@
-// TODO: https://stomp-js.github.io/guide/stompjs/using-stompjs-v5.html
+// https://stomp-js.github.io/guide/stompjs/using-stompjs-v5.html
 
 /**
  * Creates a stomp-js Client, using options passed from java, through thymeleaf inline javascript
