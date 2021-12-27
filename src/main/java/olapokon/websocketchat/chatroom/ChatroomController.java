@@ -3,6 +3,7 @@ package olapokon.websocketchat.chatroom;
 import java.util.List;
 
 import olapokon.websocketchat.messages.MessageService;
+import olapokon.websocketchat.util.ChatroomsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,20 +58,24 @@ public class ChatroomController {
     /**
      * Sends a chatroom webpage that initiated a websocket connection to the corresponding topic.
      *
-     * @param chatroomId
+     * @param chatroomName
      *         the id of the chatroom for which a page is requested
      * @param model
      *
      * @return
      */
     // TODO: make protected
-    @GetMapping("/room/{chatroomId}")
-    @PostAuthorize("hasPermission(#chatroomId, null)")
-    public String chatroom(@PathVariable String chatroomId, Model model) {
-        model.addAttribute("chatroomId", chatroomId);
+    @GetMapping("/room/{chatroomName}")
+    @PostAuthorize("hasPermission(#chatroomName, null)")
+    public String chatroom(@PathVariable String chatroomName, Model model) {
+        final String name = chatroomName.trim();
+        if (ChatroomsUtil.isInvalidChatroomName(name)) {
+            return "home";
+        }
+        model.addAttribute("chatroomId", name);
         model.addAttribute("WEBSOCKET_URL", WEBSOCKET_URL);
-        model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION + "/" + chatroomId);
-        model.addAttribute("PUBLISH_DESTINATION", PUBLISH_DESTINATION + "/" + chatroomId);
+        model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION + "/" + name);
+        model.addAttribute("PUBLISH_DESTINATION", PUBLISH_DESTINATION + "/" + name);
         return "chatroom";
     }
 }

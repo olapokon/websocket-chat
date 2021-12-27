@@ -48,6 +48,7 @@ function fetchUserList() {
         return;
     }
     if (!client.connected) {
+        // TODO: display indication to user
         console.log("CLIENT NOT CONNECTED");
         setTimeout(onWebSocketConnectionActive, TIMEOUT);
         return;

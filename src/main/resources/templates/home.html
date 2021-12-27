@@ -6,16 +6,14 @@
     <link th:href="@{/styles/main.css}" rel="stylesheet"/>
 </head>
 <body>
-<header>
-    <div th:replace="fragments/navbar.html :: navbar"></div>
-</header>
 <div>
     <p>Enter the name of a chatroom to join or create, if it does not already exist.</p>
     <p>A GitHub account is required to use the chat.</p>
-    <p>Names can only contain characters, numbers, and spaces. </p>
+    <p>Names may only contain Latin characters, numbers, and spaces, and can be up to 20 characters long.</p>
 </div>
-<label for="join-input">Chatroom name: </label><input id="join-input">
-<button id="join-button" onclick="onJoinClick()" style="font: inherit">Join or create</button>
+<label for="join-input">Chatroom name: </label>
+<input id="join-input" style="font:inherit" onkeyup="onInputKeyUp(event)">
+<button id="join-button" style="font:inherit" onclick="onJoinClick()">Join or create</button>
 
 </body>
 <script>
@@ -27,8 +25,13 @@
      * @return {boolean}
      */
     function isInValidChatroomName(name) {
-        // TODO
-        return false;
+        return name.length > 20
+            || /[^a-zA-Z0-9\s]/.test(name);
+    }
+
+    function onInputKeyUp(event) {
+        if (event.key !== "Enter") return;
+        onJoinClick();
     }
 
     function onJoinClick() {
