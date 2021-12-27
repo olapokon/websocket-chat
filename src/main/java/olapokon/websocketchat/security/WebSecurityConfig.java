@@ -11,19 +11,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            // TODO: change websocket authenticated routes?
-            .antMatchers("/ws", "/chat/room/**")
-            .authenticated()
-            .anyRequest()
-            .permitAll()
-            .and()
-            .oauth2Login()
-            .loginPage("/login")
-            .and()
-            .logout()
-            .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-            .logoutSuccessUrl("/")
-            .invalidateHttpSession(true)
-            .deleteCookies("JSESSIONID");
+                .antMatchers("/ws", "/chat/room/**")
+                .authenticated()
+                .anyRequest()
+                .permitAll()
+                .and()
+                .oauth2Login()
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
     }
 }
