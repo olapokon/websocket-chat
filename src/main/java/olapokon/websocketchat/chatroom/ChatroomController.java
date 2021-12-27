@@ -3,10 +3,7 @@ package olapokon.websocketchat.chatroom;
 import java.util.List;
 
 import olapokon.websocketchat.util.ChatroomsUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/chat")
 public class ChatroomController {
-
-    private final Logger log = LoggerFactory.getLogger(ChatroomController.class);
 
     private static final String WEBSOCKET_URL = "ws://localhost:8080/ws";
 
@@ -61,7 +56,6 @@ public class ChatroomController {
      * @return
      */
     @GetMapping("/room/{chatroomName}")
-    @PostAuthorize("hasPermission(#chatroomName, null)")
     public String chatroom(@PathVariable String chatroomName, Model model) {
         final String name = chatroomName.trim();
         if (ChatroomsUtil.isInvalidChatroomName(name)) {

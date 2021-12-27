@@ -56,10 +56,12 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
             sessionDestinations.addAll(val);
             return sessionDestinations;
         });
+        final String username = u.getUsername();
+        final String destination = sd.destination();
         if (userJoinedChatroom.get())
-            log.debug("user {} connected to {}", u.getUsername(), sd.destination());
+            log.debug("user {} connected to {}", username, destination);
         else
-            log.debug("user {} opened an additional connection to {}", u.getUsername(), sd.destination());
+            log.debug("user {} opened an additional connection to {}", username, destination);
         logTrackerState();
         return userJoinedChatroom.get();
     }

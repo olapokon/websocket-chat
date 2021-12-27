@@ -1,9 +1,5 @@
 package olapokon.websocketchat.user;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import olapokon.websocketchat.entities.User;
 import olapokon.websocketchat.messages.MessageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-
-    private static final String USER_NOT_FOUND = "User not found.";
 
     private final MessageService messageService;
 

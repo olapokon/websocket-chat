@@ -1,28 +1,17 @@
 package olapokon.websocketchat.messages;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-// TODO: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket
-//
-// TODO: WS sessions: https://docs.spring.io/spring-session/docs/current/reference/html5/guides/boot-websocket.html
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer {
-
-    private static final Logger         log = LoggerFactory.getLogger(WebSocketMessageConfig.class);
-    private final        MessageService messageService;
-
 
     @Value("${spring.rabbitmq.host}")
     private String host;
@@ -33,11 +22,6 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
     @Value("${spring.rabbitmq.password}")
     private String password;
 
-    @Autowired
-    public WebSocketMessageConfig(@Lazy MessageService messageService) {
-        this.messageService = messageService;
-    }
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // the HTTP URL for the WebSocket handshake
@@ -46,7 +30,7 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new InboundChannelInterceptor(messageService));
+        registration.interceptors(new InboundChannelInterceptor());
     }
 
     @Override
@@ -60,7 +44,6 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
         // are routed to @MessageMapping methods in @Controller classes
         registry.setApplicationDestinationPrefixes("/app");
 
-        // TODO: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket-stomp-handle-broker-relay-configure
         // STOMP frames whose destination header begins with these prefixes
         // are routed directly to the message broker.
         registry.enableStompBrokerRelay("/topic")

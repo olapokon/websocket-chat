@@ -2,7 +2,6 @@ package olapokon.websocketchat.chatroom;
 
 import java.util.List;
 
-import olapokon.websocketchat.entities.Chatroom;
 import olapokon.websocketchat.entities.User;
 import olapokon.websocketchat.presence.UserPresenceTracker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ChatroomService {
-
-    private static final String CHATROOM_NOT_FOUND = "Chatroom not found.";
 
     private final UserPresenceTracker userPresenceTracker;
 
@@ -21,7 +18,7 @@ public class ChatroomService {
     }
 
     // TODO: implement if needed or remove this method
-    public List<Chatroom> findAllChatrooms() {
+    public List<Object> findAllChatrooms() {
         throw new UnsupportedOperationException();
     }
 

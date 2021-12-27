@@ -1,8 +1,6 @@
 package olapokon.websocketchat.entities;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Represents a user of the chat application.
@@ -24,13 +22,6 @@ public class User {
     private String providedId;
 
     private String username;
-
-    /**
-     * The private {@link Chatroom}s to which the user has access.
-     * <p>
-     * Bi-directional many-to-many relationship.
-     */
-    private Set<Chatroom> accessibleChatrooms = new HashSet<>();
 
     public User() {}
 
@@ -62,14 +53,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Set<Chatroom> getAccessibleChatrooms() {
-        return accessibleChatrooms;
-    }
-
-    public void setAccessibleChatrooms(Set<Chatroom> accessibleChatrooms) {
-        this.accessibleChatrooms = accessibleChatrooms;
     }
 
     @Override

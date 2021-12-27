@@ -9,17 +9,11 @@ import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 
-// TODO: probably needs to be removed
+// Only used for logging
 public class InboundChannelInterceptor implements ChannelInterceptor {
 
     private static final Logger         log = LoggerFactory.getLogger(InboundChannelInterceptor.class);
-    private final        MessageService messageService;
 
-    public InboundChannelInterceptor(MessageService messageService) {
-        this.messageService = messageService;
-    }
-
-    // When you throw any exception from ClientInboundChannelInterceptor, it will be sent as an ERROR frame
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);

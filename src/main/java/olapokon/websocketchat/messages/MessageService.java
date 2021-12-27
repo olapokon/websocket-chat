@@ -11,16 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
-
-    // TODO: move into constructor, or elsewhere
-    // TODO: probably remove completely
-    @Autowired
-    private SimpUserRegistry simpUserRegistry; // TODO: only local count, need a different registry if other nodes
 
     private final Logger log = LoggerFactory.getLogger(MessageService.class);
 
@@ -51,13 +45,14 @@ public class MessageService {
                 .addMessageType(ChatMessageType.USER_MESSAGE, username)
                 .addTimestamp(ZonedDateTime.now().toString())
                 .build();
-        log.trace("-----------------------------------------------------------------"); // TODO: remove
-        log.trace("SENDING STOMP FRAME:");
-        log.trace("headers: {}", headers);
-        log.trace("username: {}", username);
-        log.trace("message: {}", message);
-        log.trace("destination: {}", destination);
-        log.trace("-----------------------------------------------------------------");
+        log.trace("""
+                  SENDING STOMP FRAME:
+                  headers: {}
+                  username: {}
+                  message: {}
+                  destination: {}
+                   """
+                , headers, username, message, destination);
 
         this.template.convertAndSend(destination, message, headers);
     }
@@ -77,11 +72,12 @@ public class MessageService {
                 .addMessageType(ChatMessageType.USER_LIST_UPDATE, userListJson)
                 .addTimestamp(ZonedDateTime.now().toString())
                 .build();
-        log.trace("-----------------------------------------------------------------"); // TODO: remove
-        log.trace("SENDING STOMP FRAME:");
-        log.trace("headers: {}", headers);
-        log.trace("destination: {}", destination);
-        log.trace("-----------------------------------------------------------------");
+        log.trace("""
+                  SENDING STOMP FRAME:
+                  headers: {}
+                  destination: {}
+                   """
+                , headers, destination);
 
         this.template.convertAndSend(destination, "", headers);
     }
@@ -101,11 +97,12 @@ public class MessageService {
                 .addMessageType(ChatMessageType.USER_JOINED, username)
                 .addTimestamp(ZonedDateTime.now().toString())
                 .build();
-        log.trace("-----------------------------------------------------------------"); // TODO: remove
-        log.trace("SENDING STOMP FRAME:");
-        log.trace("headers: {}", headers);
-        log.trace("destination: {}", destination);
-        log.trace("-----------------------------------------------------------------");
+        log.trace("""
+                  SENDING STOMP FRAME:
+                  headers: {}
+                  destination: {}
+                   """
+                , headers, destination);
 
         this.template.convertAndSend(destination, "", headers);
     }
@@ -123,11 +120,12 @@ public class MessageService {
                 .addMessageType(ChatMessageType.USER_LEFT, username)
                 .addTimestamp(ZonedDateTime.now().toString())
                 .build();
-        log.trace("-----------------------------------------------------------------"); // TODO: remove
-        log.trace("SENDING STOMP FRAME:");
-        log.trace("headers: {}", headers);
-        log.trace("destination: {}", destination);
-        log.trace("-----------------------------------------------------------------");
+        log.trace("""
+                  SENDING STOMP FRAME:
+                  headers: {}
+                  destination: {}
+                   """
+                , headers, destination);
 
         this.template.convertAndSend(destination, "", headers);
     }
