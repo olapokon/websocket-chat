@@ -45,10 +45,6 @@ export function createClient(onMessage) {
     return client;
 }
 
-
-// TODO: to be removed eventually
-let messageCount = 0;
-
 /**
  * Sends a websocket message.
  *
@@ -62,7 +58,7 @@ export function sendMessage(client, messageBody) {
 
     client.publish({
         destination: PUBLISH_DESTINATION,
-        body: messageBody + ` #${++messageCount}`, // TODO: remove count
+        body: messageBody,
         skipContentLengthHeader: true,
     });
 }

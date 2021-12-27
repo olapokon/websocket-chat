@@ -19,6 +19,8 @@ autoscroll(document.getElementById("messages-container"));
  */
 let initialUserListAcquired = false;
 
+appendChatMessage("Connecting...", "coral");
+
 /**
  * Fetches and returns the a Promise that resolves to a json string
  * containing the list of usernames for the users
@@ -41,18 +43,18 @@ function fetchUserList() {
  * This is to ensure that the list of users does not remain empty when first connected to a chatroom.
  */
 (async function onWebSocketConnectionActive() {
-    // TODO: add "connecting..." message while not connected
     const TIMEOUT = 200;
     if (initialUserListAcquired) {
         // stop attempting to retrieve a user list if it has already been fetched once
+        appendChatMessage("Connected.", "coral");
         return;
     }
     if (!client.connected) {
-        // TODO: display indication to user
         console.log("CLIENT NOT CONNECTED");
         setTimeout(onWebSocketConnectionActive, TIMEOUT);
         return;
     }
+    appendChatMessage("Connected.", "coral");
     const userListFetched = await fetchUserList();
     console.log("userListFetched:\n", userListFetched);
     if (!userListFetched) {
@@ -175,10 +177,12 @@ function onMessage(message) {
  * Appends a chat message to the chat display.
  *
  * @param messageText {string} the text of the message
+ * @param color {string} the color to be used for the text
  */
-function appendChatMessage(messageText) {
+function appendChatMessage(messageText, color = "black") {
     const li = document.createElement("li");
     li.appendChild(document.createTextNode(messageText));
+    li.style.color = color;
     document.getElementById("messages").appendChild(li);
 }
 

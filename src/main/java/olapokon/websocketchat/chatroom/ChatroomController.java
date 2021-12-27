@@ -2,7 +2,6 @@ package olapokon.websocketchat.chatroom;
 
 import java.util.List;
 
-import olapokon.websocketchat.messages.MessageService;
 import olapokon.websocketchat.util.ChatroomsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,13 +35,10 @@ public class ChatroomController {
     private static final String PUBLISH_DESTINATION = "/app/ws-chat";
 
     private final ChatroomService chatroomService;
-    private final MessageService  messageService;
 
     @Autowired
-    public ChatroomController(ChatroomService chatroomService,
-                              MessageService messageService) {
+    public ChatroomController(ChatroomService chatroomService) {
         this.chatroomService = chatroomService;
-        this.messageService = messageService;
     }
 
     /**
@@ -64,7 +60,6 @@ public class ChatroomController {
      *
      * @return
      */
-    // TODO: make protected
     @GetMapping("/room/{chatroomName}")
     @PostAuthorize("hasPermission(#chatroomName, null)")
     public String chatroom(@PathVariable String chatroomName, Model model) {
