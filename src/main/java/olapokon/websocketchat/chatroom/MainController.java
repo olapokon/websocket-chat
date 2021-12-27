@@ -9,7 +9,7 @@ import org.springframework.web.servlet.view.RedirectView;
 public class MainController {
 
     @GetMapping("/")
-    public RedirectView websocketTest(Model model) {
-        return new RedirectView("/chat/list");
+    public String homePage(Model model) {
+        return "home";
     }
 }

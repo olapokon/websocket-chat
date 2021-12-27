@@ -1,7 +1,5 @@
 package olapokon.websocketchat.entities;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -15,7 +13,6 @@ public class UserId implements Serializable {
      * <p>
      * Only GitHub is currently supported.
      */
-    @Enumerated(value = EnumType.STRING)
     private UserType type;
 
     /**

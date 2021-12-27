@@ -45,15 +45,6 @@ public class ChatroomController {
     }
 
     /**
-     * Returns a webpage with the list of chatrooms.
-     */
-    @GetMapping("/list")
-    public String chatroomList(Model model) {
-        model.addAttribute("chatrooms", chatroomService.findAllChatrooms());
-        return "chatroom-list";
-    }
-
-    /**
      * Returns a {@link List} with the usernames of the users currently connected to the provided chatroom destination.
      */
     @ResponseBody

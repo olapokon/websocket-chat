@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import olapokon.websocketchat.entities.Chatroom;
 import olapokon.websocketchat.entities.User;
 import olapokon.websocketchat.exceptions.InvalidStateException;
 import org.slf4j.Logger;
@@ -109,7 +108,7 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
      * <p>
      *
      * @deprecated Inefficient as it goes through all active simp sessions. The data structures should be refactored or
-     *         a different {@link UserPresenceTracker} implementation should be used instead .
+     *         a different {@link UserPresenceTracker} implementation should be used instead.
      */
     @Deprecated(since = "0.0")
     public List<User> getUserList(String destination) {

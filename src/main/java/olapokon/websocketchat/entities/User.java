@@ -1,13 +1,5 @@
 package olapokon.websocketchat.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -17,9 +9,6 @@ import java.util.Set;
  * <p>
  * Only github login is currently supported, so every user is expected to have a github id and login/username.
  */
-@Entity
-@IdClass(UserId.class)
-@Table(name = "user")
 public class User {
 
     /**
@@ -27,19 +16,13 @@ public class User {
      * <p>
      * Only GitHub is currently supported.
      */
-    @Id
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
     private UserType type;
 
     /**
      * The user's id returned by the identity provider.
      */
-    @Id
-    @Column(nullable = false)
     private String providedId;
 
-    @Column(nullable = false)
     private String username;
 
     /**
@@ -47,7 +30,6 @@ public class User {
      * <p>
      * Bi-directional many-to-many relationship.
      */
-    @ManyToMany(mappedBy = "authorizedUsers")
     private Set<Chatroom> accessibleChatrooms = new HashSet<>();
 
     public User() {}

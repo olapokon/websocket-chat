@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Home</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>
+    <div th:replace="fragments/navbar.html :: navbar"></div>
+</header>
+<div>
+    <p>Enter the name of a chatroom to join or create, if it does not already exist.</p>
+    <p>A GitHub account is required to use the chat.</p>
+    <p>Names can only contain characters, numbers, and spaces. </p>
+</div>
+<input id="join-input">
+<!--<button id="join-button" onclick="onJoinClick()">Join or create</button>-->
+<button id="join-button" onclick="displayValidationError()">Join or create</button>
+
+</body>
+<script>
+    const joinInput = document.getElementById("join-input");
+    const joinButton = document.getElementById("join-button");
+    const ERROR_MESSAGE_ID = "error-message";
+
+    /**
+     * @param name {string}
+     * @return {boolean}
+     */
+    function isInValidChatroomName(name) {
+        // TODO
+        return false;
+    }
+
+    function onJoinClick() {
+        clearValidationError();
+        const name = joinInput.value;
+        if (isInValidChatroomName(name)) {
+            displayValidationError();
+            return;
+        }
+        joinInput.value = "";
+        // navigate
+        console.log("navigate");
+    }
+
+    function displayValidationError() {
+        let errorDiv = document.getElementById(ERROR_MESSAGE_ID);
+        if (errorDiv) {
+            return;
+        }
+        errorDiv = document.createElement("div");
+        errorDiv.appendChild(document.createTextNode("Invalid chatroom name"))
+        errorDiv.id = ERROR_MESSAGE_ID;
+        errorDiv.style.color = "coral";
+        joinInput.parentElement.appendChild(errorDiv);
+    }
+
+    function clearValidationError() {
+        const errorDiv = document.getElementById(ERROR_MESSAGE_ID);
+        errorDiv.remove();
+    }
+</script>
+</html>

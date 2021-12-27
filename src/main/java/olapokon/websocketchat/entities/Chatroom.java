@@ -1,27 +1,13 @@
 package olapokon.websocketchat.entities;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Represents a chatroom.
  */
-@Entity
-@Table(name = "chatroom")
 public class Chatroom {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
@@ -29,13 +15,11 @@ public class Chatroom {
      * <p>
      * Chatroom names are unique.
      */
-    @Column(nullable = false)
     private String name;
 
     /**
      * To be appended to the message broker destination.
      */
-    @Column(nullable = false)
     private String endpoint;
 
     /**
@@ -43,12 +27,6 @@ public class Chatroom {
      * <p>
      * Bi-directional many-to-many relationship.
      */
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(name = "chatroom_authorized_user",
-               joinColumns = @JoinColumn(name = "chatroom_id"),
-               inverseJoinColumns = {@JoinColumn(name = "user_type"),
-                                     @JoinColumn(name = "user_provided_id")
-               })
     private Set<User> authorizedUsers = new HashSet<>();
 
     public Chatroom() {}
