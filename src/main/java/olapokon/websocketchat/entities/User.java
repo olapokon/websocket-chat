@@ -23,8 +23,6 @@ public class User {
 
     private String username;
 
-    public User() {}
-
     public User(UserType type, String providedId, String username) {
         this.type = type;
         this.providedId = providedId;
