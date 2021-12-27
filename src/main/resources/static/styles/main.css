@@ -25,16 +25,19 @@ body {
 
 #navbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 0.5rem 1rem;
 }
 
 #navbar a {
     text-decoration: none;
-    color: inherit;
 }
 
 #navbar a:hover {
     text-decoration: underline;
+}
+
+#leave-button {
+    color: var(--orange-color);
 }
 
