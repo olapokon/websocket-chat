@@ -22,7 +22,7 @@ let initialUserListAcquired = false;
 appendChatMessage("Connecting...", "coral");
 
 /**
- * Fetches and returns the a Promise that resolves to a json string
+ * Fetches and returns a Promise that resolves to a json string
  * containing the list of usernames for the users
  * currently connected to this chatroom/destination, or null if it is unsuccessful.
  *
