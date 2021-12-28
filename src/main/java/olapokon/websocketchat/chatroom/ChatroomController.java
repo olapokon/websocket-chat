@@ -4,6 +4,7 @@ import java.util.List;
 
 import olapokon.websocketchat.util.ChatroomsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/chat")
 public class ChatroomController {
 
-    private static final String WEBSOCKET_URL = "ws://localhost:8080/ws";
+    @Value("${server.port}")
+    private String port;
 
     /**
      * Subscribe destination for STOMP frames. Additional segments can be appended.
@@ -61,6 +63,7 @@ public class ChatroomController {
         if (ChatroomsUtil.isInvalidChatroomName(name)) {
             return "home";
         }
+        final String WEBSOCKET_URL = "ws://localhost:" + port + "/ws";
         model.addAttribute("chatroomId", name);
         model.addAttribute("WEBSOCKET_URL", WEBSOCKET_URL);
         model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION + "/" + name);

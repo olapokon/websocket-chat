@@ -1,6 +1,5 @@
 package olapokon.websocketchat.messages;
 
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -51,7 +50,6 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
                 .setRelayPort(port)
                 .setSystemLogin(userName)
                 .setSystemPasscode(password);
-
 
         // Messages from the broker are published to the clientOutboundChannel,
         // from where they are written to WebSocket sessions.

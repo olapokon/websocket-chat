@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  * <p>
  * An in-memory implementation of {@link UserPresenceTracker}.
  * <p>
- * A different tracker should be implemented eventually, maybe using Redis?
+ * A different tracker should be implemented eventually.
  */
 @Component
 public class InMemoryUserPresenceTracker implements UserPresenceTracker {
@@ -96,11 +96,12 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
         });
 
         logTrackerState();
+        final String username = u.getUsername();
         if (userLeftChatroom.get()) {
-            log.debug("user {} disconnected from {}", u.getUsername(), destination);
+            log.debug("user {} disconnected from {}", username, destination);
             return destination.get();
         } else {
-            log.debug("user {} closed one of their connections to {}", u.getUsername(), sd.destination());
+            log.debug("user {} closed one of their connections", username);
             return null;
         }
     }
