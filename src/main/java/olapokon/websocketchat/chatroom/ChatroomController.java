@@ -2,9 +2,9 @@ package olapokon.websocketchat.chatroom;
 
 import java.util.List;
 
+import olapokon.websocketchat.ApplicationProperties;
 import olapokon.websocketchat.util.ChatroomsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,13 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/chat")
 public class ChatroomController {
 
-    @Value("${server.port}")
-    private String port;
+    private final ApplicationProperties applicationProperties;
 
     /**
      * Subscribe destination for STOMP frames. Additional segments can be appended.
      * <p>
-     * (can subscript to all with "topic/all:
+     * Can subscribe to all with "topic/all
      */
     private static final String SUBSCRIBE_DESTINATION = "/topic";
 
@@ -34,7 +33,8 @@ public class ChatroomController {
     private final ChatroomService chatroomService;
 
     @Autowired
-    public ChatroomController(ChatroomService chatroomService) {
+    public ChatroomController(ApplicationProperties applicationProperties, ChatroomService chatroomService) {
+        this.applicationProperties = applicationProperties;
         this.chatroomService = chatroomService;
     }
 
@@ -51,10 +51,8 @@ public class ChatroomController {
     /**
      * Sends a chatroom webpage that initiated a websocket connection to the corresponding topic.
      *
-     * @param chatroomName
-     *         the id of the chatroom for which a page is requested
+     * @param chatroomName the id of the chatroom for which a page is requested
      * @param model
-     *
      * @return
      */
     @GetMapping("/room/{chatroomName}")
@@ -63,9 +61,8 @@ public class ChatroomController {
         if (ChatroomsUtil.isInvalidChatroomName(name)) {
             return "home";
         }
-        final String WEBSOCKET_URL = "ws://localhost:" + port + "/ws";
         model.addAttribute("chatroomId", name);
-        model.addAttribute("WEBSOCKET_URL", WEBSOCKET_URL);
+        model.addAttribute("WEBSOCKET_URL", applicationProperties.getWebsocketUrl());
         model.addAttribute("SUBSCRIBE_DESTINATION", SUBSCRIBE_DESTINATION + "/" + name);
         model.addAttribute("PUBLISH_DESTINATION", PUBLISH_DESTINATION + "/" + name);
         return "chatroom";
