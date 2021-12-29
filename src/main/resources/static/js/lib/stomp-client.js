@@ -16,7 +16,7 @@ export function createClient(onMessage) {
     const client = new StompJs.Client({
         brokerURL: WEBSOCKET_URL,
         connectHeaders: {},
-        debug: (str) => console.debug(str), // DEBUG console output
+        // debug: (str) => console.debug(str), // DEBUG console output
         reconnectDelay: 1000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,

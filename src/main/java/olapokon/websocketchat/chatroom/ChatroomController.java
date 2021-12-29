@@ -3,7 +3,7 @@ package olapokon.websocketchat.chatroom;
 import java.util.List;
 
 import olapokon.websocketchat.ApplicationProperties;
-import olapokon.websocketchat.util.ChatroomsUtil;
+import olapokon.websocketchat.util.ChatroomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,7 +58,7 @@ public class ChatroomController {
     @GetMapping("/room/{chatroomName}")
     public String chatroom(@PathVariable String chatroomName, Model model) {
         final String name = chatroomName.trim();
-        if (ChatroomsUtil.isInvalidChatroomName(name)) {
+        if (ChatroomUtil.isInvalidChatroomName(name)) {
             return "home";
         }
         model.addAttribute("chatroomId", name);

@@ -1,12 +1,12 @@
 package olapokon.websocketchat.messages;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import olapokon.websocketchat.chatroom.ChatroomService;
+import olapokon.websocketchat.util.ChatroomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class MessageService {
                                 String message) {
         Map<String, Object> headers = new CustomStompHeaders()
                 .addMessageType(ChatMessageType.USER_MESSAGE, username)
-                .addTimestamp(ZonedDateTime.now().toString())
+                .addTimestamp(ChatroomUtil.createTimestamp())
                 .build();
         log.trace("""
                   SENDING STOMP FRAME:
@@ -70,7 +70,7 @@ public class MessageService {
         String userListJson = objectMapper.writeValueAsString(userList);
         Map<String, Object> headers = new CustomStompHeaders()
                 .addMessageType(ChatMessageType.USER_LIST_UPDATE, userListJson)
-                .addTimestamp(ZonedDateTime.now().toString())
+                .addTimestamp(ChatroomUtil.createTimestamp())
                 .build();
         log.trace("""
                   SENDING STOMP FRAME:
@@ -95,7 +95,7 @@ public class MessageService {
     public void sendUserJoinedMessage(String destination, String username) {
         Map<String, Object> headers = new CustomStompHeaders()
                 .addMessageType(ChatMessageType.USER_JOINED, username)
-                .addTimestamp(ZonedDateTime.now().toString())
+                .addTimestamp(ChatroomUtil.createTimestamp())
                 .build();
         log.trace("""
                   SENDING STOMP FRAME:
@@ -118,7 +118,7 @@ public class MessageService {
     public void sendUserLeftMessage(String destination, String username) {
         Map<String, Object> headers = new CustomStompHeaders()
                 .addMessageType(ChatMessageType.USER_LEFT, username)
-                .addTimestamp(ZonedDateTime.now().toString())
+                .addTimestamp(ChatroomUtil.createTimestamp())
                 .build();
         log.trace("""
                   SENDING STOMP FRAME:

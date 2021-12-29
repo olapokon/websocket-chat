@@ -140,10 +140,11 @@ function onMessage(message) {
         return;
     }
 
-    const timestamp = headers[CustomStompHeader.TIMESTAMP]; // TODO: parse
+    let timestamp = headers[CustomStompHeader.TIMESTAMP];
     if (!timestamp) {
         throw new Error("Invalid " + CustomStompHeader.MESSAGE_TYPE + " header")
     }
+    timestamp = parseDate(timestamp);
 
     const [messageType, messageTypeValue] = parseMessageTypeHeaderValue(messageTypeHeader);
     let username = "";
@@ -171,6 +172,23 @@ function onMessage(message) {
     // TODO message ACK or NACK
     message.ack();
     lastAckedMessage = message;
+}
+
+/**
+ * Reads the ZonedDateTime timestamp sent by the server and converts it to a time string.
+ *
+ * @param zonedDateTimeString {string}
+ * @return {string}
+ */
+function parseDate(zonedDateTimeString) {
+    let date = zonedDateTimeString
+        .match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d*(Z|\+\d+:\d{2})/);
+    if (!date || date.length < 1) {
+        return "";
+    }
+    date = date[0];
+    return new Date(date)
+        .toLocaleTimeString("en-US");
 }
 
 /**
