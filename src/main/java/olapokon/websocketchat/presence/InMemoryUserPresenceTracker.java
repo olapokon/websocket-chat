@@ -128,6 +128,10 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
                 .toList();
     }
 
+    /**
+     * @deprecated Only use in development.
+     */
+    @Deprecated(since = "0.0")
     private void logTrackerState() {
         String formatted = formatMap(simpSessionDestinations);
         log.trace("user presence: {}", formatted);
