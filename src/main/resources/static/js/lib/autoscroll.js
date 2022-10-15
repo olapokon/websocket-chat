@@ -10,7 +10,7 @@ function autoScroll(e, addedNodes) {
         || e.scrollTop >= e.scrollHeight - addedElementHeight - e.clientHeight;
     if (!isAtBottom)
         return;
-    e.scrollTop = overflowHeight;
+    e.scrollTop = overflowHeight + 4;
 }
 
 /**

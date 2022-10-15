@@ -111,7 +111,7 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
      * <p>
      *
      * @deprecated Inefficient as it goes through all active simp sessions. The data structures should be refactored or
-     *         a different {@link UserPresenceTracker} implementation should be used instead.
+     * a different {@link UserPresenceTracker} implementation should be used instead.
      */
     @Deprecated(since = "0.0")
     public List<User> getUserList(String destination) {
@@ -119,9 +119,9 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
                 .entrySet()
                 .stream()
                 .filter(entry -> entry.getValue()
-                                      .stream()
-                                      .anyMatch(sd -> sd.destination()
-                                                        .equals(destination)))
+                        .stream()
+                        .anyMatch(sd -> sd.destination() != null
+                                && sd.destination().equals(destination)))
                 .map(Map.Entry::getKey)
                 .distinct()
                 .sorted((u1, u2) -> u1.getUsername().compareToIgnoreCase(u2.getUsername()))
@@ -141,10 +141,10 @@ public class InMemoryUserPresenceTracker implements UserPresenceTracker {
         return m.entrySet()
                 .stream()
                 .map(entry -> "\n" + entry.getKey().toString()
-                              + entry.getValue()
-                                     .stream()
-                                     .map(sd -> "\n\t" + sd.toString())
-                                     .collect(Collectors.joining()))
+                        + entry.getValue()
+                        .stream()
+                        .map(sd -> "\n\t" + sd.toString())
+                        .collect(Collectors.joining()))
                 .collect(Collectors.joining());
     }
 }
